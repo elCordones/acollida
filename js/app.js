@@ -162,6 +162,14 @@ const App = {
                 <span class="flag">🇲🇦</span>
                 <span class="name arabic-text">العربية</span>
               </button>
+              <button type="button" class="lang-btn ${this.state.bridgeLang === 'uk' ? 'active' : ''}" data-lang="uk">
+                <span class="flag">🇺🇦</span>
+                <span class="name">Українська</span>
+              </button>
+              <button type="button" class="lang-btn ${this.state.bridgeLang === 'zh' ? 'active' : ''}" data-lang="zh">
+                <span class="flag">🇨🇳</span>
+                <span class="name">中文</span>
+              </button>
             </div>
           </div>
 
@@ -195,7 +203,9 @@ const App = {
     const userBadge = document.getElementById("user-badge");
     const userNameSpan = document.getElementById("user-name-display");
     if (userBadge && userNameSpan) {
-      userNameSpan.textContent = this.state.studentName;
+      const flags = { es: "🇪🇸", fr: "🇫🇷", en: "🇬🇧", ar: "🇲🇦", uk: "🇺🇦", zh: "🇨🇳" };
+      const flag = flags[this.state.bridgeLang] || "🌍";
+      userNameSpan.innerHTML = `${this.escapeHTML(this.state.studentName)} <span title="Llengua de suport: ${this.state.bridgeLang.toUpperCase()}" style="font-size: 1.1em; margin-left: 0.25rem;">${flag}</span>`;
       userBadge.style.display = "flex";
     }
   },
@@ -381,8 +391,10 @@ const App = {
     this.saveToStorage();
 
     const textToSpeak = lang === 'ca' ? item.ca : (item[lang] || item.es);
-    // Si la llengua és àrab, emprem el fitxer d'àudio natiu local d'alta qualitat
-    const localAudio = lang === 'ar' ? `audio/ar/${item.id}.mp3` : null;
+    // Si la llengua disposa de fitxers d'àudio natius locals (ar, uk, zh), els prioritzem
+    const localAudio = (lang === 'ar' || lang === 'uk' || lang === 'zh')
+      ? `audio/${lang}/${item.id}.mp3`
+      : null;
 
     AudioManager.speak(textToSpeak, lang, localAudio);
 
@@ -403,7 +415,9 @@ const App = {
     if (!item || !item.frase_model) return;
 
     const textToSpeak = lang === 'ca' ? item.frase_model.ca : (item.frase_model[lang] || item.frase_model.es);
-    const localAudio = lang === 'ar' ? `audio/ar/${item.id}_frase.mp3` : null;
+    const localAudio = (lang === 'ar' || lang === 'uk' || lang === 'zh')
+      ? `audio/${lang}/${item.id}_frase.mp3`
+      : null;
 
     AudioManager.speak(textToSpeak, lang, localAudio);
   },

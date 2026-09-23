@@ -82,7 +82,9 @@ const AudioManager = {
       es: ['es-ES', 'es'],
       fr: ['fr-FR', 'fr'],
       en: ['en-GB', 'en-US', 'en'],
-      ar: ['ar-SA', 'ar-XA', 'ar-EG', 'ar']
+      ar: ['ar-SA', 'ar-XA', 'ar-EG', 'ar'],
+      uk: ['uk-UA', 'uk'],
+      zh: ['zh-CN', 'zh-TW', 'zh-HK', 'zh']
     };
     const targetLocales = langMap[lang] || [lang];
     return this.voices.some(v => 
@@ -224,7 +226,9 @@ const AudioManager = {
         es: ['es-ES', 'es'],
         fr: ['fr-FR', 'fr'],
         en: ['en-GB', 'en-US', 'en'],
-        ar: ['ar-SA', 'ar-XA', 'ar-EG', 'ar']
+        ar: ['ar-SA', 'ar-XA', 'ar-EG', 'ar'],
+        uk: ['uk-UA', 'uk'],
+        zh: ['zh-CN', 'zh-TW', 'zh-HK', 'zh']
       };
 
       const targetLocales = langMap[lang] || [lang];
@@ -253,7 +257,8 @@ const AudioManager = {
   playOnlineTTS(text, lang) {
     const cleanText = text.trim();
     if (!cleanText) return;
-    const url = `https://translate.google.com/translate_tts?ie=UTF-8&tl=${lang}&client=tw-ob&q=${encodeURIComponent(cleanText)}`;
+    const ttsLang = lang === 'zh' ? 'zh-CN' : lang;
+    const url = `https://translate.google.com/translate_tts?ie=UTF-8&tl=${ttsLang}&client=tw-ob&q=${encodeURIComponent(cleanText)}`;
     this.playAudioFile(url);
   },
 
