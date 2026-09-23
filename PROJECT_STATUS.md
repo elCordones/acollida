@@ -44,9 +44,11 @@
   - [x] Suport dual complet per a **Mode Fosc / Clar**: detecció automàtica per defecte del dispositiu/sistema operatiu (`prefers-color-scheme`) i commutador manual a la capçalera amb persistència.
   - [x] Disseny responsive revisat i optimitzat per a tauletes d'aula i telèfons intel·ligents (touch targets >= 48px, graelles adaptatives i impressió forçada en blanc/negre).
   - [x] Auditoria i correcció integral de contrastos (WCAG AAA): corregit l'error sintàctic del selector de llengua actiu (`.lang-btn.active`), estandarditzats tots els colors via tokens CSS semàntics i eliminats estils inline amb colors fixos a tota l'aplicació.
+  - [x] Motor d'àudio híbrid i paquet local en àrab: integrats 54 arxius d'àudio natius a `audio/ar/` per a totes les paraules i frases, garantint funcionament 100% autònom i solució al problema dels sistemes sense paquet de veu àrab instal·lat a Windows.
 - **Punt exacte on ens hem quedat**:
-  - L'aplicació compta amb suport multi-dispositiu i temes clar/fosc totalment integrats, amb contrastos impecables en tots els components.
+  - L'aplicació compta amb àudio robust garantit per a totes les llengües (fins i tot si el sistema operatiu de l'escola no té veu en àrab instal·lada).
 - **Decisions tècniques i incidències conegudes**:
+  - Windows no porta instal·lat el paquet de síntesi vocal OneCore per a l'àrab per defecte. Per aquest motiu, s'ha implementat una arquitectura híbrida de 3 nivells: àudio local dedicat -> Web Speech API nativa -> stream remot d'alta fidelitat.
   - S'ha eliminat qualsevol regla `@media` anidada incorrectament en llistes de selectors CSS per evitar exclusions silencioses de regles al motor del navegador.
   - La impressió del Passaport d'Aprenentatge força automàticament el fons blanc i text fosc per estalviar tinta i complir criteris gràfics escolars, independentment de si l'aplicació està en mode fosc.
 

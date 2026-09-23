@@ -1,13 +1,17 @@
 /**
- * Motor d'Àudio i Síntesi de Veu (Web Speech API + Web Audio API)
- * Funciona 100% en local sense necessitat de connexió a cap servidor.
- * Velocitat adaptada a l'alumnat d'acollida (0.85x per facilitar la discriminació fonètica).
+ * Motor d'Àudio Híbrid i Resilient (Web Speech API + Àudio Natiu Local + Web Audio API)
+ * 
+ * Estratègia en 3 nivells:
+ * 1. Fitxers d'àudio MP3 natius locals d'alta qualitat (inclòs suport natiu complet per a Àrab).
+ * 2. Síntesi vocal Web Speech API del navegador (Català, Castellà, etc.).
+ * 3. Fallback d'àudio en línia d'alta fidelitat per a llengües no instal·lades al sistema operatiu.
  */
 
 const AudioManager = {
   synth: window.speechSynthesis || null,
   audioCtx: null,
   voices: [],
+  currentAudio: null,
 
   init() {
     if (this.synth) {
@@ -36,26 +40,8 @@ const AudioManager = {
     return this.audioCtx;
   },
 
-  /**
-   * Pronuncia un text en la llengua indicada
-   * @param {string} text Text a pronunciar
-   * @param {string} lang Codi de llengua ('ca', 'es', 'fr', 'en', 'ar')
-   * @param {number} rate Velocitat (per defecte 0.88 per a comprensió pedagògica)
-   */
-  speak(text, lang = 'ca', rate = 0.88) {
-    if (!this.synth) {
-      console.warn("La síntesi de veu no està disponible en aquest navegador.");
-      return;
-    }
-
-    // Atura qualsevol pronunciació anterior
-    this.synth.cancel();
-
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.rate = rate;
-    utterance.pitch = 1.0;
-
-    // Mapa de codis de llengua BCP 47
+  hasVoiceForLang(lang) {
+    if (!this.synth || !this.voices || this.voices.length === 0) return false;
     const langMap = {
       ca: ['ca-ES', 'ca'],
       es: ['es-ES', 'es'],
@@ -63,24 +49,111 @@ const AudioManager = {
       en: ['en-GB', 'en-US', 'en'],
       ar: ['ar-SA', 'ar-XA', 'ar-EG', 'ar']
     };
-
     const targetLocales = langMap[lang] || [lang];
-    utterance.lang = targetLocales[0];
-
-    // Cerca de la veu més adient disponible al sistema operatiu
-    if (this.voices.length === 0) {
-      this.loadVoices();
-    }
-
-    const matchedVoice = this.voices.find(voice => 
-      targetLocales.some(loc => voice.lang.toLowerCase().startsWith(loc.toLowerCase()))
+    return this.voices.some(v => 
+      targetLocales.some(loc => v.lang && v.lang.toLowerCase().startsWith(loc.toLowerCase()))
     );
+  },
 
-    if (matchedVoice) {
-      utterance.voice = matchedVoice;
+  /**
+   * Atura qualsevol so en curs (síntesi de veu i àudios MP3)
+   */
+  stopAll() {
+    if (this.synth) {
+      this.synth.cancel();
+    }
+    if (this.currentAudio) {
+      this.currentAudio.pause();
+      this.currentAudio.currentTime = 0;
+      this.currentAudio = null;
+    }
+  },
+
+  /**
+   * Reprodueix un fitxer d'àudio
+   */
+  playAudioFile(src, onFallback) {
+    this.stopAll();
+    const audio = new Audio(src);
+    this.currentAudio = audio;
+
+    const playPromise = audio.play();
+    if (playPromise !== undefined) {
+      playPromise.catch(err => {
+        console.warn("No s'ha pogut reproduir l'àudio:", src, err);
+        if (typeof onFallback === 'function') {
+          onFallback();
+        }
+      });
+    }
+  },
+
+  /**
+   * Pronuncia un text o reprodueix el seu àudio dedicat
+   * @param {string} text Text a pronunciar
+   * @param {string} lang Codi de llengua ('ca', 'es', 'fr', 'en', 'ar')
+   * @param {string|null} localAudioPath Ruta d'arxiu MP3 local si existeix
+   * @param {number} rate Velocitat de parla
+   */
+  speak(text, lang = 'ca', localAudioPath = null, rate = 0.88) {
+    this.stopAll();
+
+    // 1. Si tenim un fitxer d'àudio dedicat (ex: paquet local d'àrab), prioritzem-lo
+    if (localAudioPath) {
+      this.playAudioFile(localAudioPath, () => {
+        // Fallback automàtic si el fitxer local no es troba
+        this.speakWithSynthesisOrOnline(text, lang, rate);
+      });
+      return;
     }
 
-    this.synth.speak(utterance);
+    // 2. Si no hi ha fitxer local, emprem síntesi nativa o fallback en línia
+    this.speakWithSynthesisOrOnline(text, lang, rate);
+  },
+
+  speakWithSynthesisOrOnline(text, lang, rate = 0.88) {
+    // Si el navegador disposa de veu nativa instal·lada per a aquesta llengua
+    if (this.synth && this.hasVoiceForLang(lang)) {
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.rate = rate;
+      utterance.pitch = 1.0;
+
+      const langMap = {
+        ca: ['ca-ES', 'ca'],
+        es: ['es-ES', 'es'],
+        fr: ['fr-FR', 'fr'],
+        en: ['en-GB', 'en-US', 'en'],
+        ar: ['ar-SA', 'ar-XA', 'ar-EG', 'ar']
+      };
+
+      const targetLocales = langMap[lang] || [lang];
+      utterance.lang = targetLocales[0];
+
+      const matchedVoice = this.voices.find(voice => 
+        targetLocales.some(loc => voice.lang && voice.lang.toLowerCase().startsWith(loc.toLowerCase()))
+      );
+
+      if (matchedVoice) {
+        utterance.voice = matchedVoice;
+      }
+
+      utterance.onerror = () => {
+        // Si falla la veu nativa, saltem a l'àudio en línia
+        this.playOnlineTTS(text, lang);
+      };
+
+      this.synth.speak(utterance);
+    } else {
+      // 3. Fallback d'àudio en línia d'alta fidelitat
+      this.playOnlineTTS(text, lang);
+    }
+  },
+
+  playOnlineTTS(text, lang) {
+    const cleanText = text.trim();
+    if (!cleanText) return;
+    const url = `https://translate.google.com/translate_tts?ie=UTF-8&tl=${lang}&client=tw-ob&q=${encodeURIComponent(cleanText)}`;
+    this.playAudioFile(url);
   },
 
   /**
@@ -96,7 +169,6 @@ const AudioManager = {
       const gain = ctx.createGain();
 
       osc.type = 'triangle';
-      // Arpegi positiu Do - Mi - Sol
       osc.frequency.setValueAtTime(523.25, now); // C5
       osc.frequency.setValueAtTime(659.25, now + 0.1); // E5
       osc.frequency.setValueAtTime(783.99, now + 0.2); // G5

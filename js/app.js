@@ -357,12 +357,15 @@ const App = {
     this.saveToStorage();
 
     const textToSpeak = lang === 'ca' ? item.ca : (item[lang] || item.es);
-    AudioManager.speak(textToSpeak, lang);
+    // Si la llengua és àrab, emprem el fitxer d'àudio natiu local d'alta qualitat
+    const localAudio = lang === 'ar' ? `audio/ar/${item.id}.mp3` : null;
+
+    AudioManager.speak(textToSpeak, lang, localAudio);
 
     // Feedback visual a la targeta
     const card = document.getElementById(`card-${wordId}`);
     if (card) {
-      card.style.borderColor = "#3b82f6";
+      card.style.borderColor = "#2563eb";
       setTimeout(() => { card.style.borderColor = ""; }, 600);
     }
   },
@@ -372,7 +375,9 @@ const App = {
     if (!item || !item.frase_model) return;
 
     const textToSpeak = lang === 'ca' ? item.frase_model.ca : (item.frase_model[lang] || item.frase_model.es);
-    AudioManager.speak(textToSpeak, lang);
+    const localAudio = lang === 'ar' ? `audio/ar/${item.id}_frase.mp3` : null;
+
+    AudioManager.speak(textToSpeak, lang, localAudio);
   },
 
   // --- MODE PRÀCTICA / REPTES AUTOAVALUATIUS ---
