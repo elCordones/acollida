@@ -336,10 +336,18 @@ const App = {
                     <span>💬 "${phraseCa}"</span>
                     <button 
                       style="background:none; border:none; cursor:pointer; font-size: 1rem;" 
-                      title="Escolta la frase"
+                      title="Escolta la frase en català"
+                      aria-label="Escolta la frase en català"
                       onclick="App.listenPhrase('${w.id}', 'ca')">🔊</button>
                   </p>
-                  <p class="phrase-bridge ${isArabic ? 'arabic-text' : ''}">${phraseBridge}</p>
+                  <p class="phrase-bridge ${isArabic ? 'arabic-text' : ''}">
+                    <span>${phraseBridge}</span>
+                    <button 
+                      style="background:none; border:none; cursor:pointer; font-size: 1rem; margin-inline-start: 0.35rem;" 
+                      title="Escolta la frase en ${lang.toUpperCase()}"
+                      aria-label="Escolta la frase en ${lang.toUpperCase()}"
+                      onclick="App.listenPhrase('${w.id}', '${lang}')">🎧</button>
+                  </p>
                 </div>
               ` : ''}
             </div>
@@ -365,8 +373,12 @@ const App = {
     // Feedback visual a la targeta
     const card = document.getElementById(`card-${wordId}`);
     if (card) {
-      card.style.borderColor = "#2563eb";
-      setTimeout(() => { card.style.borderColor = ""; }, 600);
+      card.style.borderColor = "var(--primary-color)";
+      card.classList.add("playing-audio");
+      setTimeout(() => { 
+        card.style.borderColor = ""; 
+        card.classList.remove("playing-audio");
+      }, 700);
     }
   },
 

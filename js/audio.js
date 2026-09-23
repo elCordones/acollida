@@ -70,20 +70,81 @@ const AudioManager = {
   },
 
   /**
-   * Reprodueix un fitxer d'àudio
+   * Resol una ruta relativa a una URL absoluta canònica compatible amb GitHub Pages,
+   * servidors locals i obertura directa de fitxers (file:///).
+   */
+  getAudioUrl(relativePath) {
+    if (!relativePath) return '';
+    if (/^(https?:|data:|blob:)/i.test(relativePath)) {
+      return relativePath;
+    }
+    const cleanPath = relativePath.replace(/^(\.\/|\/)/, '');
+    try {
+      const url = new URL(window.location.href);
+      let baseDir;
+      if (url.hostname.endsWith('github.io')) {
+        // A GitHub Pages, el primer segment és el nom del repositori (/acollida/)
+        const parts = url.pathname.split('/').filter(Boolean);
+        const repo = parts[0] || '';
+        baseDir = url.origin + '/' + repo + '/';
+      } else if (url.protocol === 'file:') {
+        return cleanPath;
+      } else {
+        let p = url.pathname;
+        if (!p.endsWith('/')) {
+          const idx = p.lastIndexOf('/');
+          p = p.substring(0, idx + 1);
+        }
+        baseDir = url.origin + p;
+      }
+      return new URL(cleanPath, baseDir).href;
+    } catch (e) {
+      return cleanPath;
+    }
+  },
+
+  /**
+   * Reprodueix un fitxer d'àudio amb gestió d'errors i suport per a referer buit
    */
   playAudioFile(src, onFallback) {
     this.stopAll();
-    const audio = new Audio(src);
+
+    const resolvedSrc = this.getAudioUrl(src);
+    const audio = new Audio();
+    // Bloquegem l'enviament de la capçalera Referer per permetre el fallback de serveis externs
+    audio.referrerPolicy = 'no-referrer';
+    audio.preload = 'auto';
+    audio.src = resolvedSrc;
     this.currentAudio = audio;
+
+    let fallbackCalled = false;
+    const triggerFallback = (reason) => {
+      if (fallbackCalled) return;
+      fallbackCalled = true;
+      console.warn("Fallback d'àudio activat per a:", resolvedSrc, reason);
+      if (typeof onFallback === 'function') {
+        onFallback();
+      }
+    };
+
+    audio.onerror = (e) => {
+      triggerFallback(e);
+    };
+
+    audio.onended = () => {
+      if (this.currentAudio === audio) {
+        this.currentAudio = null;
+      }
+    };
 
     const playPromise = audio.play();
     if (playPromise !== undefined) {
       playPromise.catch(err => {
-        console.warn("No s'ha pogut reproduir l'àudio:", src, err);
-        if (typeof onFallback === 'function') {
-          onFallback();
+        // Si l'àudio s'ha interromput per una nova petició de l'usuari (pause()), no fem fallback
+        if (err.name === 'AbortError') {
+          return;
         }
+        triggerFallback(err);
       });
     }
   },

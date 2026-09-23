@@ -685,6 +685,12 @@ body {
   border-color: var(--border-hover);
 }
 
+.vocab-card.playing-audio {
+  border-color: var(--primary-color) !important;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.25), var(--shadow-md) !important;
+  transform: translateY(-2px);
+}
+
 .card-img-wrap {
   width: 105px;
   height: 105px;

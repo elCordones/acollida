@@ -28,9 +28,9 @@
 ---
 
 ## 2. Estat Actual i Punt de Control (Darrera sessió: 2026-09-23)
-- **Estat general**: Totalment funcional i operatiu (Versió 1.3 Dark/Light & Responsive).
+- **Estat general**: Totalment funcional, auditat i publicat a GitHub Pages (Versió 1.5 Àudio Resilient & Cache Busting).
 - **Funcionalitats completades**:
-  - [x] Matriu de vocabulari inicial amb 23 conceptes i frases en 5 idiomes (CA, ES, FR, EN, AR).
+  - [x] Matriu de vocabulari inicial amb 27 conceptes i frases en 5 idiomes (CA, ES, FR, EN, AR).
   - [x] Motor de veu integrat en local amb Web Speech API i efectes sonors sintètics DUA.
   - [x] Mode "Descobreix 🎧" amb targetes interactives, àudio doble i frase model.
   - [x] Mode "Reptes 🎯" amb joc de discriminació auditiva i reforç positiu immediat.
@@ -44,13 +44,18 @@
   - [x] Suport dual complet per a **Mode Fosc / Clar**: detecció automàtica per defecte del dispositiu/sistema operatiu (`prefers-color-scheme`) i commutador manual a la capçalera amb persistència.
   - [x] Disseny responsive revisat i optimitzat per a tauletes d'aula i telèfons intel·ligents (touch targets >= 48px, graelles adaptatives i impressió forçada en blanc/negre).
   - [x] Auditoria i correcció integral de contrastos (WCAG AAA): corregit l'error sintàctic del selector de llengua actiu (`.lang-btn.active`), estandarditzats tots els colors via tokens CSS semàntics i eliminats estils inline amb colors fixos a tota l'aplicació.
-  - [x] Motor d'àudio híbrid i paquet local en àrab: integrats 54 arxius d'àudio natius a `audio/ar/` per a totes les paraules i frases, garantint funcionament 100% autònom i solució al problema dels sistemes sense paquet de veu àrab instal·lat a Windows.
+  - [x] Paquet complet de veus en àrab: 54 arxius d'àudio MP3 natius locals (`audio/ar/*.mp3`) per a totes les paraules i frases model.
+  - [x] Correcció integral de la reproducció d'àudio a GitHub Pages (v1.5):
+    - Resolució canònica d'URLs relatives mitjançant `AudioManager.getAudioUrl`, tolerant rutes sense barra final a GitHub Pages (`/acollida` vs `/acollida/`).
+    - Protecció `referrerPolicy = "no-referrer"` i `<meta name="referrer" content="no-referrer">` per evitar el bloqueig 404 del fallback remot de síntesi vocal.
+    - Gestió d'errors d'àudio tolerant a `AbortError` (interrupcions voluntàries per clics repetits sense saltar a fallback erròniament).
+    - Incorporació de cadenes de trencament de memòria cau (*cache busting* `?v=1.5`) a `index.html` per forçar la càrrega immediata de les darreres versions de scripts i estils als navegadors dels alumnes/docents.
+    - Afegit botó d'escolta d'àudio dedicat també a les frases model en la llengua pont (`🎧`).
 - **Punt exacte on ens hem quedat**:
-  - L'aplicació compta amb àudio robust garantit per a totes les llengües (fins i tot si el sistema operatiu de l'escola no té veu en àrab instal·lada).
+  - L'aplicació compta amb àudio completament operatiu a GitHub Pages (`https://elcordones.github.io/acollida/`), garantit per a àrab i resta d'idiomes en qualsevol dispositiu o navegador.
 - **Decisions tècniques i incidències conegudes**:
-  - Windows no porta instal·lat el paquet de síntesi vocal OneCore per a l'àrab per defecte. Per aquest motiu, s'ha implementat una arquitectura híbrida de 3 nivells: àudio local dedicat -> Web Speech API nativa -> stream remot d'alta fidelitat.
-  - S'ha eliminat qualsevol regla `@media` anidada incorrectament en llistes de selectors CSS per evitar exclusions silencioses de regles al motor del navegador.
-  - La impressió del Passaport d'Aprenentatge força automàticament el fons blanc i text fosc per estalviar tinta i complir criteris gràfics escolars, independentment de si l'aplicació està en mode fosc.
+  - GitHub Pages emet per defecte capçaleres `Cache-Control: max-age=600`, motiu pel qual l'actualització de codi JS requereix paràmetres de versió `?v=...` per evitar que els navegadors executin fitxers en memòria cau obsolets.
+  - Windows no disposa per defecte de veus en àrab a la Web Speech API; la inclusió dels MP3 locals a `audio/ar/` resol el problema al 100% sense dependre de la configuració de l'ordinador de l'escola.
 
 ---
 
