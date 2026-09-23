@@ -1315,7 +1315,72 @@ a:focus-visible,
   }
 }
 
-/* --- ESTILS D'IMPRESSIÓ PER AL PASSAPORT D'APRENENTATGE (FORÇA SEMPRE BLANC/NEGRE) --- */
+/* --- FULL DE FLASHCARDS D'AULA (PANTALLA I IMPRESSIÓ) --- */
+.flashcards-sheet {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.25rem;
+  width: 100%;
+  max-height: 60vh;
+  overflow-y: auto;
+  padding: 0.5rem;
+}
+
+.flashcard-item {
+  border: 2px dashed var(--border-color);
+  background: var(--card-bg);
+  border-radius: var(--radius-md);
+  padding: 1.25rem 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  transition: all 0.2s ease;
+}
+
+.flashcard-item:hover {
+  border-color: var(--primary-color);
+  box-shadow: var(--shadow-sm);
+}
+
+.flashcard-icon {
+  font-size: 3.2rem;
+  margin-bottom: 0.4rem;
+  line-height: 1;
+}
+
+.flashcard-word-ca {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: var(--text-heading);
+  margin-bottom: 0.2rem;
+}
+
+.flashcard-word-bridge {
+  font-size: 1.05rem;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+.flashcard-phonetic {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  font-style: italic;
+  margin-top: 0.15rem;
+}
+
+.flashcard-footer-cut {
+  margin-top: 0.75rem;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  border-top: 1px dotted var(--border-color);
+  width: 100%;
+  padding-top: 0.35rem;
+  opacity: 0.8;
+}
+
+/* --- ESTILS D'IMPRESSIÓ PER AL PASSAPORT D'APRENENTATGE I FLASHCARDS D'AULA --- */
 @media print {
   body {
     background: white !important;
@@ -1327,7 +1392,9 @@ a:focus-visible,
   .modal-overlay,
   .modal-content,
   .passport-certificate,
-  .passport-certificate * {
+  .passport-certificate *,
+  .flashcards-sheet,
+  .flashcards-sheet * {
     visibility: visible;
   }
   .modal-overlay {
@@ -1342,7 +1409,7 @@ a:focus-visible,
     box-shadow: none;
     padding: 0;
     border: none;
-    max-width: 100%;
+    max-width: 100% !important;
     background: white !important;
     color: black !important;
   }
@@ -1351,6 +1418,34 @@ a:focus-visible,
   .app-footer,
   .close-btn {
     display: none !important;
+  }
+  .flashcards-sheet {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 1.2cm !important;
+    max-height: none !important;
+    overflow: visible !important;
+    padding: 0.5cm !important;
+    background: white !important;
+  }
+  .flashcard-item {
+    border: 2px dashed #475569 !important;
+    border-radius: 8px !important;
+    padding: 1.2cm 0.8cm !important;
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+    background: white !important;
+  }
+  .flashcard-word-ca {
+    font-size: 1.7rem !important;
+    color: black !important;
+  }
+  .flashcard-word-bridge {
+    color: #334155 !important;
+  }
+  .flashcard-footer-cut {
+    color: #64748b !important;
+    border-top: 1px dotted #94a3b8 !important;
   }
   .passport-certificate {
     border: 3px solid #000 !important;

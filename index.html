@@ -22,12 +22,20 @@
   <!-- Favicon visual i minimalista (SVG) -->
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
   
+  <!-- Manifest PWA i configuració per a instal·lació d'aplicació nativa / Offline -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Acollida">
+  <link rel="apple-touch-icon" href="icon-192.png">
+  <meta name="theme-color" content="#2563eb">
+
   <!-- Tipografia per a Català i suport natiu Àrab -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="css/style.css?v=1.7">
+  <link rel="stylesheet" href="css/style.css?v=1.8">
 </head>
 <body>
 
@@ -99,8 +107,19 @@
   </footer>
 
   <!-- SCRIPTS DE L'APLICACIÓ -->
-  <script src="js/data.js?v=1.7"></script>
-  <script src="js/audio.js?v=1.7"></script>
-  <script src="js/app.js?v=1.7"></script>
+  <script src="js/data.js?v=1.8"></script>
+  <script src="js/audio.js?v=1.8"></script>
+  <script src="js/app.js?v=1.8"></script>
+
+  <!-- Registre del Service Worker per a funcionament 100% Offline (PWA) -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js').catch(err => {
+          console.log('SW no registrat:', err);
+        });
+      });
+    }
+  </script>
 </body>
 </html>

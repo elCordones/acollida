@@ -290,17 +290,22 @@ const App = {
           </span>
         </div>
 
-        <div class="tabs-container">
-          <button 
-            class="tab-btn ${this.state.currentMode === 'discover' ? 'active' : ''}" 
-            onclick="App.setMode('discover')">
-            ${ACOLLIDA_DATA.ui.modeDiscover[lang] || "Descobreix 🎧"}
+        <div style="display: flex; gap: 0.6rem; align-items: center; flex-wrap: wrap;">
+          <button class="btn-secondary" onclick="App.showFlashcardsModal()" title="Imprimir targetes de vocabulari d'aquest tema">
+            🖨️ Targetes
           </button>
-          <button 
-            class="tab-btn ${this.state.currentMode === 'practice' ? 'active' : ''}" 
-            onclick="App.setMode('practice')">
-            ${ACOLLIDA_DATA.ui.modePractice[lang] || "Reptes 🎯"}
-          </button>
+          <div class="tabs-container">
+            <button 
+              class="tab-btn ${this.state.currentMode === 'discover' ? 'active' : ''}" 
+              onclick="App.setMode('discover')">
+              ${ACOLLIDA_DATA.ui.modeDiscover[lang] || "Descobreix 🎧"}
+            </button>
+            <button 
+              class="tab-btn ${this.state.currentMode === 'practice' ? 'active' : ''}" 
+              onclick="App.setMode('practice')">
+              ${ACOLLIDA_DATA.ui.modePractice[lang] || "Reptes 🎯"}
+            </button>
+          </div>
         </div>
       </div>
 
@@ -714,6 +719,64 @@ const App = {
   restartMemoryGame() {
     this.initMemoryGame();
     this.renderCategoryContent();
+  },
+
+  // --- GENERADOR DE FLASHCARDS D'AULA IMPRIMIBLES (RETOLACIÓ FÍSICA) ---
+  showFlashcardsModal() {
+    const cat = ACOLLIDA_DATA.categories.find(c => c.id === this.state.currentCategory);
+    if (!cat) return;
+
+    const words = ACOLLIDA_DATA.vocabulary.filter(v => v.categoria === cat.id);
+    const lang = this.state.bridgeLang;
+    const isArabic = lang === "ar";
+
+    const cardsHtml = words.map(w => {
+      const bridgeWord = w[lang] || w.es;
+      const phonetic = (lang === 'ar' && w.ar_fonetica) ? `<div class="flashcard-phonetic">(${w.ar_fonetica})</div>` : '';
+
+      return `
+        <div class="flashcard-item">
+          <div class="flashcard-icon">${w.icon}</div>
+          <div class="flashcard-word-ca">${w.ca}</div>
+          <div class="flashcard-word-bridge ${isArabic ? 'arabic-text' : ''}">${bridgeWord}</div>
+          ${phonetic}
+          <div class="flashcard-footer-cut">✂️ Retalla per la línia discontínua • Aula d'Acollida</div>
+        </div>
+      `;
+    }).join("");
+
+    const modalHtml = `
+      <div class="modal-overlay" id="flashcards-modal" role="dialog" aria-modal="true" aria-labelledby="modal-flashcards-title">
+        <div class="modal-content" style="max-width: 900px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+            <div>
+              <h3 id="modal-flashcards-title" style="font-size: 1.4rem; color: var(--text-heading); margin-bottom: 0.25rem;">
+                🖨️ Targetes de Vocabulari (Flashcards) per a l'Aula
+              </h3>
+              <p style="color: var(--text-muted); font-size: 0.9rem;">
+                Tema: <strong>${cat.icon} ${cat.titol.ca}</strong> • Ideals per retolar l'aula física o fer jocs manipulatius
+              </p>
+            </div>
+            <button class="btn-secondary" onclick="App.closeModal()" aria-label="Tancar finestra">✖️</button>
+          </div>
+
+          <div class="flashcards-sheet">
+            ${cardsHtml}
+          </div>
+
+          <div class="modal-actions" style="margin-top: 1.5rem;">
+            <button class="btn-primary" onclick="window.print()" aria-label="Imprimir les targetes en PDF o paper">
+              🖨️ Imprimeix les Targetes (PDF)
+            </button>
+            <button class="btn-secondary" onclick="App.closeModal()" aria-label="Tancar finestra">
+              Tancar ✖️
+            </button>
+          </div>
+        </div>
+      </div>
+    `;
+
+    document.getElementById("modal-container").innerHTML = modalHtml;
   },
 
   // --- FINALITZACIÓ DE SESSIÓ, INFORME CSV I PASSAPORT IMPRIMIBLE ---
