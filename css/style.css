@@ -810,6 +810,139 @@ body {
   margin: 0 auto;
 }
 
+/* --- SUBNAVEGACIÓ DE TIPUS DE REPTES --- */
+.practice-subnav {
+  display: flex;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+}
+
+.subnav-btn {
+  background: var(--card-subtle-bg);
+  color: var(--text-main);
+  border: 2px solid var(--border-color);
+  padding: 0.6rem 1.25rem;
+  border-radius: var(--radius-full);
+  font-weight: 700;
+  font-size: 0.95rem;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  transition: all 0.2s ease;
+}
+
+.subnav-btn:hover {
+  border-color: var(--primary-color);
+  background: var(--card-bg);
+}
+
+.subnav-btn.active {
+  background: var(--primary-color);
+  color: #ffffff;
+  border-color: var(--primary-color);
+  box-shadow: 0 3px 10px rgba(37, 99, 235, 0.35);
+}
+
+/* --- JOC DE PARELLES (MEMORY) --- */
+.memory-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  width: 100%;
+  max-width: 650px;
+  margin: 1.25rem auto;
+  perspective: 1000px;
+}
+
+@media (max-width: 600px) {
+  .memory-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+  }
+}
+
+.memory-card {
+  height: 120px;
+  cursor: pointer;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: var(--radius-md);
+  user-select: none;
+}
+
+.memory-card.flipped,
+.memory-card.matched {
+  transform: rotateY(180deg);
+}
+
+.memory-card-face {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: var(--radius-md);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem;
+  box-shadow: var(--shadow-sm);
+}
+
+.memory-card-back {
+  background: var(--card-subtle-bg);
+  border: 2px dashed var(--border-color);
+  color: var(--text-muted);
+  font-size: 2.2rem;
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.memory-card:hover .memory-card-back,
+.memory-card:focus-visible .memory-card-back {
+  border-color: var(--primary-color);
+  background: var(--card-bg);
+}
+
+.memory-card-front {
+  background: var(--card-bg);
+  border: 2.5px solid var(--primary-color);
+  transform: rotateY(180deg);
+}
+
+.memory-card.matched .memory-card-front {
+  border-color: #10b981;
+  background: rgba(16, 185, 129, 0.12);
+  box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.4);
+}
+
+.memory-card-icon {
+  font-size: 2.8rem;
+  line-height: 1;
+}
+
+.memory-card-word {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--text-heading);
+  text-align: center;
+  word-break: break-word;
+}
+
+.memory-victory-box {
+  background: var(--card-subtle-bg);
+  border: 2px solid #10b981;
+  border-radius: var(--radius-lg);
+  padding: 1.75rem;
+  text-align: center;
+  margin-top: 1.5rem;
+  width: 100%;
+}
+
 .practice-header {
   text-align: center;
   margin-bottom: 2rem;

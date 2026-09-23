@@ -722,6 +722,34 @@ const ACOLLIDA_DATA = {
       en: "Click the speaker and choose the matching image:",
       ar: "اضغط على مكبر الصوت واختر الصورة المطابقة:"
     },
+    challengeMemoryTitle: {
+      ca: "Joc de parelles (Memory)",
+      es: "Juego de parejas (Memory)",
+      fr: "Jeu de mémoire (Memory)",
+      en: "Memory Matching Game",
+      ar: "لعبة مطابقة الأزواج (الذاكرة)"
+    },
+    challengeMemoryInstr: {
+      ca: "Gira dues targetes per associar la imatge amb la paraula en català:",
+      es: "Gira dos tarjetas para asociar la imagen con la palabra en catalán:",
+      fr: "Retourne deux cartes pour associer l'image au mot en catalan :",
+      en: "Flip two cards to match the picture with the Catalan word:",
+      ar: "اقلب بطاقتين لمطابقة الصورة مع الكلمة بالكتالونية:"
+    },
+    memoryWellDone: {
+      ca: "Fantàstic! Has trobat totes les parelles! 🌟",
+      es: "¡Fantástico! ¡Has encontrado todas las parejas! 🌟",
+      fr: "Fantastique ! Tu as trouvé toutes les paires ! 🌟",
+      en: "Fantastic! You found all the pairs! 🌟",
+      ar: "رائع! لقد وجدت جميع الأزواج! 🌟"
+    },
+    playAgainBtn: {
+      ca: "Jugar una altra partida 🔄",
+      es: "Jugar otra partida 🔄",
+      fr: "Rejouer une partie 🔄",
+      en: "Play again 🔄",
+      ar: "العب جولة أخرى 🔄"
+    },
     challengeMatchTitle: {
       ca: "Repte de lectura: Quina paraula és?",
       es: "Reto de lectura: ¿Qué palabra es?",

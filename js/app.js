@@ -9,6 +9,7 @@ const App = {
     bridgeLang: "es", // es, fr, en, ar
     currentCategory: null,
     currentMode: "discover", // discover | practice
+    practiceType: "listen", // listen | memory
     startTime: null,
     discoveredWords: new Set(),
     quizAnswers: []
@@ -78,6 +79,7 @@ const App = {
     this.state.bridgeLang = "es";
     this.state.currentCategory = null;
     this.state.currentMode = "discover";
+    this.state.practiceType = "listen";
     this.state.startTime = null;
     this.state.discoveredWords = new Set();
     this.state.quizAnswers = [];
@@ -247,6 +249,15 @@ const App = {
   // --- VISTA DETALLADA DEL TEMA (DESCOBREIX & REPTES) ---
   openCategory(catId) {
     this.state.currentCategory = catId;
+    this.initMemoryGame();
+    this.renderCategoryContent();
+  },
+
+  setPracticeType(type) {
+    this.state.practiceType = type;
+    if (type === 'memory') {
+      this.initMemoryGame();
+    }
     this.renderCategoryContent();
   },
 
@@ -395,6 +406,35 @@ const App = {
   // --- MODE PRÀCTICA / REPTES AUTOAVALUATIUS ---
   renderPracticeArea(words) {
     const lang = this.state.bridgeLang;
+    const type = this.state.practiceType || "listen";
+
+    return `
+      <div class="practice-container">
+        <div class="practice-subnav" role="tablist" aria-label="Tipus de repte">
+          <button 
+            class="subnav-btn ${type === 'listen' ? 'active' : ''}" 
+            onclick="App.setPracticeType('listen')"
+            role="tab"
+            aria-selected="${type === 'listen'}">
+            🎧 ${ACOLLIDA_DATA.ui.challengeListenTitle[lang] || "Repte auditiu"}
+          </button>
+          <button 
+            class="subnav-btn ${type === 'memory' ? 'active' : ''}" 
+            onclick="App.setPracticeType('memory')"
+            role="tab"
+            aria-selected="${type === 'memory'}">
+            🃏 ${ACOLLIDA_DATA.ui.challengeMemoryTitle[lang] || "Joc de parelles (Memory)"}
+          </button>
+        </div>
+
+        ${type === 'listen' ? this.renderListenChallenge(words) : this.renderMemoryGame(words)}
+      </div>
+    `;
+  },
+
+  // --- REPTE AUDITIU: ESCOLTA I TRIA ---
+  renderListenChallenge(words) {
+    const lang = this.state.bridgeLang;
     const isArabic = lang === "ar";
 
     // Triem una paraula aleatòria com a repte
@@ -412,39 +452,37 @@ const App = {
     };
 
     return `
-      <div class="practice-container">
-        <div class="practice-header">
-          <h3>🎯 ${ACOLLIDA_DATA.ui.challengeListenTitle[lang] || "Repte auditiu"}</h3>
-          <p class="${isArabic ? 'arabic-text' : ''}">
-            ${ACOLLIDA_DATA.ui.challengeListenInstr[lang] || "Clica l'altaveu i selecciona la imatge corresponent:"}
-          </p>
+      <div class="practice-header">
+        <h3>🎯 ${ACOLLIDA_DATA.ui.challengeListenTitle[lang] || "Repte auditiu"}</h3>
+        <p class="${isArabic ? 'arabic-text' : ''}">
+          ${ACOLLIDA_DATA.ui.challengeListenInstr[lang] || "Clica l'altaveu i selecciona la imatge corresponent:"}
+        </p>
+      </div>
+
+      <div class="challenge-box">
+        <button class="big-speaker-btn" onclick="App.playChallengeAudio('${targetWord.id}')" title="Escolta la paraula en català" aria-label="Escolta la paraula en català">
+          🔊
+        </button>
+        <span style="font-weight: 600; color: var(--text-muted);">(Fes clic per escoltar)</span>
+
+        <div class="challenge-options-grid">
+          ${options.map(opt => `
+            <button 
+              class="option-btn" 
+              id="opt-${opt.id}" 
+              onclick="App.checkOption('${opt.id}', '${targetWord.id}')">
+              <span class="opt-icon">${opt.icon}</span>
+              <span class="opt-text">${opt.ca}</span>
+            </button>
+          `).join("")}
         </div>
 
-        <div class="challenge-box">
-          <button class="big-speaker-btn" onclick="App.playChallengeAudio('${targetWord.id}')" title="Escolta">
-            🔊
+        <div id="feedback-box" class="feedback-banner"></div>
+
+        <div id="next-challenge-wrap" style="display: none; margin-top: 1rem;">
+          <button class="btn-primary" onclick="App.nextChallenge()">
+            Següent repte ➡️
           </button>
-          <span style="font-weight: 600; color: var(--text-muted);">(Fes clic per escoltar)</span>
-
-          <div class="challenge-options-grid">
-            ${options.map(opt => `
-              <button 
-                class="option-btn" 
-                id="opt-${opt.id}" 
-                onclick="App.checkOption('${opt.id}', '${targetWord.id}')">
-                <span class="opt-icon">${opt.icon}</span>
-                <span class="opt-text">${opt.ca}</span>
-              </button>
-            `).join("")}
-          </div>
-
-          <div id="feedback-box" class="feedback-banner"></div>
-
-          <div id="next-challenge-wrap" style="display: none; margin-top: 1rem;">
-            <button class="btn-primary" onclick="App.nextChallenge()">
-              Següent repte ➡️
-            </button>
-          </div>
         </div>
       </div>
     `;
@@ -496,6 +534,185 @@ const App = {
   },
 
   nextChallenge() {
+    this.renderCategoryContent();
+  },
+
+  // --- JOC DE PARELLES (MEMORY GAME) ---
+  initMemoryGame() {
+    const catWords = ACOLLIDA_DATA.vocabulary.filter(v => v.categoria === this.state.currentCategory);
+    if (!catWords.length) return;
+
+    // Seleccionem fins a 4 paraules per generar 8 cartes (4 parelles)
+    const shuffled = [...catWords].sort(() => 0.5 - Math.random());
+    const selected = shuffled.slice(0, Math.min(4, shuffled.length));
+
+    const cards = [];
+    selected.forEach(item => {
+      // Carta tipus icona
+      cards.push({
+        id: `mem_icon_${item.id}`,
+        wordId: item.id,
+        type: 'icon',
+        icon: item.icon,
+        ca: item.ca,
+        flipped: false,
+        matched: false
+      });
+      // Carta tipus paraula escrita
+      cards.push({
+        id: `mem_word_${item.id}`,
+        wordId: item.id,
+        type: 'word',
+        icon: item.icon,
+        ca: item.ca,
+        flipped: false,
+        matched: false
+      });
+    });
+
+    cards.sort(() => 0.5 - Math.random());
+
+    this.memoryGame = {
+      cards: cards,
+      selectedCards: [],
+      matchedPairs: 0,
+      totalPairs: selected.length,
+      isLocked: false
+    };
+  },
+
+  renderMemoryGame(words) {
+    if (!this.memoryGame || !this.memoryGame.cards || !this.memoryGame.cards.length) {
+      this.initMemoryGame();
+    }
+
+    const lang = this.state.bridgeLang;
+    const isArabic = lang === "ar";
+    const mg = this.memoryGame;
+    const isFinished = mg.matchedPairs >= mg.totalPairs && mg.totalPairs > 0;
+
+    return `
+      <div class="practice-header">
+        <h3>🃏 ${ACOLLIDA_DATA.ui.challengeMemoryTitle[lang] || "Joc de parelles (Memory)"}</h3>
+        <p class="${isArabic ? 'arabic-text' : ''}">
+          ${ACOLLIDA_DATA.ui.challengeMemoryInstr[lang] || "Gira dues targetes per associar la imatge amb la paraula en català:"}
+        </p>
+        <div id="memory-score-display" style="margin-top: 0.6rem; font-weight: 700; color: var(--primary-color);">
+          Parelles trobades: ${mg.matchedPairs} / ${mg.totalPairs}
+        </div>
+      </div>
+
+      <div class="memory-grid" id="memory-grid">
+        ${mg.cards.map((card, idx) => `
+          <div 
+            class="memory-card ${card.flipped ? 'flipped' : ''} ${card.matched ? 'matched' : ''}" 
+            id="mcard-${card.id}"
+            onclick="App.flipMemoryCard('${card.id}')"
+            onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();App.flipMemoryCard('${card.id}');}"
+            tabindex="0"
+            role="button"
+            aria-label="${card.flipped || card.matched ? (card.type === 'icon' ? 'Imatge ' + card.ca : 'Paraula ' + card.ca) : 'Targeta oculta ' + (idx + 1)}">
+            <div class="memory-card-face memory-card-back">
+              🎒
+            </div>
+            <div class="memory-card-face memory-card-front">
+              ${card.type === 'icon' 
+                ? `<span class="memory-card-icon">${card.icon}</span>` 
+                : `<span class="memory-card-word">${card.ca}</span>`}
+            </div>
+          </div>
+        `).join("")}
+      </div>
+
+      ${isFinished ? `
+        <div class="memory-victory-box">
+          <div style="font-size: 2.2rem; margin-bottom: 0.5rem;">🌟🎉👏</div>
+          <h4 style="font-size: 1.3rem; color: #10b981; margin-bottom: 0.5rem;">
+            ${ACOLLIDA_DATA.ui.memoryWellDone[lang] || "Fantàstic! Has trobat totes les parelles!"}
+          </h4>
+          <button class="btn-primary" onclick="App.restartMemoryGame()" style="margin-top: 1rem;">
+            ${ACOLLIDA_DATA.ui.playAgainBtn[lang] || "Jugar una altra partida 🔄"}
+          </button>
+        </div>
+      ` : ''}
+    `;
+  },
+
+  flipMemoryCard(cardId) {
+    const mg = this.memoryGame;
+    if (!mg || mg.isLocked) return;
+
+    const card = mg.cards.find(c => c.id === cardId);
+    if (!card || card.flipped || card.matched) return;
+
+    // Gira la targeta
+    card.flipped = true;
+    mg.selectedCards.push(card);
+
+    // Pronunciem la paraula en català per reforçar el so
+    AudioManager.speak(card.ca, 'ca');
+
+    // Actualitzem l'element al DOM
+    const el = document.getElementById(`mcard-${card.id}`);
+    if (el) el.classList.add("flipped");
+
+    if (mg.selectedCards.length === 2) {
+      const [c1, c2] = mg.selectedCards;
+      if (c1.wordId === c2.wordId) {
+        // Parella correcta!
+        c1.matched = true;
+        c2.matched = true;
+        mg.matchedPairs++;
+        mg.selectedCards = [];
+
+        this.state.discoveredWords.add(c1.wordId);
+        this.state.quizAnswers.push({
+          wordId: c1.wordId,
+          selectedId: c2.wordId,
+          isCorrect: true,
+          timestamp: new Date().toISOString()
+        });
+        this.saveToStorage();
+
+        setTimeout(() => {
+          const el1 = document.getElementById(`mcard-${c1.id}`);
+          const el2 = document.getElementById(`mcard-${c2.id}`);
+          if (el1) el1.classList.add("matched");
+          if (el2) el2.classList.add("matched");
+          AudioManager.playSuccessSound();
+
+          if (mg.matchedPairs >= mg.totalPairs) {
+            this.renderCategoryContent();
+          } else {
+            const scoreDisplay = document.getElementById("memory-score-display");
+            if (scoreDisplay) {
+              scoreDisplay.textContent = `Parelles trobades: ${mg.matchedPairs} / ${mg.totalPairs}`;
+            }
+          }
+        }, 300);
+      } else {
+        // No coincideixen
+        mg.isLocked = true;
+        setTimeout(() => {
+          AudioManager.playRetrySound();
+        }, 350);
+
+        setTimeout(() => {
+          c1.flipped = false;
+          c2.flipped = false;
+          mg.selectedCards = [];
+          mg.isLocked = false;
+          const el1 = document.getElementById(`mcard-${c1.id}`);
+          const el2 = document.getElementById(`mcard-${c2.id}`);
+          if (el1) el1.classList.remove("flipped");
+          if (el2) el2.classList.remove("flipped");
+        }, 1100);
+      }
+    }
+  },
+
+  restartMemoryGame() {
+    this.initMemoryGame();
     this.renderCategoryContent();
   },
 

@@ -12,13 +12,48 @@ const AudioManager = {
   audioCtx: null,
   voices: [],
   currentAudio: null,
+  isSlowSpeed: false,
 
   init() {
+    try {
+      const savedSpeed = localStorage.getItem("acollida_speed");
+      if (savedSpeed === "slow") {
+        this.isSlowSpeed = true;
+      }
+    } catch (e) {
+      console.warn("No s'ha pogut llegir la preferència de velocitat:", e);
+    }
+    this.updateSpeedUI();
+
     if (this.synth) {
       this.loadVoices();
       if (this.synth.onvoiceschanged !== undefined) {
         this.synth.onvoiceschanged = () => this.loadVoices();
       }
+    }
+  },
+
+  toggleSpeed() {
+    this.isSlowSpeed = !this.isSlowSpeed;
+    try {
+      localStorage.setItem("acollida_speed", this.isSlowSpeed ? "slow" : "normal");
+    } catch (e) {
+      console.warn("No s'ha pogut desar la velocitat:", e);
+    }
+    this.updateSpeedUI();
+    // Breu anunci auditiu informatiu
+    this.speak(this.isSlowSpeed ? "A poc a poc" : "Normal", "ca");
+  },
+
+  updateSpeedUI() {
+    const btn = document.getElementById("speed-toggle-btn");
+    if (btn) {
+      btn.textContent = this.isSlowSpeed ? "🐢" : "🐇";
+      const title = this.isSlowSpeed 
+        ? "Velocitat de veu: A poc a poc 🐢 (Clica per a normal 🐇)" 
+        : "Velocitat de veu: Normal 🐇 (Clica per a lenta 🐢)";
+      btn.setAttribute("title", title);
+      btn.setAttribute("aria-label", title);
     }
   },
 
@@ -115,6 +150,7 @@ const AudioManager = {
     audio.referrerPolicy = 'no-referrer';
     audio.preload = 'auto';
     audio.src = resolvedSrc;
+    audio.playbackRate = this.isSlowSpeed ? 0.76 : 1.0;
     this.currentAudio = audio;
 
     let fallbackCalled = false;
@@ -154,22 +190,26 @@ const AudioManager = {
    * @param {string} text Text a pronunciar
    * @param {string} lang Codi de llengua ('ca', 'es', 'fr', 'en', 'ar')
    * @param {string|null} localAudioPath Ruta d'arxiu MP3 local si existeix
-   * @param {number} rate Velocitat de parla
+   * @param {number|null} rate Velocitat de parla (si és null, s'adapta al mode DUA lenta/normal)
    */
-  speak(text, lang = 'ca', localAudioPath = null, rate = 0.88) {
+  speak(text, lang = 'ca', localAudioPath = null, rate = null) {
     this.stopAll();
+
+    const effectiveRate = (rate !== null && rate !== undefined)
+      ? rate
+      : (this.isSlowSpeed ? 0.68 : 0.88);
 
     // 1. Si tenim un fitxer d'àudio dedicat (ex: paquet local d'àrab), prioritzem-lo
     if (localAudioPath) {
       this.playAudioFile(localAudioPath, () => {
         // Fallback automàtic si el fitxer local no es troba
-        this.speakWithSynthesisOrOnline(text, lang, rate);
+        this.speakWithSynthesisOrOnline(text, lang, effectiveRate);
       });
       return;
     }
 
     // 2. Si no hi ha fitxer local, emprem síntesi nativa o fallback en línia
-    this.speakWithSynthesisOrOnline(text, lang, rate);
+    this.speakWithSynthesisOrOnline(text, lang, effectiveRate);
   },
 
   speakWithSynthesisOrOnline(text, lang, rate = 0.88) {
