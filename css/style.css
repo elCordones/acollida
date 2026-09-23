@@ -1,0 +1,1230 @@
+/* ============================================================
+   AULA D'ACOLLIDA DIGITAL - FULL D'ESTILS ACCESSIBLE I DUA
+   Dissenyat per a Educació Primària, Multilingüisme RTL i Modes Fosc/Clar
+   ============================================================ */
+
+/* --- SISTEMA DE TOKENS I VARIABLES DE COLOR --- */
+:root {
+  /* Colors base de marca */
+  --primary-color: #2563eb;
+  --primary-hover: #1d4ed8;
+  --secondary-color: #10b981;
+  --accent-color: #f59e0b;
+
+  /* Mode Clar (per defecte) */
+  --bg-color: #f8fafc;
+  --header-bg: #ffffff;
+  --card-bg: #ffffff;
+  --card-subtle-bg: #f1f5f9;
+  --text-main: #0f172a;
+  --text-muted: #475569;
+  --text-heading: #1e3a8a;
+  --border-color: #cbd5e1;
+  --border-hover: #94a3b8;
+  --input-bg: #ffffff;
+  --input-text: #0f172a;
+  --badge-bg: #f1f5f9;
+  --badge-text: #1e293b;
+  
+  /* Botó de llengua actiu */
+  --lang-active-bg: #dbeafe;
+  --lang-active-text: #1e40af;
+  --lang-active-border: #2563eb;
+
+  /* Targeta de frase model */
+  --phrase-bg: #fefce8;
+  --phrase-border: #fef08a;
+  --phrase-title: #854d0e;
+  --phrase-text: #713f12;
+
+  /* Botons de reproducció de veu */
+  --speaker-bg: #dbeafe;
+  --speaker-hover: #2563eb;
+  --speaker-color: #1d4ed8;
+  --speak-btn-bg: #eff6ff;
+  --speak-btn-text: #1d4ed8;
+  --speak-btn-border: #bfdbfe;
+  --speak-bridge-bg: #f1f5f9;
+  --speak-bridge-text: #1e293b;
+  --speak-bridge-border: #cbd5e1;
+
+  /* Banner de feedback */
+  --feedback-success-bg: #d1fae5;
+  --feedback-success-text: #065f46;
+  --feedback-success-border: #a7f3d0;
+  --feedback-retry-bg: #fee2e2;
+  --feedback-retry-text: #991b1b;
+  --feedback-retry-border: #fecaca;
+
+  /* Medalles i Passaport */
+  --word-badge-bg: #e0f2fe;
+  --word-badge-text: #0369a1;
+  --word-badge-border: #bae6fd;
+  --passport-bg: #fafaf9;
+  --passport-border: #2563eb;
+
+  /* Peu de pàgina */
+  --footer-bg: #f8fafc;
+  --footer-border: #e2e8f0;
+  --footer-text: #475569;
+  --footer-link: #2563eb;
+
+  /* Ombres i ràdios */
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.12);
+  --radius-sm: 8px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --font-main: 'Segoe UI', system-ui, -apple-system, Roboto, 'Helvetica Neue', sans-serif;
+  --font-arabic: 'Segoe UI', 'Cairo', 'Noto Sans Arabic', Tahoma, sans-serif;
+
+  color-scheme: light;
+}
+
+/* --- DETECCIÓ AUTOMÀTICA DE PREFERÈNCIA DEL SISTEMA (MODE FOSC) --- */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg-color: #0b1120;
+    --header-bg: #111827;
+    --card-bg: #1e293b;
+    --card-subtle-bg: #0f172a;
+    --text-main: #f8fafc;
+    --text-muted: #cbd5e1;
+    --text-heading: #93c5fd;
+    --border-color: #334155;
+    --border-hover: #475569;
+    --input-bg: #0f172a;
+    --input-text: #f8fafc;
+    --badge-bg: #1e293b;
+    --badge-text: #f8fafc;
+
+    --lang-active-bg: #1e3a8a;
+    --lang-active-text: #ffffff;
+    --lang-active-border: #60a5fa;
+
+    --phrase-bg: #172554;
+    --phrase-border: #1e40af;
+    --phrase-title: #fde047;
+    --phrase-text: #e2e8f0;
+
+    --speaker-bg: #1e3a8a;
+    --speaker-hover: #2563eb;
+    --speaker-color: #93c5fd;
+    --speak-btn-bg: #1e3a8a;
+    --speak-btn-text: #ffffff;
+    --speak-btn-border: #3b82f6;
+    --speak-bridge-bg: #334155;
+    --speak-bridge-text: #f8fafc;
+    --speak-bridge-border: #475569;
+
+    --feedback-success-bg: #064e3b;
+    --feedback-success-text: #a7f3d0;
+    --feedback-success-border: #059669;
+    --feedback-retry-bg: #7f1d1d;
+    --feedback-retry-text: #fecaca;
+    --feedback-retry-border: #dc2626;
+
+    --word-badge-bg: #1e3a8a;
+    --word-badge-text: #bfdbfe;
+    --word-badge-border: #3b82f6;
+    --passport-bg: #1e293b;
+    --passport-border: #60a5fa;
+
+    --footer-bg: #111827;
+    --footer-border: #1f2937;
+    --footer-text: #cbd5e1;
+    --footer-link: #60a5fa;
+
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.4);
+    --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4);
+    --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.5);
+
+    color-scheme: dark;
+  }
+}
+
+/* --- FORÇAR MODE FOSC MANUALMENT --- */
+[data-theme="dark"] {
+  --bg-color: #0b1120;
+  --header-bg: #111827;
+  --card-bg: #1e293b;
+  --card-subtle-bg: #0f172a;
+  --text-main: #f8fafc;
+  --text-muted: #cbd5e1;
+  --text-heading: #93c5fd;
+  --border-color: #334155;
+  --border-hover: #475569;
+  --input-bg: #0f172a;
+  --input-text: #f8fafc;
+  --badge-bg: #1e293b;
+  --badge-text: #f8fafc;
+
+  --lang-active-bg: #1e3a8a;
+  --lang-active-text: #ffffff;
+  --lang-active-border: #60a5fa;
+
+  --phrase-bg: #172554;
+  --phrase-border: #1e40af;
+  --phrase-title: #fde047;
+  --phrase-text: #e2e8f0;
+
+  --speaker-bg: #1e3a8a;
+  --speaker-hover: #2563eb;
+  --speaker-color: #93c5fd;
+  --speak-btn-bg: #1e3a8a;
+  --speak-btn-text: #ffffff;
+  --speak-btn-border: #3b82f6;
+  --speak-bridge-bg: #334155;
+  --speak-bridge-text: #f8fafc;
+  --speak-bridge-border: #475569;
+
+  --feedback-success-bg: #064e3b;
+  --feedback-success-text: #a7f3d0;
+  --feedback-success-border: #059669;
+  --feedback-retry-bg: #7f1d1d;
+  --feedback-retry-text: #fecaca;
+  --feedback-retry-border: #dc2626;
+
+  --word-badge-bg: #1e3a8a;
+  --word-badge-text: #bfdbfe;
+  --word-badge-border: #3b82f6;
+  --passport-bg: #1e293b;
+  --passport-border: #60a5fa;
+
+  --footer-bg: #111827;
+  --footer-border: #1f2937;
+  --footer-text: #cbd5e1;
+  --footer-link: #60a5fa;
+
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.5);
+
+  color-scheme: dark;
+}
+
+/* --- FORÇAR MODE CLAR MANUALMENT --- */
+[data-theme="light"] {
+  --bg-color: #f8fafc;
+  --header-bg: #ffffff;
+  --card-bg: #ffffff;
+  --card-subtle-bg: #f1f5f9;
+  --text-main: #0f172a;
+  --text-muted: #475569;
+  --text-heading: #1e3a8a;
+  --border-color: #cbd5e1;
+  --border-hover: #94a3b8;
+  --input-bg: #ffffff;
+  --input-text: #0f172a;
+  --badge-bg: #f1f5f9;
+  --badge-text: #1e293b;
+
+  --lang-active-bg: #dbeafe;
+  --lang-active-text: #1e40af;
+  --lang-active-border: #2563eb;
+
+  --phrase-bg: #fefce8;
+  --phrase-border: #fef08a;
+  --phrase-title: #854d0e;
+  --phrase-text: #713f12;
+
+  --speaker-bg: #dbeafe;
+  --speaker-hover: #2563eb;
+  --speaker-color: #1d4ed8;
+  --speak-btn-bg: #eff6ff;
+  --speak-btn-text: #1d4ed8;
+  --speak-btn-border: #bfdbfe;
+  --speak-bridge-bg: #f1f5f9;
+  --speak-bridge-text: #1e293b;
+  --speak-bridge-border: #cbd5e1;
+
+  --feedback-success-bg: #d1fae5;
+  --feedback-success-text: #065f46;
+  --feedback-success-border: #a7f3d0;
+  --feedback-retry-bg: #fee2e2;
+  --feedback-retry-text: #991b1b;
+  --feedback-retry-border: #fecaca;
+
+  --word-badge-bg: #e0f2fe;
+  --word-badge-text: #0369a1;
+  --word-badge-border: #bae6fd;
+  --passport-bg: #fafaf9;
+  --passport-border: #2563eb;
+
+  --footer-bg: #f8fafc;
+  --footer-border: #e2e8f0;
+  --footer-text: #475569;
+  --footer-link: #2563eb;
+
+  color-scheme: light;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-main);
+  background: var(--bg-color);
+  color: var(--text-main);
+  line-height: 1.6;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+/* --- SUPORT PER A LLENGUA ÀRAB (RTL) --- */
+.arabic-text {
+  font-family: var(--font-arabic);
+  direction: rtl;
+  text-align: right;
+  unicode-bidi: isolate;
+  font-size: 1.15em;
+  letter-spacing: 0;
+}
+
+[dir="rtl"] {
+  direction: rtl;
+  text-align: right;
+}
+
+/* --- CAPÇALERA I BARRA SUPERIOR --- */
+.app-header {
+  background: var(--header-bg);
+  border-bottom: 1px solid var(--border-color);
+  padding: 0.85rem 1.25rem;
+  box-shadow: var(--shadow-sm);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.header-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.logo-area {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  user-select: none;
+}
+
+.logo-icon {
+  font-size: 2rem;
+  background: var(--badge-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 0.35rem 0.55rem;
+  display: inline-block;
+  line-height: 1;
+}
+
+.logo-title h1 {
+  font-size: 1.25rem;
+  color: var(--text-heading);
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.logo-title p {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.theme-toggle-btn {
+  background: var(--badge-bg);
+  border: 1px solid var(--border-color);
+  color: var(--text-main);
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.theme-toggle-btn:hover {
+  border-color: var(--primary-color);
+  background: var(--card-subtle-bg);
+  transform: rotate(15deg) scale(1.05);
+}
+
+.user-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  background: var(--badge-bg);
+  padding: 0.4rem 0.85rem;
+  border-radius: var(--radius-lg);
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--text-main);
+  border: 1px solid var(--border-color);
+}
+
+.user-badge .avatar {
+  background: var(--primary-color);
+  color: white;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+}
+
+/* --- CONTENIDOR PRINCIPAL --- */
+.main-wrapper {
+  max-width: 1200px;
+  margin: 1.5rem auto;
+  padding: 0 1rem;
+  width: 100%;
+  flex: 1;
+}
+
+/* --- PANTALLA INICIAL (BENVINGUDA I CONFIGURACIÓ) --- */
+.welcome-screen {
+  background: var(--card-bg);
+  border-radius: var(--radius-lg);
+  padding: 2.25rem;
+  text-align: center;
+  max-width: 650px;
+  margin: 1.5rem auto;
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--border-color);
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.welcome-screen h2 {
+  font-size: 1.75rem;
+  color: var(--text-heading);
+  margin-bottom: 0.4rem;
+}
+
+.welcome-screen p.subtitle {
+  color: var(--text-muted);
+  margin-bottom: 1.75rem;
+  font-size: 0.98rem;
+}
+
+.config-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  text-align: left;
+}
+
+.form-group label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: var(--text-main);
+  font-size: 1rem;
+}
+
+.form-input {
+  width: 100%;
+  padding: 0.85rem 1rem;
+  font-size: 1.05rem;
+  background: var(--input-bg);
+  color: var(--input-text);
+  border: 2px solid var(--border-color);
+  border-radius: var(--radius-md);
+  outline: none;
+  transition: border-color 0.2s, background-color 0.2s;
+}
+
+.form-input::placeholder {
+  color: var(--text-muted);
+  opacity: 0.75;
+}
+
+.form-input:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.25);
+}
+
+/* Selector d'idioma en format targetes gràfiques */
+.lang-selector-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+  gap: 0.75rem;
+}
+
+.lang-btn {
+  background: var(--card-bg);
+  border: 2px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 0.75rem 0.5rem;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3rem;
+  transition: all 0.2s ease;
+  color: var(--text-main);
+}
+
+.lang-btn .flag {
+  font-size: 1.75rem;
+}
+
+.lang-btn .name {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--text-main);
+}
+
+.lang-btn:hover {
+  border-color: var(--primary-color);
+  background: var(--card-subtle-bg);
+}
+
+.lang-btn.active {
+  background: var(--lang-active-bg);
+  color: var(--lang-active-text);
+  border-color: var(--lang-active-border);
+  box-shadow: 0 0 0 2px var(--lang-active-border);
+}
+
+.lang-btn.active .name {
+  color: var(--lang-active-text);
+  font-weight: 700;
+}
+
+.btn-primary {
+  background: var(--primary-color);
+  color: #ffffff;
+  border: none;
+  padding: 0.9rem 1.75rem;
+  font-size: 1.15rem;
+  font-weight: 700;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  box-shadow: var(--shadow-md);
+}
+
+.btn-primary:hover {
+  background: var(--primary-hover);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+/* --- PANNELL DE SELECCIÓ DE TEMES --- */
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.section-title {
+  font-size: 1.5rem;
+  color: var(--text-main);
+  font-weight: 700;
+}
+
+.categories-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.25rem;
+  margin-bottom: 2rem;
+}
+
+.category-card {
+  background: var(--card-bg);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  border: 2px solid var(--border-color);
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+}
+
+.category-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 8px;
+  background: var(--cat-color, #2563eb);
+}
+
+.category-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--cat-color, #2563eb);
+}
+
+.cat-icon {
+  font-size: 2.6rem;
+  margin-bottom: 0.75rem;
+}
+
+.cat-title-ca {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--text-main);
+  margin-bottom: 0.35rem;
+}
+
+.cat-title-bridge {
+  font-size: 0.95rem;
+  color: var(--text-muted);
+  margin-bottom: 0.75rem;
+}
+
+.cat-desc {
+  font-size: 0.88rem;
+  color: var(--text-muted);
+  margin-top: auto;
+}
+
+/* --- VISTA DE TEMA (MODES DESCOBREIX I REPTES) --- */
+.topic-top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--card-bg);
+  padding: 0.85rem 1.25rem;
+  border-radius: var(--radius-md);
+  margin-bottom: 1.5rem;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border-color);
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.tabs-container {
+  display: flex;
+  gap: 0.4rem;
+  background: var(--badge-bg);
+  border: 1px solid var(--border-color);
+  padding: 0.3rem;
+  border-radius: var(--radius-md);
+}
+
+.tab-btn {
+  padding: 0.55rem 1.15rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+  color: var(--text-muted);
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.tab-btn.active {
+  background: var(--card-bg);
+  color: var(--primary-color);
+  box-shadow: var(--shadow-sm);
+}
+
+/* --- GRID DE TARGETES LÈXIQUES (MODE DESCOBREIX) --- */
+.vocab-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.25rem;
+}
+
+.vocab-card {
+  background: var(--card-bg);
+  border-radius: var(--radius-lg);
+  border: 2px solid var(--border-color);
+  padding: 1.25rem;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.vocab-card:hover {
+  box-shadow: var(--shadow-md);
+  border-color: var(--border-hover);
+}
+
+.card-img-wrap {
+  width: 105px;
+  height: 105px;
+  background: var(--card-subtle-bg);
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0.85rem;
+  border: 1px solid var(--border-color);
+  position: relative;
+}
+
+.card-img-wrap .emoji-fallback {
+  font-size: 3.2rem;
+}
+
+.card-word-ca {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--text-main);
+  margin-bottom: 0.25rem;
+}
+
+.card-word-bridge {
+  font-size: 1.1rem;
+  color: var(--text-muted);
+  font-weight: 600;
+  margin-bottom: 0.15rem;
+}
+
+.card-phonetic {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  font-style: italic;
+  margin-bottom: 0.75rem;
+}
+
+.card-audio-actions {
+  display: flex;
+  gap: 0.6rem;
+  width: 100%;
+  margin-top: auto;
+  padding-top: 0.75rem;
+  border-top: 1px dashed var(--border-color);
+}
+
+.btn-speak {
+  flex: 1;
+  background: var(--speak-btn-bg);
+  color: var(--speak-btn-text);
+  border: 1px solid var(--speak-btn-border);
+  padding: 0.65rem 0.5rem;
+  border-radius: var(--radius-sm);
+  font-weight: 700;
+  font-size: 0.9rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  transition: all 0.2s;
+}
+
+.btn-speak:hover {
+  background: var(--primary-color);
+  color: #ffffff;
+  border-color: var(--primary-color);
+}
+
+.btn-speak-bridge {
+  background: var(--speak-bridge-bg);
+  color: var(--speak-bridge-text);
+  border: 1px solid var(--speak-bridge-border);
+}
+
+.btn-speak-bridge:hover {
+  background: var(--primary-color);
+  color: #ffffff;
+  border-color: var(--primary-color);
+}
+
+/* Microestructura / Frase útil desplegable a la targeta */
+.card-phrase-box {
+  margin-top: 0.75rem;
+  background: var(--phrase-bg);
+  border: 1px solid var(--phrase-border);
+  border-radius: var(--radius-sm);
+  padding: 0.65rem 0.75rem;
+  width: 100%;
+  text-align: left;
+  font-size: 0.88rem;
+}
+
+.card-phrase-box p.phrase-ca {
+  font-weight: 700;
+  color: var(--phrase-title);
+  margin-bottom: 0.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.card-phrase-box p.phrase-bridge {
+  color: var(--phrase-text);
+  font-size: 0.84rem;
+}
+
+/* --- PANTALLA DE REPTES I JOCS --- */
+.practice-container {
+  background: var(--card-bg);
+  border-radius: var(--radius-lg);
+  padding: 2rem;
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--border-color);
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.practice-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.practice-header h3 {
+  font-size: 1.55rem;
+  color: var(--text-heading);
+  margin-bottom: 0.5rem;
+}
+
+.practice-header p {
+  color: var(--text-muted);
+}
+
+.challenge-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.big-speaker-btn {
+  background: var(--speaker-bg);
+  border: 3px solid var(--speaker-color);
+  color: var(--speaker-color);
+  width: 88px;
+  height: 88px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.4rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: var(--shadow-md);
+}
+
+.big-speaker-btn:hover {
+  transform: scale(1.08);
+  background: var(--speaker-hover);
+  color: #ffffff;
+}
+
+.challenge-options-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 1rem;
+  width: 100%;
+}
+
+.option-btn {
+  background: var(--card-bg);
+  border: 2px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 1.25rem 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.option-btn:hover {
+  border-color: var(--primary-color);
+  background: var(--card-subtle-bg);
+}
+
+.option-btn.correct {
+  border-color: #10b981;
+  background: rgba(16, 185, 129, 0.2);
+  animation: pulseCorrect 0.4s ease;
+}
+
+.option-btn.wrong {
+  border-color: #ef4444;
+  background: rgba(239, 68, 68, 0.2);
+  animation: shakeWrong 0.4s ease;
+}
+
+.option-btn .opt-icon {
+  font-size: 2.8rem;
+}
+
+.option-btn .opt-text {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.feedback-banner {
+  padding: 0.9rem 1.5rem;
+  border-radius: var(--radius-md);
+  font-weight: 700;
+  font-size: 1.05rem;
+  text-align: center;
+  width: 100%;
+  display: none;
+}
+
+.feedback-banner.success {
+  display: block;
+  background: var(--feedback-success-bg);
+  color: var(--feedback-success-text);
+  border: 1px solid var(--feedback-success-border);
+}
+
+.feedback-banner.retry {
+  display: block;
+  background: var(--feedback-retry-bg);
+  color: var(--feedback-retry-text);
+  border: 1px solid var(--feedback-retry-border);
+}
+
+/* --- MODAL DE FINALITZACIÓ I PASSAPORT D'APRENENTATGE --- */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: var(--card-bg);
+  color: var(--text-main);
+  border-radius: var(--radius-lg);
+  max-width: 680px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: var(--shadow-lg);
+  padding: 1.75rem;
+  position: relative;
+  border: 1px solid var(--border-color);
+}
+
+.passport-certificate {
+  border: 4px double var(--passport-border);
+  border-radius: var(--radius-md);
+  padding: 1.75rem;
+  background: var(--passport-bg);
+  text-align: center;
+  margin-bottom: 1.25rem;
+}
+
+.passport-header h3 {
+  font-size: 1.5rem;
+  color: var(--text-heading);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.passport-student-name {
+  font-size: 1.8rem;
+  color: var(--primary-color);
+  font-weight: 800;
+  margin: 0.75rem 0;
+}
+
+.passport-metrics {
+  display: flex;
+  justify-content: space-around;
+  margin: 1.25rem 0;
+  background: var(--card-bg);
+  padding: 0.85rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-color);
+}
+
+.metric-item .num {
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: var(--text-main);
+}
+
+.metric-item .lbl {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+}
+
+.passport-words-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  justify-content: center;
+  margin: 1rem 0;
+}
+
+.word-badge {
+  background: var(--word-badge-bg);
+  color: var(--word-badge-text);
+  border: 1px solid var(--word-badge-border);
+  padding: 0.35rem 0.75rem;
+  border-radius: var(--radius-lg);
+  font-size: 0.88rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.btn-secondary {
+  background: var(--badge-bg);
+  color: var(--text-main);
+  border: 1px solid var(--border-color);
+  padding: 0.8rem 1.4rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.2s;
+}
+
+.btn-secondary:hover {
+  background: var(--border-hover);
+}
+
+/* --- ANIMACIONS --- */
+@keyframes pulseCorrect {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+@keyframes shakeWrong {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-6px); }
+  75% { transform: translateX(6px); }
+}
+
+/* --- PEU DE PÀGINA RESUMIT I CONTINGUT (APPS-ESCOLARS) --- */
+.app-footer {
+  margin-top: auto;
+  padding: 0.6rem 1rem;
+  background-color: var(--footer-bg);
+  border-top: 1px solid var(--footer-border);
+  text-align: center;
+  font-family: var(--font-main);
+  font-size: 0.78rem;
+  color: var(--footer-text);
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.app-footer .footer-content {
+  max-width: 900px;
+  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+}
+
+.app-footer .cc-badge {
+  height: 22px;
+  width: auto;
+  display: block;
+}
+
+.app-footer .footer-legal {
+  line-height: 1.4;
+}
+
+.app-footer a {
+  color: var(--footer-link);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.app-footer a:hover {
+  text-decoration: underline;
+}
+
+/* --- ACCESSIBILITAT FOCUS-VISIBLE (WCAG) --- */
+button:focus-visible,
+input:focus-visible,
+a:focus-visible,
+[tabindex="0"]:focus-visible {
+  outline: 3px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+/* --- ADAPTABILITAT RESPONSIVE PER A TAULETES I MÒBILS --- */
+@media (max-width: 640px) {
+  .header-container {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  .logo-title h1 {
+    font-size: 1.1rem;
+  }
+
+  .logo-title p {
+    display: none;
+  }
+
+  .welcome-screen {
+    padding: 1.5rem 1rem;
+    margin: 1rem auto;
+  }
+
+  .lang-selector-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .categories-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .vocab-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .topic-top-bar {
+    flex-direction: column;
+    align-items: stretch;
+    text-align: center;
+    gap: 0.75rem;
+  }
+
+  .tabs-container {
+    width: 100%;
+  }
+
+  .tab-btn {
+    flex: 1;
+    justify-content: center;
+    font-size: 0.88rem;
+    padding: 0.5rem 0.25rem;
+  }
+
+  .challenge-options-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+  }
+
+  .passport-metrics {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .modal-actions {
+    flex-direction: column;
+  }
+
+  .modal-actions button {
+    width: 100%;
+  }
+}
+
+/* --- ESTILS D'IMPRESSIÓ PER AL PASSAPORT D'APRENENTATGE (FORÇA SEMPRE BLANC/NEGRE) --- */
+@media print {
+  body {
+    background: white !important;
+    color: black !important;
+  }
+  body * {
+    visibility: hidden;
+  }
+  .modal-overlay,
+  .modal-content,
+  .passport-certificate,
+  .passport-certificate * {
+    visibility: visible;
+  }
+  .modal-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background: transparent;
+    padding: 0;
+  }
+  .modal-content {
+    box-shadow: none;
+    padding: 0;
+    border: none;
+    max-width: 100%;
+    background: white !important;
+    color: black !important;
+  }
+  .modal-actions,
+  .app-header,
+  .app-footer,
+  .close-btn {
+    display: none !important;
+  }
+  .passport-certificate {
+    border: 3px solid #000 !important;
+    background: white !important;
+    color: black !important;
+    padding: 2cm 1cm;
+  }
+  .passport-student-name {
+    color: black !important;
+  }
+  .word-badge {
+    background: #f1f5f9 !important;
+    color: black !important;
+    border: 1px solid #cbd5e1 !important;
+  }
+}
