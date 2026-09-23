@@ -139,6 +139,63 @@ const ACOLLIDA_DATA = {
         en: "Everyday clothes and phrases to talk about the weather.",
         ar: "الملابس اليومية وعبارات للحديث عن حالة الطقس."
       }
+    },
+    {
+      id: "nombres",
+      icon: "🔢",
+      color: "#4263eb",
+      titol: {
+        ca: "Els nombres, el temps i el calendari",
+        es: "Los números, el tiempo y el calendario",
+        fr: "Les nombres, l'heure et le calendrier",
+        en: "Numbers, time & the calendar",
+        ar: "الأرقام والوقت والتقويم"
+      },
+      descripcio: {
+        ca: "Nombres per comptar, mirar l'hora i situar-se en els dies de la setmana.",
+        es: "Números para contar, mirar la hora y situarse en los días de la semana.",
+        fr: "Nombres pour compter, lire l'heure et se repérer dans la semaine.",
+        en: "Numbers for counting, telling time, and days of the week.",
+        ar: "الأرقام للعد ومعرفة الوقت وأيام الأسبوع."
+      }
+    },
+    {
+      id: "ciutat",
+      icon: "🚌",
+      color: "#f76707",
+      titol: {
+        ca: "El barri, la ciutat i els transports",
+        es: "El barrio, la ciudad y los transportes",
+        fr: "Le quartier, la ville et les transports",
+        en: "Neighborhood, city & transport",
+        ar: "الحي والمدينة ووسائل النقل"
+      },
+      descripcio: {
+        ca: "Com moure's pel carrer amb seguretat, utilitzar el transport i explorar el barri.",
+        es: "Cómo moverse por la calle con seguridad, usar el transporte y explorar el barrio.",
+        fr: "Se déplacer dans la rue en sécurité, prendre les transports et explorer le quartier.",
+        en: "Navigating streets safely, using public transport, and exploring the neighborhood.",
+        ar: "التنقل بأمان في الشارع واستخدام المواصلات واكتشاف الحي."
+      }
+    },
+    {
+      id: "rutines",
+      icon: "⏰",
+      color: "#ae3ec9",
+      titol: {
+        ca: "Les rutines escolars i accions d'aula",
+        es: "Las rutinas escolares y acciones de aula",
+        fr: "Les routines scolaires et actions en classe",
+        en: "School routines & classroom actions",
+        ar: "الروتين المدرسي وأنشطة القسم"
+      },
+      descripcio: {
+        ca: "Instruccions bàsiques, ordre de la jornada i accions per participar a classe.",
+        es: "Instrucciones básicas, orden de la jornada y acciones para participar en clase.",
+        fr: "Consignes de base, déroulement de la journée et actions pour participer en classe.",
+        en: "Basic instructions, daily schedule, and actions to participate in class.",
+        ar: "التعليمات الأساسية وترتيب اليوم المدرسي والمشاركة في القسم."
+      }
     }
   ],
 
@@ -895,6 +952,354 @@ const ACOLLIDA_DATA = {
         fr: "Il pleut et nous ouvrons le parapluie.",
         en: "It's raining and we open the umbrella.",
         ar: "إنها تمطر ونفتح المظلة."
+      }
+    },
+
+    // --- 8. ELS NOMBRES, EL TEMPS I EL CALENDARI ---
+    {
+      id: "nom_nombres",
+      categoria: "nombres",
+      icon: "🔢",
+      arasaacId: 7088,
+      ca: "Els nombres / Comptar",
+      es: "Los números / Contar",
+      fr: "Les nombres / Compter",
+      en: "Numbers / Counting",
+      ar: "الأرقام / العد",
+      ar_fonetica: "Al-arqam / Al-'add",
+      frase_model: {
+        ca: "Sé comptar de l'un al deu: un, dos, tres...",
+        es: "Sé contar del uno al diez: uno, dos, tres...",
+        fr: "Je sais compter de un à dix : un, deux, trois...",
+        en: "I can count from one to ten: one, two, three...",
+        ar: "أعرف العد من واحد إلى عشرة: واحد، اثنان، ثلاثة..."
+      }
+    },
+    {
+      id: "nom_rellotge",
+      categoria: "nombres",
+      icon: "⏰",
+      arasaacId: 2470,
+      ca: "El rellotge / L'hora",
+      es: "El reloj / La hora",
+      fr: "L'horloge / L'heure",
+      en: "The clock / The time",
+      ar: "الساعة / الوقت",
+      ar_fonetica: "As-sa'a / Al-waqt",
+      frase_model: {
+        ca: "Quina hora és? Falta poc per sortir?",
+        es: "¿Qué hora es? ¿Falta poco para salir?",
+        fr: "Quelle heure est-il ? Bientôt l'heure de sortir ?",
+        en: "What time is it? Is it almost time to leave?",
+        ar: "كم الساعة؟ هل اقترب وقت الخروج؟"
+      }
+    },
+    {
+      id: "nom_avui",
+      categoria: "nombres",
+      icon: "📅",
+      arasaacId: 3014,
+      ca: "Avui / Ahir / Demà",
+      es: "Hoy / Ayer / Mañana",
+      fr: "Aujourd'hui / Hier / Demain",
+      en: "Today / Yesterday / Tomorrow",
+      ar: "اليوم / أمس / غداً",
+      ar_fonetica: "Al-yawm / Ams / Ghadan",
+      frase_model: {
+        ca: "Quin dia és avui? Avui és dilluns.",
+        es: "¿Qué día es hoy? Hoy es lunes.",
+        fr: "Quel jour sommes-nous aujourd'hui ? Aujourd'hui c'est lundi.",
+        en: "What day is today? Today is Monday.",
+        ar: "ما هو اليوم؟ اليوم هو الاثنين."
+      }
+    },
+    {
+      id: "nom_mati_tarda",
+      categoria: "nombres",
+      icon: "🌅",
+      arasaacId: 7083,
+      ca: "El matí i la tarda",
+      es: "La mañana y la tarde",
+      fr: "Le matin et l'après-midi",
+      en: "Morning and afternoon",
+      ar: "الصباح والمساء",
+      ar_fonetica: "As-sabah wal-masa'",
+      frase_model: {
+        ca: "Al matí vinc a l'escola i a la tarda vaig a casa.",
+        es: "Por la mañana vengo a la escuela y por la tarde voy a casa.",
+        fr: "Le matin je viens à l'école et l'après-midi je rentre à la maison.",
+        en: "In the morning I come to school and in the afternoon I go home.",
+        ar: "في الصباح آتي إلى المدرسة وفي المساء أذهب إلى البيت."
+      }
+    },
+    {
+      id: "nom_dilluns_divendres",
+      categoria: "nombres",
+      icon: "🗓️",
+      arasaacId: 28662,
+      ca: "Els dies d'escola (Dilluns a divendres)",
+      es: "Los días de escuela (Lunes a viernes)",
+      fr: "Les jours d'école (Lundi à vendredi)",
+      en: "School days (Monday to Friday)",
+      ar: "أيام المدرسة (من الاثنين إلى الجمعة)",
+      ar_fonetica: "Ayyam al-madrasa",
+      frase_model: {
+        ca: "De dilluns a divendres tenim classe.",
+        es: "De lunes a viernes tenemos clase.",
+        fr: "Du lundi au vendredi nous avons classe.",
+        en: "From Monday to Friday we have class.",
+        ar: "من الاثنين إلى الجمعة لدينا دروس."
+      }
+    },
+    {
+      id: "nom_cap_setmana",
+      categoria: "nombres",
+      icon: "🎈",
+      arasaacId: 7084,
+      ca: "El cap de setmana (Dissabte i diumenge)",
+      es: "El fin de semana (Sábado y domingo)",
+      fr: "Le week-end (Samedi et dimanche)",
+      en: "The weekend (Saturday and Sunday)",
+      ar: "عطلة نهاية الأسبوع (السبت والأحد)",
+      ar_fonetica: "'Utlat nihayat al-usbu'",
+      frase_model: {
+        ca: "El cap de setmana no hi ha escola, descanso amb la família.",
+        es: "El fin de semana no hay escuela, descanso con la familia.",
+        fr: "Le week-end il n'y a pas d'école, je me repose en famille.",
+        en: "On the weekend there is no school, I rest with my family.",
+        ar: "في عطلة نهاية الأسبوع لا توجد مدرسة، أستريح مع عائلتي."
+      }
+    },
+
+    // --- 9. EL BARRI, LA CIUTAT I ELS TRANSPORTS ---
+    {
+      id: "ciu_carrer",
+      categoria: "ciutat",
+      icon: "🛣️",
+      arasaacId: 2844,
+      ca: "El carrer i el pas de vianants",
+      es: "La calle y el paso de peatones",
+      fr: "La rue et le passage piéton",
+      en: "The street and pedestrian crossing",
+      ar: "الشارع وممر الراجلين",
+      ar_fonetica: "Ash-shari' wa mamarr ar-rajilin",
+      frase_model: {
+        ca: "Miro a l'esquerra i a la dreta abans de creuar el carrer.",
+        es: "Miro a la izquierda y a la derecha antes de cruzar la calle.",
+        fr: "Je regarde à gauche et à droite avant de traverser la rue.",
+        en: "I look left and right before crossing the street.",
+        ar: "أنظر يميناً ويساراً قبل عبور الشارع."
+      }
+    },
+    {
+      id: "ciu_autobus",
+      categoria: "ciutat",
+      icon: "🚌",
+      arasaacId: 2544,
+      ca: "L'autobús escolar / El bus",
+      es: "El autobús escolar / El bus",
+      fr: "Le bus scolaire / Le bus",
+      en: "School bus / The bus",
+      ar: "حافلة المدرسة / الحافلة",
+      ar_fonetica: "Hafilat al-madrasa / Al-hafila",
+      frase_model: {
+        ca: "Vinc a l'escola amb autobús.",
+        es: "Vengo a la escuela en autobús.",
+        fr: "Je viens à l'école en bus.",
+        en: "I come to school by bus.",
+        ar: "آتي إلى المدرسة بالحافلة."
+      }
+    },
+    {
+      id: "ciu_tren",
+      categoria: "ciutat",
+      icon: "🚆",
+      arasaacId: 2841,
+      ca: "El tren i el metro",
+      es: "El tren y el metro",
+      fr: "Le train et le métro",
+      en: "The train and subway",
+      ar: "القطار والمترو",
+      ar_fonetica: "Al-qitar wal-mitru",
+      frase_model: {
+        ca: "Pugem al tren per anar a la ciutat.",
+        es: "Subimos al tren para ir a la ciudad.",
+        fr: "Nous montons dans le train pour aller en ville.",
+        en: "We get on the train to go to the city.",
+        ar: "نركب القطار للذهاب إلى المدينة."
+      }
+    },
+    {
+      id: "ciu_parada",
+      categoria: "ciutat",
+      icon: "🚏",
+      arasaacId: 32448,
+      ca: "La parada de bus / L'estació",
+      es: "La parada de autobús / La estación",
+      fr: "L'arrêt de bus / La gare",
+      en: "Bus stop / Station",
+      ar: "موقف الحافلة / المحطة",
+      ar_fonetica: "Mawqif al-hafila / Al-mahatta",
+      frase_model: {
+        ca: "M'espero a la parada de l'autobús.",
+        es: "Espero en la parada del autobús.",
+        fr: "J'attends à l'arrêt de bus.",
+        en: "I wait at the bus stop.",
+        ar: "أنتظر في موقف الحافلة."
+      }
+    },
+    {
+      id: "ciu_botiga",
+      categoria: "ciutat",
+      icon: "🛒",
+      arasaacId: 2845,
+      ca: "La botiga / El supermercat",
+      es: "La tienda / El supermercado",
+      fr: "Le magasin / Le supermarché",
+      en: "The shop / Supermarket",
+      ar: "الدكان / السوبرماركت",
+      ar_fonetica: "Ad-dukkan / As-subarmarkit",
+      frase_model: {
+        ca: "Anem a la botiga a comprar el berenar.",
+        es: "Vamos a la tienda a comprar la merienda.",
+        fr: "Nous allons au magasin pour acheter le goûter.",
+        en: "We go to the store to buy a snack.",
+        ar: "نذهب إلى الدكان لشراء اللمجة."
+      }
+    },
+    {
+      id: "ciu_parc",
+      categoria: "ciutat",
+      icon: "🌳",
+      arasaacId: 2842,
+      ca: "El parc i la plaça",
+      es: "El parque y la plaza",
+      fr: "Le parc et la place",
+      en: "The park and the square",
+      ar: "الحديقة والساحة",
+      ar_fonetica: "Al-hadiqa was-saha",
+      frase_model: {
+        ca: "Després d'escola vaig a jugar al parc.",
+        es: "Después de la escuela voy a jugar al parque.",
+        fr: "Après l'école je vais jouer au parc.",
+        en: "After school I go play at the park.",
+        ar: "بعد المدرسة أذهب للعب في الحديقة."
+      }
+    },
+
+    // --- 10. LES RUTINES ESCOLARS I ACCIONS D'AULA ---
+    {
+      id: "rut_fila",
+      categoria: "rutines",
+      icon: "🚶",
+      arasaacId: 32675,
+      ca: "Fer la fila / Entrar a classe",
+      es: "Hacer la fila / Entrar a clase",
+      fr: "Faire le rang / Entrer en classe",
+      en: "Line up / Enter class",
+      ar: "الوقوف في الصف / الدخول إلى القسم",
+      ar_fonetica: "Al-wuquf fis-saff / Ad-dukhul ila al-qism",
+      frase_model: {
+        ca: "Fem la fila sense empènyer per pujar a la classe.",
+        es: "Hacemos la fila sin empujar para subir a clase.",
+        fr: "On fait le rang sans pousser pour monter en classe.",
+        en: "We line up without pushing to go up to class.",
+        ar: "نقف في الصف دون تدافع للصعود إلى القسم."
+      }
+    },
+    {
+      id: "rut_escoltar",
+      categoria: "rutines",
+      icon: "👂",
+      arasaacId: 6476,
+      ca: "Escoltar / Fer silenci",
+      es: "Escuchar / Hacer silencio",
+      fr: "Écouter / Faire silence",
+      en: "Listen / Be quiet",
+      ar: "الاستماع / التزام الهدوء",
+      ar_fonetica: "Al-istima' / Iltizam al-hudoo'",
+      frase_model: {
+        ca: "Escoltem la mestra quan explica l'activitat.",
+        es: "Escuchamos a la maestra cuando explica la actividad.",
+        fr: "On écoute la maîtresse quand elle explique l'activité.",
+        en: "We listen to the teacher when she explains the activity.",
+        ar: "نستمع إلى المعلمة عندما تشرح النشاط."
+      }
+    },
+    {
+      id: "rut_seure",
+      categoria: "rutines",
+      icon: "🪑",
+      arasaacId: 6496,
+      ca: "Seure a la cadira / Aixecar-se",
+      es: "Sentarse en la silla / Levantarse",
+      fr: "S'asseoir sur la chaise / Se lever",
+      en: "Sit on the chair / Stand up",
+      ar: "الجلوس على الكرسي / الوقوف",
+      ar_fonetica: "Al-julus 'ala al-kursi / Al-wuquf",
+      frase_model: {
+        ca: "Seguem a la cadira i posem atenció.",
+        es: "Nos sentamos en la silla y prestamos atención.",
+        fr: "On s'assoit sur la chaise et on est attentif.",
+        en: "We sit on our chair and pay attention.",
+        ar: "نجلس على الكرسي وننتبه."
+      }
+    },
+    {
+      id: "rut_escriure",
+      categoria: "rutines",
+      icon: "✍️",
+      arasaacId: 6480,
+      ca: "Escriure i dibuixar",
+      es: "Escribir y dibujar",
+      fr: "Écrire et dessiner",
+      en: "Write and draw",
+      ar: "الكتابة والرسم",
+      ar_fonetica: "Al-kitaba war-rasm",
+      frase_model: {
+        ca: "Escriu la data a la llibreta i fes un dibuix.",
+        es: "Escribe la fecha en la libreta y haz un dibujo.",
+        fr: "Écris la date dans le cahier et fais un dessin.",
+        en: "Write the date in your notebook and make a drawing.",
+        ar: "اكتب التاريخ في الدفتر وارسم رسماً."
+      }
+    },
+    {
+      id: "rut_llegir",
+      categoria: "rutines",
+      icon: "📖",
+      arasaacId: 6484,
+      ca: "Llegir un conte / Llibre",
+      es: "Leer un cuento / Libro",
+      fr: "Lire une histoire / Livre",
+      en: "Read a story / Book",
+      ar: "قراءة قصة / كتاب",
+      ar_fonetica: "Qira'at qissa / Kitab",
+      frase_model: {
+        ca: "Obrim el llibre per la pàgina indicada per llegir.",
+        es: "Abrimos el libro por la página indicada para leer.",
+        fr: "On ouvre le livre à la page indiquée pour lire.",
+        en: "We open the book to the indicated page to read.",
+        ar: "نفتح الكتاب في الصفحة المحددة للقراءة."
+      }
+    },
+    {
+      id: "rut_endrecar",
+      categoria: "rutines",
+      icon: "🧹",
+      arasaacId: 6494,
+      ca: "Recollir i endreçar el material",
+      es: "Recoger y ordenar el material",
+      fr: "Ranger le matériel",
+      en: "Tidy up & pack away",
+      ar: "جمع وترتيب الأدوات",
+      ar_fonetica: "Jam' wa tartib al-adawat",
+      frase_model: {
+        ca: "S'ha acabat la classe: recollim els llapis i endrecem la taula.",
+        es: "Ha terminado la clase: recogemos los lápices y ordenamos la mesa.",
+        fr: "Le cours est fini : on range les crayons et la table.",
+        en: "Class is over: let's pack up our pencils and tidy the desk.",
+        ar: "انتهى الدرس: نجمع الأقلام ونرتب الطاولة."
       }
     }
   ],

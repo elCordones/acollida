@@ -28,17 +28,9 @@
 ---
 
 ## 2. Estat Actual i Punt de Control (Darrera sessió: 2026-09-23)
-- **Estat general**: Totalment funcional, auditat i publicat a GitHub Pages (Versió 1.8 PWA Offline & Flashcards d'Aula).
+- **Estat general**: Totalment funcional, auditat i actualitzat (Versió 1.9 Gran Ampliació de Vocabulari, Rutines i Calendari).
 - **Funcionalitats completades**:
-  - [x] **Arquitectura PWA (Progressive Web App) i Suport 100% Offline**:
-    - [x] Manifest web (`manifest.json`) amb icones de 192x192 i 512x512 per a instal·lació d'aplicació nativa a pantalles d'inici (iOS, Android, Chromebooks).
-    - [x] Service Worker (`sw.js`) amb estratègia Stale-While-Revalidate per a l'App Shell i Cache-First per als fitxers d'àudio.
-    - [x] Funcionament garantit a les escoles fins i tot quan cau la connexió Wi-Fi del centre o en mode avió a les tauletes.
-  - [x] **Generador de Flashcards de Vocabulari per a Retolació d'Aula**:
-    - [x] Botó directe `🖨️ Targetes` a la capçalera de cada tema.
-    - [x] Vista prèvia de targetes de mida gran amb imatge, paraula en català, traducció a la llengua pont i línia de tall per a tisores.
-    - [x] Estils d'impressió optimitzats (`@media print`) en quadrícula de 2 columnes per a paper A4 en blanc i negre estalvi de tinta per retolar els objectes de l'aula física.
-  - [x] **Matriu de vocabulari ampliada (7 categories i 39 conceptes complets)**:
+  - [x] **Matriu de vocabulari ampliada a 10 categories i 57 conceptes complets amb frases model**:
     - [x] 1. Urgències i comunicació bàsica (🚨)
     - [x] 2. L'escola i el material d'aula (✏️)
     - [x] 3. El pati i els jocs de relació (⚽)
@@ -46,7 +38,18 @@
     - [x] 5. El cos, la salut i les emocions (❤️)
     - [x] 6. El menjador escolar i els aliments (🍽️)
     - [x] 7. La roba i el temps atmosfèric (🧥)
-  - [x] **Paquet complet d'àudio natiu local en àrab (78 fitxers MP3)** a `audio/ar/`.
+    - [x] 8. Els nombres, el temps i el calendari escolar (🔢)
+    - [x] 9. El barri, la ciutat i els transports (🚌)
+    - [x] 10. Les rutines escolars i accions d'aula (⏰)
+  - [x] **Paquet complet d'àudios natius locals en àrab (114 fitxers MP3)** a `audio/ar/` (cobertura 100% de paraules i frases model per a les 10 categories).
+  - [x] **Arquitectura PWA (Progressive Web App) i Suport 100% Offline**:
+    - [x] Manifest web (`manifest.json`) amb icones de 192x192 i 512x512 per a instal·lació d'aplicació nativa a pantalles d'inici (iOS, Android, Chromebooks).
+    - [x] Service Worker (`sw.js`) actualitzat a memòria cau `acollida-cache-v1.9` amb estratègia Stale-While-Revalidate per a l'App Shell i Cache-First per als fitxers d'àudio.
+    - [x] Cache-busting de versions (`?v=1.9`) a `index.html` per forçar actualització immediata dels recursos als navegadors.
+  - [x] **Generador de Flashcards de Vocabulari per a Retolació d'Aula**:
+    - [x] Suport automàtic per a les 10 categories temàtiques.
+    - [x] Vista prèvia de targetes de mida gran amb imatge, paraula en català, traducció a la llengua pont i línia de tall per a tisores.
+    - [x] Estils d'impressió optimitzats (`@media print`) en quadrícula de 2 columnes per a paper A4 en blanc i negre estalvi de tinta per retolar els objectes de l'aula física.
   - [x] Motor de veu integrat en local amb Web Speech API i efectes sonors sintètics DUA.
   - [x] Mode "Descobreix 🎧" amb targetes interactives, àudio doble i frase model.
   - [x] Mode "Reptes 🎯" diversificat: Repte auditiu i Joc de parelles (Memory 🃏).
@@ -62,19 +65,19 @@
   - [x] Disseny responsive revisat i optimitzat per a tauletes d'aula i telèfons intel·ligents (touch targets >= 48px, graelles adaptatives i impressió forçada en blanc/negre).
   - [x] Auditoria i correcció integral de contrastos (WCAG AAA).
 - **Punt exacte on ens hem quedat**:
-  - Aplicació consolidada com a PWA completa, autònoma, multilingüe, accessible i amb suport manipulatiu tant digital com imprès.
+  - Aplicació consolidada amb 10 categories i 57 conceptes clau per a l'acollida inicial a Educació Primària, 100% autònoma, amb 114 àudios en àrab i suport manipulatiu tant digital com imprès.
 - **Decisions tècniques i incidències conegudes**:
-  - El Service Worker empra una versió de memòria cau `acollida-cache-v1.8` que neteja automàticament qualsevol memòria anterior i assegura que les tauletes tinguin sempre els recursos actualitzats.
+  - El Service Worker empra la versió `acollida-cache-v1.9` que neteja automàticament qualsevol memòria anterior i assegura que les tauletes tinguin sempre els recursos actualitzats.
   - Les Flashcards s'adapten automàticament a la llengua pont seleccionada per l'alumne o docent.
 
 ---
 
 ## 3. Full de Ruta d'Implementació (Roadmap / Propers Passos)
 - **Tasques immediates per a la següent sessió**:
-  - [ ] Pas 1: Suport per a noves llengües pont freqüents a les aules catalanes (Amazic, Urdú, Ucraïnès, Xinès, Panjabi).
-  - [ ] Pas 2: Possibilitat que el docent afegeixi vocabulari personalitzat des d'un panell d'administració senzill.
+  - [ ] Pas 1: Suport per a noves llengües pont freqüents a les aules catalanes (Ucraïnès 🇺🇦, Xinès 🇨🇳, Urdú 🇵🇰, Amazic).
+  - [ ] Pas 2: Panell docent d'edició per afegir paraules o imatges pròpies del centre escolar (desades a `localStorage`).
   - [ ] Pas 3: Historial acumulatiu multisesió per fer el seguiment de l'evolució al llarg del trimestre.
 - **Millores futures i backlog**:
-  - [ ] Suport per a noves llengües pont freqüents a les aules catalanes (Amazic, Urdú, Ucraïnès, Xinès, Panjabi).
-  - [ ] Possibilitat que el docent afegeixi vocabulari personalitzat des d'un panell d'administració senzill.
+  - [ ] Suport per a noves llengües pont freqüents a les aules catalanes (Ucraïnès, Xinès, Urdú, Amazic).
+  - [ ] Panell docent per afegir vocabulari personalitzat des d'un entorn senzill.
   - [ ] Historial acumulatiu multisesió per fer el seguiment de l'evolució al llarg del trimestre.
