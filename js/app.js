@@ -12,7 +12,8 @@ const App = {
     practiceType: "listen", // listen | memory
     startTime: null,
     discoveredWords: new Set(),
-    quizAnswers: []
+    quizAnswers: [],
+    customVocabulary: []
   },
 
   // --- MÈTODES DE SEGURETAT I UTILITATS (SECURITY-AND-HARDENING) ---
@@ -35,7 +36,43 @@ const App = {
     return str.replace(/"/g, '""');
   },
 
+  // --- GESTIÓ DEL VOCABULARI PERSONALITZAT (ESPAI DOCENT) ---
+  loadCustomVocabulary() {
+    try {
+      const saved = localStorage.getItem("acollida_custom_vocab");
+      this.state.customVocabulary = saved ? JSON.parse(saved) : [];
+      if (!Array.isArray(this.state.customVocabulary)) {
+        this.state.customVocabulary = [];
+      }
+    } catch (e) {
+      console.warn("Error carregant vocabulari personalitzat:", e);
+      this.state.customVocabulary = [];
+    }
+  },
+
+  saveCustomVocabulary() {
+    try {
+      localStorage.setItem("acollida_custom_vocab", JSON.stringify(this.state.customVocabulary));
+    } catch (e) {
+      console.warn("Error desant vocabulari personalitzat:", e);
+    }
+  },
+
+  getAllVocabulary() {
+    const custom = Array.isArray(this.state.customVocabulary) ? this.state.customVocabulary : [];
+    return [...ACOLLIDA_DATA.vocabulary, ...custom];
+  },
+
+  getCategoryWords(catId) {
+    return this.getAllVocabulary().filter(v => v.categoria === catId);
+  },
+
+  getWord(wordId) {
+    return this.getAllVocabulary().find(v => v.id === wordId);
+  },
+
   init() {
+    this.loadCustomVocabulary();
     this.restoreFromStorage();
     this.renderInitialScreen();
     this.attachGlobalEvents();
@@ -222,8 +259,8 @@ const App = {
       const descBridge = cat.descripcio[lang] || cat.descripcio.es;
 
       // Comptar paraules completades
-      const totalWords = ACOLLIDA_DATA.vocabulary.filter(v => v.categoria === cat.id).length;
-      const doneWords = ACOLLIDA_DATA.vocabulary.filter(v => v.categoria === cat.id && this.state.discoveredWords.has(v.id)).length;
+      const totalWords = this.getCategoryWords(cat.id).length;
+      const doneWords = this.getCategoryWords(cat.id).filter(v => this.state.discoveredWords.has(v.id)).length;
 
       return `
         <div class="category-card" style="--cat-color: ${cat.color}" onclick="App.openCategory('${cat.id}')">
@@ -244,7 +281,10 @@ const App = {
           <h2 class="section-title">Temes d'Aprenentatge</h2>
           <p style="color: var(--text-muted);">Tria un tema per començar a descobrir vocabulari i practicar:</p>
         </div>
-        <div>
+        <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+          <button class="btn-secondary" onclick="App.showTeacherPanel()" title="Espai docent: gestionar vocabulari propi de l'escola">
+            🏫 Espai Docent
+          </button>
           <button class="btn-secondary" onclick="App.showFinishModal()">
             📄 ${ACOLLIDA_DATA.ui.finishSessionBtn[lang] || "Finalitza i Descarrega"}
           </button>
@@ -283,7 +323,7 @@ const App = {
     const mainWrapper = document.getElementById("main-wrapper");
     const lang = this.state.bridgeLang;
     const isArabic = lang === "ar";
-    const words = ACOLLIDA_DATA.vocabulary.filter(v => v.categoria === cat.id);
+    const words = this.getCategoryWords(cat.id);
 
     mainWrapper.innerHTML = `
       <div class="topic-top-bar">
@@ -384,7 +424,7 @@ const App = {
   },
 
   listenWord(wordId, lang) {
-    const item = ACOLLIDA_DATA.vocabulary.find(v => v.id === wordId);
+    const item = this.getWord(wordId);
     if (!item) return;
 
     this.state.discoveredWords.add(wordId);
@@ -411,7 +451,7 @@ const App = {
   },
 
   listenPhrase(wordId, lang) {
-    const item = ACOLLIDA_DATA.vocabulary.find(v => v.id === wordId);
+    const item = this.getWord(wordId);
     if (!item || !item.frase_model) return;
 
     const textToSpeak = lang === 'ca' ? item.frase_model.ca : (item.frase_model[lang] || item.frase_model.es);
@@ -508,7 +548,7 @@ const App = {
   },
 
   playChallengeAudio(wordId) {
-    const item = ACOLLIDA_DATA.vocabulary.find(v => v.id === wordId);
+    const item = this.getWord(wordId);
     if (item) {
       AudioManager.speak(item.ca, 'ca');
     }
@@ -558,7 +598,7 @@ const App = {
 
   // --- JOC DE PARELLES (MEMORY GAME) ---
   initMemoryGame() {
-    const catWords = ACOLLIDA_DATA.vocabulary.filter(v => v.categoria === this.state.currentCategory);
+    const catWords = this.getCategoryWords(this.state.currentCategory);
     if (!catWords.length) return;
 
     // Seleccionem fins a 4 paraules per generar 8 cartes (4 parelles)
@@ -740,7 +780,7 @@ const App = {
     const cat = ACOLLIDA_DATA.categories.find(c => c.id === this.state.currentCategory);
     if (!cat) return;
 
-    const words = ACOLLIDA_DATA.vocabulary.filter(v => v.categoria === cat.id);
+    const words = this.getCategoryWords(cat.id);
     const lang = this.state.bridgeLang;
     const isArabic = lang === "ar";
 
@@ -801,7 +841,7 @@ const App = {
     const accuracy = totalQuiz > 0 ? Math.round((correctQuiz / totalQuiz) * 100) : 0;
 
     const wordsMastered = Array.from(this.state.discoveredWords).map(id => {
-      const item = ACOLLIDA_DATA.vocabulary.find(v => v.id === id);
+      const item = this.getWord(id);
       return item ? `<span class="word-badge">${item.icon} ${item.ca}</span>` : '';
     }).join("");
 
@@ -892,7 +932,7 @@ const App = {
     csvContent += "VOCABULARI EXPLORAT\n";
     csvContent += "ID;Categoria;Català;Llengua Pont\n";
     this.state.discoveredWords.forEach(id => {
-      const item = ACOLLIDA_DATA.vocabulary.find(v => v.id === id);
+      const item = this.getWord(id);
       if (item) {
         const bridgeWord = item[this.state.bridgeLang] || item.es;
         csvContent += `"${item.id}";"${item.categoria}";"${item.ca}";"${bridgeWord}"\n`;
@@ -902,8 +942,8 @@ const App = {
     csvContent += "\nRESULTATS DELS REPTES I JOCS\n";
     csvContent += "Data/Hora;Paraula Objectiu;Opció Escollida;Correcte\n";
     this.state.quizAnswers.forEach(q => {
-      const target = ACOLLIDA_DATA.vocabulary.find(v => v.id === q.wordId);
-      const selected = ACOLLIDA_DATA.vocabulary.find(v => v.id === q.selectedId);
+      const target = this.getWord(q.wordId);
+      const selected = this.getWord(q.selectedId);
       csvContent += `"${q.timestamp}";"${target ? target.ca : q.wordId}";"${selected ? selected.ca : q.selectedId}";"${q.isCorrect ? 'SÍ' : 'NO'}"\n`;
     });
 
@@ -916,6 +956,388 @@ const App = {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+  },
+
+  // --- ESPAI DOCENT: GESTIÓ DE VOCABULARI PERSONALITZAT DE L'ESCOLA ---
+  showTeacherPanel() {
+    this.loadCustomVocabulary();
+    const modalContainer = document.getElementById("modal-container");
+    const lang = this.state.bridgeLang;
+    const customList = this.state.customVocabulary || [];
+
+    const categoryOptions = ACOLLIDA_DATA.categories.map(c => `
+      <option value="${c.id}">${c.icon} ${c.titol.ca}</option>
+    `).join("");
+
+    const itemsHtml = customList.length ? customList.map(item => {
+      const bridgeWord = item[lang] || item.es || "";
+      const cat = ACOLLIDA_DATA.categories.find(c => c.id === item.categoria);
+      const catName = cat ? `${cat.icon} ${cat.titol.ca}` : item.categoria;
+
+      return `
+        <div class="teacher-vocab-item" id="titem-${item.id}">
+          <div class="teacher-vocab-info">
+            <span class="teacher-vocab-icon">${item.icon || '🏫'}</span>
+            <div class="teacher-vocab-texts">
+              <span class="teacher-vocab-ca">${this.escapeHTML(item.ca)}</span>
+              <span class="teacher-vocab-bridge">${this.escapeHTML(bridgeWord)}</span>
+              <span class="teacher-vocab-cat-badge">${catName}</span>
+            </div>
+          </div>
+          <div class="teacher-item-actions">
+            <button class="btn-icon-action" onclick="AudioManager.speak('${this.escapeHTML(item.ca).replace(/'/g, "\\'")}', 'ca')" title="Escolta la pronunciació en català" aria-label="Escolta en català">🔊</button>
+            <button class="btn-icon-action" onclick="App.openEditCustomWord('${item.id}')" title="Edita aquesta paraula" aria-label="Edita paraula">✏️</button>
+            <button class="btn-icon-action danger" onclick="App.deleteCustomWord('${item.id}')" title="Elimina aquesta paraula" aria-label="Elimina paraula">🗑️</button>
+          </div>
+        </div>
+      `;
+    }).join("") : `
+      <div class="teacher-empty-state">
+        <div class="icon">🏫</div>
+        <h4 style="color: var(--text-heading); font-size: 1.15rem; margin-bottom: 0.35rem;">Cap paraula pròpia afegida encara</h4>
+        <p>Afegeix els espais, serveis o objectes de la vostra escola per adaptar l'aplicació a la realitat del vostre centre.</p>
+      </div>
+    `;
+
+    modalContainer.innerHTML = `
+      <div class="modal-overlay" id="teacher-modal" role="dialog" aria-modal="true" aria-labelledby="modal-teacher-title">
+        <div class="modal-content" style="max-width: 840px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+            <div>
+              <h3 id="modal-teacher-title" style="font-size: 1.35rem; color: var(--text-heading); margin-bottom: 0.2rem;">
+                🏫 Espai Docent: Vocabulari de l'Escola
+              </h3>
+              <p style="color: var(--text-muted); font-size: 0.88rem;">
+                Crea, edita i comparteix paraules i espais propis del centre escolar.
+              </p>
+            </div>
+            <button class="btn-secondary" onclick="App.closeModal()" aria-label="Tancar finestra">✖️</button>
+          </div>
+
+          <div class="teacher-toolbar">
+            <button class="teacher-btn-action primary" onclick="App.toggleCustomWordForm()">
+              ➕ Nova Paraula / Espai
+            </button>
+            <button class="teacher-btn-action" onclick="App.exportCustomVocabularyJSON()">
+              💾 Exporta (.JSON)
+            </button>
+            <button class="teacher-btn-action" onclick="document.getElementById('import-json-input').click()">
+              📂 Importa (.JSON)
+            </button>
+            <input type="file" id="import-json-input" accept=".json" style="display: none;" onchange="App.handleImportJSON(event)">
+            ${customList.length ? `
+              <button class="teacher-btn-action" onclick="App.clearAllCustomVocabulary()" style="color: #ef4444; margin-left: auto;">
+                🗑️ Netejar tot
+              </button>
+            ` : ''}
+          </div>
+
+          <!-- Formulari d'afegir/editar (ocult per defecte) -->
+          <div id="teacher-form-wrap" style="display: none;" class="teacher-form-card">
+            <h4 id="teacher-form-title" style="font-size: 1.1rem; color: var(--text-heading); margin-bottom: 0.85rem;">
+              ➕ Afegir nova paraula o espai
+            </h4>
+            <form id="custom-word-form" onsubmit="App.handleSaveCustomWord(event)">
+              <input type="hidden" id="custom-word-id" value="">
+              
+              <div class="teacher-form-grid">
+                <div class="teacher-form-group">
+                  <label for="c-ca">Paraula en català *</label>
+                  <input type="text" id="c-ca" placeholder="Ex: L'hort escolar, La consergeria..." required autocomplete="off">
+                </div>
+
+                <div class="teacher-form-group">
+                  <label for="c-cat">Categoria</label>
+                  <select id="c-cat">
+                    ${categoryOptions}
+                  </select>
+                </div>
+
+                <div class="teacher-form-group">
+                  <label for="c-icon">Icona / Emoji</label>
+                  <input type="text" id="c-icon" placeholder="🏫" value="🏫" maxlength="4" style="text-align: center; font-size: 1.25rem;">
+                  <div class="emoji-pills-row">
+                    ${['🏫', '📚', '🌱', '🔔', '🚪', '🧑‍🏫', '🏀', '🎨', '🔬', '💻', '🧃', '🥪', '🌳', '🚌'].map(em => `
+                      <button type="button" class="emoji-pill" onclick="App.setFormEmoji('${em}')">${em}</button>
+                    `).join("")}
+                  </div>
+                </div>
+              </div>
+
+              <div style="font-size: 0.85rem; font-weight: 700; color: var(--text-muted); margin: 0.75rem 0 0.4rem;">
+                Traduccions a les llengües de suport:
+              </div>
+              <div class="teacher-form-grid">
+                <div class="teacher-form-group">
+                  <label for="c-es">Castellà (ES)</label>
+                  <input type="text" id="c-es" placeholder="El huerto escolar">
+                </div>
+                <div class="teacher-form-group">
+                  <label for="c-fr">Francès (FR)</label>
+                  <input type="text" id="c-fr" placeholder="Le potager de l'école">
+                </div>
+                <div class="teacher-form-group">
+                  <label for="c-en">Anglès (EN)</label>
+                  <input type="text" id="c-en" placeholder="The school garden">
+                </div>
+                <div class="teacher-form-group">
+                  <label for="c-ar">Àrab (AR)</label>
+                  <input type="text" id="c-ar" placeholder="حديقة المدرسة" dir="rtl" class="arabic-text">
+                </div>
+                <div class="teacher-form-group">
+                  <label for="c-uk">Ucraïnès (UK)</label>
+                  <input type="text" id="c-uk" placeholder="Шкільний город">
+                </div>
+                <div class="teacher-form-group">
+                  <label for="c-zh">Xinès (ZH)</label>
+                  <input type="text" id="c-zh" placeholder="学校菜园">
+                </div>
+              </div>
+
+              <div style="font-size: 0.85rem; font-weight: 700; color: var(--text-muted); margin: 0.75rem 0 0.4rem;">
+                Frase model d'ús escolar:
+              </div>
+              <div class="teacher-form-grid">
+                <div class="teacher-form-group">
+                  <label for="c-frase-ca">Frase en català</label>
+                  <input type="text" id="c-frase-ca" placeholder="Ex: Avui anem a l'hort a regar.">
+                </div>
+                <div class="teacher-form-group">
+                  <label for="c-frase-bridge">Frase en la llengua de suport</label>
+                  <input type="text" id="c-frase-bridge" placeholder="Ex: Hoy vamos al huerto a regar.">
+                </div>
+              </div>
+
+              <div style="display: flex; gap: 0.5rem; justify-content: flex-end; margin-top: 1rem;">
+                <button type="button" class="btn-secondary" onclick="App.toggleCustomWordForm(false)">Cancel·lar</button>
+                <button type="submit" class="btn-primary" style="padding: 0.55rem 1.25rem; font-size: 0.95rem;">💾 Desar Paraula</button>
+              </div>
+            </form>
+          </div>
+
+          <div style="font-weight: 700; color: var(--text-main); margin-bottom: 0.6rem;">
+            Llista de paraules de l'escola (${customList.length}):
+          </div>
+
+          <div class="teacher-vocab-items" id="teacher-vocab-list">
+            ${itemsHtml}
+          </div>
+
+          <div class="modal-actions" style="margin-top: 1.25rem;">
+            <button class="btn-primary" onclick="App.closeModal()">
+              Tanca l'Espai Docent
+            </button>
+          </div>
+        </div>
+      </div>
+    `;
+  },
+
+  toggleCustomWordForm(forceState) {
+    const wrap = document.getElementById("teacher-form-wrap");
+    if (!wrap) return;
+    const shouldShow = (typeof forceState === "boolean") ? forceState : (wrap.style.display === "none");
+    wrap.style.display = shouldShow ? "block" : "none";
+    if (shouldShow) {
+      document.getElementById("teacher-form-title").textContent = "➕ Afegir nova paraula o espai";
+      document.getElementById("custom-word-id").value = "";
+      document.getElementById("c-ca").value = "";
+      document.getElementById("c-icon").value = "🏫";
+      document.getElementById("c-es").value = "";
+      document.getElementById("c-fr").value = "";
+      document.getElementById("c-en").value = "";
+      document.getElementById("c-ar").value = "";
+      document.getElementById("c-uk").value = "";
+      document.getElementById("c-zh").value = "";
+      document.getElementById("c-frase-ca").value = "";
+      document.getElementById("c-frase-bridge").value = "";
+      document.getElementById("c-ca").focus();
+    }
+  },
+
+  setFormEmoji(emoji) {
+    const input = document.getElementById("c-icon");
+    if (input) {
+      input.value = emoji;
+    }
+  },
+
+  openEditCustomWord(id) {
+    const item = (this.state.customVocabulary || []).find(w => w.id === id);
+    if (!item) return;
+
+    this.toggleCustomWordForm(true);
+    document.getElementById("teacher-form-title").textContent = "✏️ Edita paraula o espai";
+    document.getElementById("custom-word-id").value = item.id;
+    document.getElementById("c-ca").value = item.ca || "";
+    document.getElementById("c-cat").value = item.categoria || "centre";
+    document.getElementById("c-icon").value = item.icon || "🏫";
+    document.getElementById("c-es").value = item.es || "";
+    document.getElementById("c-fr").value = item.fr || "";
+    document.getElementById("c-en").value = item.en || "";
+    document.getElementById("c-ar").value = item.ar || "";
+    document.getElementById("c-uk").value = item.uk || "";
+    document.getElementById("c-zh").value = item.zh || "";
+    document.getElementById("c-frase-ca").value = item.frase_model ? (item.frase_model.ca || "") : "";
+    document.getElementById("c-frase-bridge").value = item.frase_model ? (item.frase_model.es || item.frase_model[this.state.bridgeLang] || "") : "";
+  },
+
+  handleSaveCustomWord(e) {
+    e.preventDefault();
+    const id = document.getElementById("custom-word-id").value.trim();
+    const ca = document.getElementById("c-ca").value.trim();
+    if (!ca) return;
+
+    const categoria = document.getElementById("c-cat").value;
+    const icon = document.getElementById("c-icon").value.trim() || "🏫";
+    const es = document.getElementById("c-es").value.trim() || ca;
+    const fr = document.getElementById("c-fr").value.trim() || es;
+    const en = document.getElementById("c-en").value.trim() || es;
+    const ar = document.getElementById("c-ar").value.trim() || es;
+    const uk = document.getElementById("c-uk").value.trim() || es;
+    const zh = document.getElementById("c-zh").value.trim() || es;
+
+    const fraseCa = document.getElementById("c-frase-ca").value.trim();
+    const fraseBridge = document.getElementById("c-frase-bridge").value.trim();
+
+    const wordObj = {
+      id: id || ("cust_" + Date.now() + "_" + Math.random().toString(36).substr(2, 4)),
+      categoria: categoria,
+      icon: icon,
+      ca: ca,
+      es: es,
+      fr: fr,
+      en: en,
+      ar: ar,
+      uk: uk,
+      zh: zh,
+      frase_model: {
+        ca: fraseCa || ca,
+        es: fraseBridge || es,
+        fr: fraseBridge || fr,
+        en: fraseBridge || en,
+        ar: fraseBridge || ar,
+        uk: fraseBridge || uk,
+        zh: fraseBridge || zh
+      },
+      isCustom: true
+    };
+
+    if (id) {
+      const idx = this.state.customVocabulary.findIndex(w => w.id === id);
+      if (idx >= 0) {
+        this.state.customVocabulary[idx] = wordObj;
+      } else {
+        this.state.customVocabulary.push(wordObj);
+      }
+    } else {
+      this.state.customVocabulary.push(wordObj);
+    }
+
+    this.saveCustomVocabulary();
+    this.showTeacherPanel();
+
+    if (this.state.currentCategory) {
+      this.renderCategoryContent();
+    } else if (this.state.studentName) {
+      this.renderCategoriesView();
+    }
+  },
+
+  deleteCustomWord(id) {
+    if (!confirm("Vols eliminar aquesta paraula personalitzada?")) return;
+    this.state.customVocabulary = (this.state.customVocabulary || []).filter(w => w.id !== id);
+    this.saveCustomVocabulary();
+    this.showTeacherPanel();
+
+    if (this.state.currentCategory) {
+      this.renderCategoryContent();
+    } else if (this.state.studentName) {
+      this.renderCategoriesView();
+    }
+  },
+
+  clearAllCustomVocabulary() {
+    if (!confirm("Segur que vols esborrar TOTES les paraules personalitzades de l'escola? Aquesta acció no es pot desfer.")) return;
+    this.state.customVocabulary = [];
+    this.saveCustomVocabulary();
+    this.showTeacherPanel();
+
+    if (this.state.currentCategory) {
+      this.renderCategoryContent();
+    } else if (this.state.studentName) {
+      this.renderCategoriesView();
+    }
+  },
+
+  exportCustomVocabularyJSON() {
+    const data = this.state.customVocabulary || [];
+    if (!data.length) {
+      alert("Encara no hi ha cap paraula personalitzada per exportar. Afegeix-ne una primer!");
+      return;
+    }
+    const jsonStr = JSON.stringify(data, null, 2);
+    const blob = new Blob([jsonStr], { type: "application/json;charset=utf-8;" });
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = `vocabulari_escola_${new Date().toISOString().split('T')[0]}.json`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  },
+
+  handleImportJSON(e) {
+    const file = e.target.files && e.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      try {
+        const imported = JSON.parse(event.target.result);
+        if (!Array.isArray(imported)) {
+          alert("El fitxer no conté un format de vocabulari vàlid (ha de ser una llista JSON).");
+          return;
+        }
+
+        const validItems = imported.filter(item => item && typeof item.ca === "string" && typeof item.categoria === "string");
+        if (!validItems.length) {
+          alert("No s'han trobat elements de vocabulari vàlids al fitxer.");
+          return;
+        }
+
+        // Fusió amb les dades existents
+        const current = this.state.customVocabulary || [];
+        validItems.forEach(newItem => {
+          if (!newItem.id) {
+            newItem.id = "cust_" + Date.now() + "_" + Math.random().toString(36).substr(2, 4);
+          }
+          newItem.isCustom = true;
+          const idx = current.findIndex(w => w.id === newItem.id);
+          if (idx >= 0) {
+            current[idx] = newItem;
+          } else {
+            current.push(newItem);
+          }
+        });
+
+        this.state.customVocabulary = current;
+        this.saveCustomVocabulary();
+        this.showTeacherPanel();
+
+        if (this.state.currentCategory) {
+          this.renderCategoryContent();
+        } else if (this.state.studentName) {
+          this.renderCategoriesView();
+        }
+
+        alert(`S'han importat correctament ${validItems.length} paraules de l'escola!`);
+      } catch (err) {
+        console.error("Error analitzant el fitxer JSON:", err);
+        alert("Error en llegir el fitxer JSON: Comprova que el fitxer sigui vàlid.");
+      }
+    };
+    reader.readAsText(file);
+    e.target.value = "";
   }
 };
 

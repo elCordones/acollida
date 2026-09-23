@@ -236,6 +236,29 @@ const ACOLLIDA_DATA = {
         "uk": "Базові вказівки, порядок дня та активна участь у класі.",
         "zh": "基本课堂指令、一日作息与课堂参与。"
       }
+    },
+    {
+      "id": "centre",
+      "icon": "🏫",
+      "color": "#0ca678",
+      "titol": {
+        "ca": "El nostre centre escolar",
+        "es": "Nuestro centro escolar",
+        "fr": "Notre école et le centre",
+        "en": "Our school & campus",
+        "ar": "مدرستنا ومرافقها",
+        "uk": "Наша школа та приміщення",
+        "zh": "我们的学校与校园"
+      },
+      "descripcio": {
+        "ca": "Espais, persones, serveis i projectes propis de la nostra escola.",
+        "es": "Espacios, personas, servicios y proyectos propios de nuestra escuela.",
+        "fr": "Espaces, personnes, services et projets de notre école.",
+        "en": "Spaces, staff, services and projects of our school.",
+        "ar": "مرافق المدرسة والموظفون والخدمات والمشاريع الخاصة بمدرستنا.",
+        "uk": "Приміщення, працівники, служби та проекти нашої школи.",
+        "zh": "我们学校的特色空间、教职人员、服务与校园项目。"
+      }
     }
   ],
   "vocabulary": [
@@ -1549,6 +1572,75 @@ const ACOLLIDA_DATA = {
       },
       "uk": "Зібрати та скласти приладдя",
       "zh": "收拾与整理用具"
+    },
+    {
+      "id": "cen_biblioteca",
+      "categoria": "centre",
+      "icon": "📚",
+      "arasaacId": 2848,
+      "ca": "La biblioteca",
+      "es": "La biblioteca",
+      "fr": "La bibliothèque",
+      "en": "The library",
+      "ar": "المكتبة",
+      "ar_fonetica": "Al-maktaba",
+      "uk": "Бібліотека",
+      "zh": "图书馆",
+      "frase_model": {
+        "ca": "Anem a la biblioteca a buscar un llibre.",
+        "es": "Vamos a la biblioteca a buscar un libro.",
+        "fr": "Nous allons à la bibliothèque pour chercher un livre.",
+        "en": "We go to the library to look for a book.",
+        "ar": "نذهب إلى المكتبة للبحث عن كتاب.",
+        "uk": "Ми йдемо до бібліотеки шукати книгу.",
+        "zh": "我们去图书馆找书。"
+      }
+    },
+    {
+      "id": "cen_hort",
+      "categoria": "centre",
+      "icon": "🌱",
+      "arasaacId": 2849,
+      "ca": "L'hort escolar",
+      "es": "El huerto escolar",
+      "fr": "Le potager scolaire",
+      "en": "The school garden",
+      "ar": "حديقة المدرسة",
+      "ar_fonetica": "Hadiqat al-madrasa",
+      "uk": "Шкільний город",
+      "zh": "学校菜园",
+      "frase_model": {
+        "ca": "A l'hort escolar reguem les plantes i collim enciam.",
+        "es": "En el huerto escolar regamos las plantas y cosechamos lechuga.",
+        "fr": "Dans le potager de l'école nous arrosons les plantes.",
+        "en": "In the school garden we water the plants.",
+        "ar": "في حديقة المدرسة نسقي النباتات.",
+        "uk": "На шкільному городі ми поливаємо рослини.",
+        "zh": "在学校菜园里我们给植物浇水。"
+      }
+    },
+    {
+      "id": "cen_consergeria",
+      "categoria": "centre",
+      "icon": "🔔",
+      "arasaacId": 2850,
+      "ca": "La consergeria",
+      "es": "La conserjería",
+      "fr": "La loge du gardien",
+      "en": "The reception / caretaker office",
+      "ar": "مكتب الاستقبال",
+      "ar_fonetica": "Maktab al-istiqbal",
+      "uk": "Чергова частина / Рецепція",
+      "zh": "传达室 / 门卫室",
+      "frase_model": {
+        "ca": "Vaig a la consergeria a demanar guix.",
+        "es": "Voy a la conserjería a pedir tiza.",
+        "fr": "Je vais à la loge pour demander une craie.",
+        "en": "I go to the caretaker to ask for chalk.",
+        "ar": "أذهب إلى مكتب الاستقبال لطلب الطباشير.",
+        "uk": "Я йду до чергової частини попросити крейду.",
+        "zh": "我去传达室要粉笔。"
+      }
     }
   ],
   "ui": {

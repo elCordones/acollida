@@ -22,42 +22,41 @@
 ---
 
 ## 2. Estat Actual i Punt de Control (Darrera sessió: 2026-09-23)
-- **Estat general**: Totalment funcional, auditat i actualitzat (Versió 2.0 Suport Integral Multilingüe: 6 Llengües Pont, 10 Categories i 342 Àudios Natius).
+- **Estat general**: Totalment funcional, auditat i actualitzat (Versió 2.1 Espai Docent: Personalització de Vocabulari Escolar, Exportació/Importació JSON i 11 Categories).
 - **Funcionalitats completades**:
+  - [x] **Panell Docent de Gestió de Vocabulari Escolar (`🏫 Espai Docent`)**:
+    - [x] Accés ràpid des de la capçalera (botó `🏫`) i des de la vista principal de temes.
+    - [x] Formulari interactiu per afegir noves paraules i espais amb selecció d'emoji visual ràpid, categoria, traduccions a les 6 llengües pont i frases model.
+    - [x] Accions d'edició (`✏️`), eliminació (`🗑️`) i prova d'àudio (`🔊`) en temps real.
+    - [x] **Exportació / Importació JSON**: Eina de col·laboració per desar `vocabulari_escola.json` i compartir-lo fàcilment entre docents, aules i tauletes del centre.
+    - [x] **Integració transparent**: Les paraules personalitzades s'integren automàticament a "Descobreix 🎧", "Reptes 🎯", "Joc de parelles (Memory 🃏)", Flashcards imprimibles i exportació de progrés.
+  - [x] **11a Categoria Temàtica: "El nostre centre escolar" (🏫)**:
+    - [x] Integrada a la matriu de dades per acollir els espais, serveis i projectes de l'escola.
+    - [x] Dotada de 3 conceptes de referència inicials: La biblioteca (📚), L'hort escolar (🌱) i La consergeria (🔔) amb 18 nous fitxers MP3 descarregats.
+    - [x] Total de vocabulari base ampliat a **60 conceptes clau** (més les paraules personalitzades il·limitades del centre).
+  - [x] **Paquet complet d'àudios natius locals (360 fitxers MP3 en total)**:
+    - [x] `audio/ar/`: 120 fitxers MP3 en àrab (paraules i frases).
+    - [x] `audio/uk/`: 120 fitxers MP3 en ucraïnès (paraules i frases).
+    - [x] `audio/zh/`: 120 fitxers MP3 en xinès (paraules i frases).
+    - [x] Síntesi de veu Web Speech API i Google TTS com a doble fallback d'alta fidelitat.
   - [x] **Integració de 6 Llengües Pont Oficials d'Acollida**:
     - [x] Castellà (🇪🇸), Francès (🇫🇷), Anglès (🇬🇧), Àrab (🇲🇦), Ucraïnès (🇺🇦) i Xinès (🇨🇳).
     - [x] Selector d'idioma gràfic actualitzat a la pantalla de benvinguda amb visualització de banderes.
     - [x] Insígnia d'alumne a la capçalera amb la bandera de la llengua de suport activa.
-    - [x] Traducció íntegra de la interfície d'usuari (UI), títols i descripcions de les 10 categories, i les 57 paraules amb les seves respectives frases model en les 6 llengües.
-  - [x] **Paquet complet d'àudios natius locals (342 fitxers MP3 en total)**:
-    - [x] `audio/ar/`: 114 fitxers MP3 en àrab (paraules i frases).
-    - [x] `audio/uk/`: 114 fitxers MP3 en ucraïnès (paraules i frases).
-    - [x] `audio/zh/`: 114 fitxers MP3 en xinès (paraules i frases).
-    - [x] Síntesi de veu Web Speech API i Google TTS com a doble fallback d'alta fidelitat.
-  - [x] **Matriu de vocabulari ampliada a 10 categories i 57 conceptes complets amb frases model**:
-    - [x] 1. Urgències i comunicació bàsica (🚨)
-    - [x] 2. L'escola i el material d'aula (✏️)
-    - [x] 3. El pati i els jocs de relació (⚽)
-    - [x] 4. La casa i la família (🏡)
-    - [x] 5. El cos, la salut i les emocions (❤️)
-    - [x] 6. El menjador escolar i els aliments (🍽️)
-    - [x] 7. La roba i el temps atmosfèric (🧥)
-    - [x] 8. Els nombres, el temps i el calendari escolar (🔢)
-    - [x] 9. El barri, la ciutat i els transports (🚌)
-    - [x] 10. Les rutines escolars i accions d'aula (⏰)
+    - [x] Traducció íntegra de la interfície d'usuari (UI), títols i descripcions de les 11 categories, i les 60 paraules amb les seves respectives frases model en les 6 llengües.
   - [x] **Arquitectura PWA (Progressive Web App) i Suport 100% Offline**:
     - [x] Manifest web (`manifest.json`) amb icones de 192x192 i 512x512 per a instal·lació d'aplicació nativa a pantalles d'inici (iOS, Android, Chromebooks).
-    - [x] Service Worker (`sw.js`) actualitzat a memòria cau `acollida-cache-v2.0` amb estratègia Stale-While-Revalidate per a l'App Shell i Cache-First per als fitxers d'àudio.
-    - [x] Cache-busting de versions (`?v=2.0`) a `index.html` per forçar actualització immediata dels recursos als navegadors.
+    - [x] Service Worker (`sw.js`) actualitzat a memòria cau `acollida-cache-v2.1` amb estratègia Stale-While-Revalidate per a l'App Shell i Cache-First per als fitxers d'àudio.
+    - [x] Cache-busting de versions (`?v=2.1`) a `index.html` per forçar actualització immediata dels recursos als navegadors.
   - [x] **Generador de Flashcards de Vocabulari per a Retolació d'Aula**:
-    - [x] Suport automàtic per a les 10 categories temàtiques i les 6 llengües pont.
+    - [x] Suport automàtic per a les 11 categories temàtiques, vocabulari personalitzat i les 6 llengües pont.
     - [x] Vista prèvia de targetes de mida gran amb imatge, paraula en català, traducció a la llengua pont i línia de tall per a tisores.
     - [x] Estils d'impressió optimitzats (`@media print`) en quadrícula de 2 columnes per a paper A4 en blanc i negre estalvi de tinta per retolar els objectes de l'aula física.
   - [x] Motor de veu integrat en local amb Web Speech API i efectes sonors sintètics DUA.
   - [x] Mode "Descobreix 🎧" amb targetes interactives, àudio doble i frase model.
   - [x] Mode "Reptes 🎯" diversificat: Repte auditiu i Joc de parelles (Memory 🃏).
   - [x] **Control de velocitat de veu DUA (🐢 A poc a poc / 🐇 Normal)** a la capçalera.
-  - [x] Persistència automàtica de la sessió a `localStorage`.
+  - [x] Persistència automàtica de la sessió i del vocabulari personalitzat a `localStorage`.
   - [x] Generador i exportador de full de càlcul `.CSV` codificat en UTF-8 BOM per a Excel / Google Sheets.
   - [x] Generador de "Passaport d'Aprenentatge" en format diploma visual i preparat per a imprimir / PDF.
   - [x] Auditoria de seguretat aplicada: protecció contra injeccions XSS al DOM (`escapeHTML`) i protecció contra injeccions de fórmules al CSV (`sanitizeCSV`).
@@ -68,17 +67,16 @@
   - [x] Disseny responsive revisat i optimitzat per a tauletes d'aula i telèfons intel·ligents (touch targets >= 48px, graelles adaptatives i impressió forçada en blanc/negre).
   - [x] Auditoria i correcció integral de contrastos (WCAG AAA).
 - **Punt exacte on ens hem quedat**:
-  - Aplicació consolidada a la versió 2.0 amb 6 llengües pont, 10 categories, 57 conceptes, 342 àudios locals i suport 100% autònom offline.
+  - Aplicació consolidada a la versió 2.1 amb panell docent de gestió de vocabulari, importació/exportació JSON, 6 llengües pont, 11 categories, 60 conceptes de base i 360 àudios locals.
 - **Decisions tècniques i incidències conegudes**:
-  - El Service Worker empra la versió `acollida-cache-v2.0` que neteja automàticament qualsevol memòria anterior i assegura que les tauletes tinguin sempre els recursos actualitzats.
-  - Les Flashcards s'adapten automàticament a qualsevol de les 6 llengües pont seleccionades.
+  - El Service Worker empra la versió `acollida-cache-v2.1` que neteja automàticament qualsevol memòria anterior i assegura que les tauletes tinguin sempre els recursos actualitzats.
+  - El vocabulari personalitzat es desa a `acollida_custom_vocab` a `localStorage` i és totalment compatible amb els jocs, flashcards i síntesi de veu.
 
 ---
 
 ## 3. Full de Ruta d'Implementació (Roadmap / Propers Passos)
 - **Tasques immediates per a la següent sessió**:
-  - [ ] Pas 1: Panell docent d'edició per afegir paraules o imatges pròpies del centre escolar (desades a `localStorage`).
-  - [ ] Pas 2: Historial acumulatiu multisesió per fer el seguiment de l'evolució al llarg del trimestre.
+  - [ ] Pas 1: Historial acumulatiu multisesió per fer el seguiment de l'evolució al llarg del trimestre (perfils d'alumnes, gràfiques de progressió i registre d'aula).
 - **Millores futures i backlog**:
-  - [ ] Panell docent per afegir vocabulari personalitzat des d'un entorn senzill.
   - [ ] Historial acumulatiu multisesió per fer el seguiment de l'evolució al llarg del trimestre.
+  - [ ] Mode d'impressió de fitxes d'activitats d'aprenentatge en paper (unir amb fletxes, pintar, escriure).

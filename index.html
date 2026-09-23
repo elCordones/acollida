@@ -35,7 +35,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="css/style.css?v=2.0">
+  <link rel="stylesheet" href="css/style.css?v=2.1">
 </head>
 <body>
 
@@ -69,6 +69,16 @@
           title="Canviar mode clar / fosc" 
           aria-label="Canviar entre mode clar i fosc">
           🌓
+        </button>
+
+        <!-- Botó Espai Docent (Personalització de vocabulari del centre) -->
+        <button 
+          id="teacher-panel-btn" 
+          class="theme-toggle-btn" 
+          onclick="App.showTeacherPanel()" 
+          title="Espai Docent: Gestionar Vocabulari de l'Escola 🏫" 
+          aria-label="Obrir l'espai docent per personalitzar vocabulari de l'escola">
+          🏫
         </button>
 
         <div id="user-badge" class="user-badge" style="display: none;">
@@ -107,9 +117,9 @@
   </footer>
 
   <!-- SCRIPTS DE L'APLICACIÓ -->
-  <script src="js/data.js?v=2.0"></script>
-  <script src="js/audio.js?v=2.0"></script>
-  <script src="js/app.js?v=2.0"></script>
+  <script src="js/data.js?v=2.1"></script>
+  <script src="js/audio.js?v=2.1"></script>
+  <script src="js/app.js?v=2.1"></script>
 
   <!-- Registre del Service Worker per a funcionament 100% Offline (PWA) -->
   <script>
