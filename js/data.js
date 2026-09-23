@@ -101,6 +101,44 @@ const ACOLLIDA_DATA = {
         en: "Express how we feel physically and emotionally.",
         ar: "التعبير عن مشاعرنا وحالتنا الجسدية."
       }
+    },
+    {
+      id: "menjador",
+      icon: "🍽️",
+      color: "#ff922b",
+      titol: {
+        ca: "El menjador escolar i els aliments",
+        es: "El comedor escolar y los alimentos",
+        fr: "La cantine scolaire et les aliments",
+        en: "School cafeteria & food",
+        ar: "المطعم المدرسي والأغذية"
+      },
+      descripcio: {
+        ca: "Estris per menjar, aliments bàsics i comunicació d'al·lèrgies i preferències.",
+        es: "Utensilios para comer, alimentos básicos y comunicación de alergias y preferencias.",
+        fr: "Ustensiles pour manger, aliments de base et communication d'allergies.",
+        en: "Eating utensils, basic foods, and communicating allergies and preferences.",
+        ar: "أدوات الأكل والأطعمة الأساسية والتعبير عن الحساسية والتفضيلات."
+      }
+    },
+    {
+      id: "roba",
+      icon: "🧥",
+      color: "#20c997",
+      titol: {
+        ca: "La roba i el temps atmosfèric",
+        es: "La ropa y el tiempo atmosférico",
+        fr: "Les vêtements et la météo",
+        en: "Clothes & the weather",
+        ar: "الملابس والطقس"
+      },
+      descripcio: {
+        ca: "Peces de vestir diàries i expressions per parlar del temps que fa.",
+        es: "Prendas de vestir diarias y expresiones para hablar del tiempo que hace.",
+        fr: "Vêtements quotidiens et expressions pour parler de la météo.",
+        en: "Everyday clothes and phrases to talk about the weather.",
+        ar: "الملابس اليومية وعبارات للحديث عن حالة الطقس."
+      }
     }
   ],
 
@@ -625,6 +663,238 @@ const ACOLLIDA_DATA = {
         fr: "Nous nous lavons les mains avec du savon.",
         en: "We wash our hands with soap.",
         ar: "نغسل أيدينا بالصابون."
+      }
+    },
+
+    // --- 6. EL MENJADOR ESCOLAR I ELS ALIMENTS ---
+    {
+      id: "men_pa",
+      categoria: "menjador",
+      icon: "🥖",
+      arasaacId: 2434, // pa
+      ca: "El pa",
+      es: "El pan",
+      fr: "Le pain",
+      en: "Bread",
+      ar: "الخبز",
+      ar_fonetica: "Al-khubz",
+      frase_model: {
+        ca: "Puc agafar una mica de pa, si us plau?",
+        es: "¿Puedo coger un poco de pan, por favor?",
+        fr: "Puis-je prendre un peu de pain, s'il vous plaît ?",
+        en: "Can I take some bread, please?",
+        ar: "هل يمكنني أخذ قليل من الخبز من فضلك؟"
+      }
+    },
+    {
+      id: "men_aigua",
+      categoria: "menjador",
+      icon: "🥛",
+      arasaacId: 2439, // aigua
+      ca: "El got d'aigua",
+      es: "El vaso de agua",
+      fr: "Le verre d'eau",
+      en: "A glass of water",
+      ar: "كأس ماء",
+      ar_fonetica: "Ka's ma'",
+      frase_model: {
+        ca: "Pots omplir el meu got d'aigua?",
+        es: "¿Puedes llenar mi vaso de agua?",
+        fr: "Peux-tu remplir mon verre d'eau ?",
+        en: "Can you fill my glass with water?",
+        ar: "هل يمكنك ملء كأسي بالماء؟"
+      }
+    },
+    {
+      id: "men_cullera",
+      categoria: "menjador",
+      icon: "🥄",
+      arasaacId: 2516, // cullera
+      ca: "La cullera",
+      es: "La cuchara",
+      fr: "La cuillère",
+      en: "The spoon",
+      ar: "الملعقة",
+      ar_fonetica: "Al-mil'aqa",
+      frase_model: {
+        ca: "Menjo la sopa amb la cullera.",
+        es: "Como la sopa con la cuchara.",
+        fr: "Je mange la soupe avec la cuillère.",
+        en: "I eat the soup with the spoon.",
+        ar: "آكل الحساء بالملعقة."
+      }
+    },
+    {
+      id: "men_forquilla",
+      categoria: "menjador",
+      icon: "🍴",
+      arasaacId: 2517, // forquilla
+      ca: "La forquilla",
+      es: "El tenedor",
+      fr: "La fourchette",
+      en: "The fork",
+      ar: "الشوكة",
+      ar_fonetica: "Ash-shawka",
+      frase_model: {
+        ca: "M'ha caigut la forquilla a terra.",
+        es: "Se me ha caído el tenedor al suelo.",
+        fr: "Ma fourchette est tombée par terre.",
+        en: "My fork fell on the floor.",
+        ar: "سقطت شوكتي على الأرض."
+      }
+    },
+    {
+      id: "men_fruita",
+      categoria: "menjador",
+      icon: "🍎",
+      arasaacId: 2404, // poma
+      ca: "La fruita",
+      es: "La fruta",
+      fr: "Le fruit",
+      en: "Fruit",
+      ar: "الفاكهة",
+      ar_fonetica: "Al-fakiha",
+      frase_model: {
+        ca: "De postres menjo una poma.",
+        es: "De postre como una manzana.",
+        fr: "En dessert, je mange une pomme.",
+        en: "For dessert I eat an apple.",
+        ar: "في التحلية آكل تفاحة."
+      }
+    },
+    {
+      id: "men_alergia",
+      categoria: "menjador",
+      icon: "⚠️",
+      arasaacId: 32679, // alergia
+      ca: "L'al·lèrgia (No puc menjar...)",
+      es: "La alergia (No puedo comer...)",
+      fr: "L'allergie (Je ne peux pas manger...)",
+      en: "Allergy (I cannot eat...)",
+      ar: "الحساسية (لا يمكنني أكل...)",
+      ar_fonetica: "Al-hasasiyya",
+      frase_model: {
+        ca: "No puc menjar porc ni fruits secs.",
+        es: "No puedo comer cerdo ni frutos secos.",
+        fr: "Je ne peux pas manger de porc ni de fruits secs.",
+        en: "I cannot eat pork or nuts.",
+        ar: "لا يمكنني أكل لحم الخنزير أو المكسرات."
+      }
+    },
+
+    // --- 7. LA ROBA I EL TEMPS ATMOSFÈRIC ---
+    {
+      id: "rob_jaqueta",
+      categoria: "roba",
+      icon: "🧥",
+      arasaacId: 2470, // jaqueta
+      ca: "La jaqueta",
+      es: "La chaqueta",
+      fr: "La veste",
+      en: "The jacket",
+      ar: "السترة",
+      ar_fonetica: "As-sutra",
+      frase_model: {
+        ca: "Em poso la jaqueta per sortir al pati.",
+        es: "Me pongo la chaqueta para salir al patio.",
+        fr: "Je mets ma veste pour aller dans la cour.",
+        en: "I put on my jacket to go out to the yard.",
+        ar: "أرتدي السترة للخروج إلى الساحة."
+      }
+    },
+    {
+      id: "rob_sabates",
+      categoria: "roba",
+      icon: "👟",
+      arasaacId: 2482, // sabates
+      ca: "Les sabates",
+      es: "Los zapatos / zapatillas",
+      fr: "Les chaussures",
+      en: "Shoes / sneakers",
+      ar: "الحذاء",
+      ar_fonetica: "Al-hidha'",
+      frase_model: {
+        ca: "Em lligo els cordons de les sabates.",
+        es: "Me ato los cordones de los zapatos.",
+        fr: "J'attache les lacets de mes chaussures.",
+        en: "I tie my shoelaces.",
+        ar: "أربط أربطة حذائي."
+      }
+    },
+    {
+      id: "rob_pantalons",
+      categoria: "roba",
+      icon: "👖",
+      arasaacId: 2473, // pantalons
+      ca: "Els pantalons",
+      es: "Los pantalones",
+      fr: "Le pantalon",
+      en: "Trousers / pants",
+      ar: "السروال",
+      ar_fonetica: "As-sirwal",
+      frase_model: {
+        ca: "Porto pantalons d'esport per fer gimnàstica.",
+        es: "Llevo pantalones de deporte para hacer gimnasia.",
+        fr: "Je porte un pantalon de sport pour la gym.",
+        en: "I wear sport pants for gym class.",
+        ar: "أرتدي سروالاً رياضياً للتربية البدنية."
+      }
+    },
+    {
+      id: "rob_fred",
+      categoria: "roba",
+      icon: "❄️",
+      arasaacId: 6954, // fred
+      ca: "Fa fred",
+      es: "Hace frío",
+      fr: "Il fait froid",
+      en: "It's cold",
+      ar: "الجو بارد",
+      ar_fonetica: "Al-jaww barid",
+      frase_model: {
+        ca: "Avui fa molt de fred.",
+        es: "Hoy hace mucho frío.",
+        fr: "Aujourd'hui il fait très froid.",
+        en: "Today it is very cold.",
+        ar: "اليوم الجو بارد جداً."
+      }
+    },
+    {
+      id: "rob_calor",
+      categoria: "roba",
+      icon: "☀️",
+      arasaacId: 6953, // calor
+      ca: "Fa calor",
+      es: "Hace calor",
+      fr: "Il fait chaud",
+      en: "It's hot",
+      ar: "الجو حار",
+      ar_fonetica: "Al-jaww harr",
+      frase_model: {
+        ca: "Tinc calor, em puc treure el jersei?",
+        es: "Tengo calor, ¿puedo quitarme el jersey?",
+        fr: "J'ai chaud, puis-je enlever mon pull ?",
+        en: "I'm hot, can I take off my sweater?",
+        ar: "أشعر بالحر، هل يمكنني خلع كنزتي؟"
+      }
+    },
+    {
+      id: "rob_pluja",
+      categoria: "roba",
+      icon: "🌧️",
+      arasaacId: 6965, // pluja
+      ca: "La pluja (Plou)",
+      es: "La lluvia (Llueve)",
+      fr: "La pluie (Il pleut)",
+      en: "Rain (It's raining)",
+      ar: "المطر (تمطر)",
+      ar_fonetica: "Al-matar",
+      frase_model: {
+        ca: "Plou i obrim el paraigua.",
+        es: "Llueve y abrimos el paraguas.",
+        fr: "Il pleut et nous ouvrons le parapluie.",
+        en: "It's raining and we open the umbrella.",
+        ar: "إنها تمطر ونفتح المظلة."
       }
     }
   ],
