@@ -5,7 +5,7 @@
 - **Públic destinatari**: Alumnat nouvingut d'Educació Primària, docents d'Aules d'Acollida i mestres d'Educació Especial / SIEI.
 - **Llengües integrades**: 
   - Català (Llengua d'aprenentatge / Meta)
-  - 6 Llengües pont de suport: Castellà (🇪🇸), Francès (🇫🇷), Anglès (🇬🇧), Àrab (🇲🇦, suport natiu RTL i transliteració fonètica), Ucraïnès (🇺🇦) i Xinès (🇨🇳).
+  - 8 Llengües pont de suport: Castellà (🇪🇸), Francès (🇫🇷), Anglès (🇬🇧), Àrab (🇲🇦, suport natiu RTL i transliteració fonètica), Ucraïnès (🇺🇦), Xinès (🇨🇳), Romanès (🇷🇴) i Urdú / Panjabi (🇵🇰, suport natiu RTL i transliteració fonètica).
 - **Stack tecnològic**:
   - HTML5 semàntic i accessible (WCAG / DUA)
   - CSS3 modern responsive (suport tàctil, flexbox/grid, RTL natiu, impressió `@media print`)
@@ -101,15 +101,24 @@
     - [x] **Pestanya 3 (Protocol de Centre i CAD)**: Fases temporals d'acollida (48h, 2 setmanes, 1r semestre, transició), criteris per a la CAD i relació amb les famílies.
     - [x] **Pestanya 4 (Estratègies d'Aula i DUA)**: Respecte pel període de silenci (*Silent Period*), bastida lingüística (*scaffolding*), parelles lingüístiques i aprenentatge cooperatiu.
     - [x] **Generador de Dossier Imprimible**: Botó `🖨️ Imprimeix Dossier Guia (PDF)` que formata els 4 mòduls en un document A4 llest per imprimir o desar en PDF.
+  - [x] **Ampliació de Llengües Pont Clau: Romanès (🇷🇴) i Urdú / Panjabi (🇵🇰) (v2.5)**:
+    - [x] Traducció íntegra de la interfície d'usuari (UI) al romanès i a l'urdú.
+    - [x] Traducció completa dels títols i descripcions de les 11 categories temàtiques.
+    - [x] Traducció de les 60 paraules de vocabulari i les 60 frases model a ambdues llengües.
+    - [x] Transliteració fonètica llatina afegida a l'urdú (`ur_fonetica`) per donar suport a mestres no arabòfons/urdúfons.
+    - [x] Suport tipogràfic i RTL natiu per a l'escriptura urdú amb la classe `.urdu-text` i càrrega de la font Google Fonts *Noto Nastaliq Urdu*.
+    - [x] Integració de síntesi de veu nativa Web Speech API (`ro-RO`, `ur-PK`) i fallback resilient a Google TTS.
+    - [x] Selector d'idioma gràfic actualitzat a la benvinguda i als formularis de registre d'alumnes i docents.
+    - [x] Missatge de reforç bilingüe per a famílies en romanès i urdú als Informes de Seguiment SLS.
   - [x] Suport dual complet per a **Mode Fosc / Clar**: detecció automàtica per defecte del dispositiu/sistema operatiu (`prefers-color-scheme`) i commutador manual.
   - [x] Disseny responsive revisat i optimitzat per a tauletes d'aula i telèfons intel·ligents (touch targets >= 48px, graelles adaptatives i impressió forçada en blanc/negre).
   - [x] Auditoria i correcció integral de contrastos (WCAG AAA).
 - **Punt exacte on ens hem quedat**:
-  - Aplicació consolidada a la versió 2.4 amb Quadern de seguiment multialumne persistent, informes bilingües formatius per a famílies/CAD i Guia Docent metodològica completa amb dossier imprimible.
+  - Aplicació consolidada a la versió 2.5 amb 8 llengües pont de suport (Castellà, Francès, Anglès, Àrab, Ucraïnès, Xinès, Romanès i Urdú/Panjabi), quadern multialumne persistent, informes bilingües formatius per a famílies/CAD i Guia Docent metodològica completa.
 - **Decisions tècniques i incidències conegudes**:
+  - El Service Worker empra la versió `acollida-cache-v2.5` i `index.html` té cache-busting `?v=2.5` per a tots els fitxers de l'App Shell.
   - Els perfils d'alumnes s'emmagatzemen a `acollida_students` de forma 100% local i privada (compliment estricte de privacitat escolar / RGPD).
-  - La sincronització entre sessió activa i historial d'alumnes és transparent i immediata (`syncActiveStudentProfile`).
-  - Els fulls d'informe i la guia docent compten amb classes CSS específiques per a `@media print` que asseguren una impressió neta en blanc i negre estalvi de tinta sense talls de pàgina incòmodes.
+  - Les 8 llengües pont permeten cobrir pràcticament la totalitat de l'alumnat nouvingut que s'incorpora als centres educatius de Catalunya.
 
 ---
 
@@ -118,5 +127,4 @@
   - [ ] Pas 1: Laboratori de Veu «Escolta't i Repeteix» (gravadora local en memòria RAM per a l'autoavaluació fonètica de l'expressió oral amb `MediaRecorder API`).
   - [ ] Pas 2: Reconeixement ràpid 1 de 3 (associació de so i 3 opcions gràfiques contrarellotge relaxat).
 - **Millores futures i backlog**:
-  - [ ] Ampliació de noves llengües pont: Romanès (🇷🇴) i Panjabi / Urdu (🇵🇰).
   - [ ] Mode d'impressió de diplomes en colors suaus per a final de trimestre.

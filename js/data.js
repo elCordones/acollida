@@ -1,7 +1,7 @@
 /**
  * Dades multilingües per a l'Aula d'Acollida
  * Llengua meta: Català (CA)
- * Llengües pont: Castellà (ES), Francès (FR), Anglès (EN), Àrab (AR), Ucraïnès (UK), Xinès (ZH)
+ * Llengües pont: Castellà (ES), Francès (FR), Anglès (EN), Àrab (AR), Ucraïnès (UK), Xinès (ZH), Romanès (RO), Urdú / Panjabi (UR)
  * Dissenyat segons els criteris dels quaderns de Suport Lingüístic i Social (SLS)
  */
 
@@ -18,7 +18,9 @@ const ACOLLIDA_DATA = {
         "en": "Basic needs & emergency communication",
         "ar": "احتياجات أساسية وتواصل طارئ",
         "uk": "Базові потреби та невідкладне спілкування",
-        "zh": "基本需求与紧急沟通"
+        "zh": "基本需求与紧急沟通",
+        "ro": "Nevoi de bază și comunicare de urgență",
+        "ur": "بنیادی ضروریات اور ہنگامی رابطہ"
       },
       "descripcio": {
         "ca": "Paraules i expressions per demanar ajuda i comunicar necessitats immediates.",
@@ -27,7 +29,9 @@ const ACOLLIDA_DATA = {
         "en": "Words and phrases to ask for help and communicate urgent needs.",
         "ar": "كلمات وعبارات لطلب المساعدة والتعبير عن الاحتياجات العاجلة.",
         "uk": "Слова та вирази, щоб попросити про допомогу та повідомити про термінові потреби.",
-        "zh": "用于求助和表达急需的单词和常用语。"
+        "zh": "用于求助和表达急需的单词和常用语。",
+        "ro": "Cuvinte și expresii pentru a cere ajutor și a comunica nevoi imediate.",
+        "ur": "مدد مانگنے اور فوری ضروریات بتانے کے لیے الفاظ اور جملے۔"
       }
     },
     {
@@ -41,7 +45,9 @@ const ACOLLIDA_DATA = {
         "en": "Classroom and school supplies",
         "ar": "القسم والأدوات المدرسية",
         "uk": "Клас та шкільне приладдя",
-        "zh": "教室与学习文具"
+        "zh": "教室与学习文具",
+        "ro": "Clasa și rechizitele școlare",
+        "ur": "کلاس روم اور اسکول کا سامان"
       },
       "descripcio": {
         "ca": "El material de treball diari a l'aula i les instruccions escolars.",
@@ -50,7 +56,9 @@ const ACOLLIDA_DATA = {
         "en": "Daily classroom supplies and school instructions.",
         "ar": "الأدوات المدرسية اليومية والتعليمات الصفية.",
         "uk": "Щоденні шкільні матеріали та інструкції на уроці.",
-        "zh": "日常课堂学习用品与学校常规指令。"
+        "zh": "日常课堂学习用品与学校常规指令。",
+        "ro": "Materiale de lucru zilnic în clasă și instrucțiuni școlare.",
+        "ur": "کلاس میں روزمرہ کے کام کا سامان اور اسکول کی ہدایات۔"
       }
     },
     {
@@ -64,7 +72,9 @@ const ACOLLIDA_DATA = {
         "en": "Playground & playground games",
         "ar": "ساحة الاستراحة والألعاب",
         "uk": "Шкільне подвір'я та спільні ігри",
-        "zh": "操场与课间游戏"
+        "zh": "操场与课间游戏",
+        "ro": "Curtea școlii și jocurile cu colegii",
+        "ur": "کھیل کا میدان اور باہمی کھیل"
       },
       "descripcio": {
         "ca": "Vocabulari per jugar amb els companys, demanar participar i compartir.",
@@ -73,7 +83,9 @@ const ACOLLIDA_DATA = {
         "en": "Vocabulary to play with peers, ask to join, and share.",
         "ar": "مفردات للعب مع الزملاء وطلب المشاركة والمشاركة.",
         "uk": "Слова для гри з однокласниками, прохання приєднатися та взаємодії.",
-        "zh": "与同伴玩耍、加入游戏和分享的词汇。"
+        "zh": "与同伴玩耍、加入游戏和分享的词汇。",
+        "ro": "Vocabular pentru a te juca cu colegii, a cere să participi și a împărtăși.",
+        "ur": "ساتھیوں کے ساتھ کھیلنے، شامل ہونے اور شیئر کرنے کے الفاظ۔"
       }
     },
     {
@@ -87,7 +99,9 @@ const ACOLLIDA_DATA = {
         "en": "Home and family",
         "ar": "البيت والعائلة",
         "uk": "Дім та сім'я",
-        "zh": "家庭与家人"
+        "zh": "家庭与家人",
+        "ro": "Casa și familia",
+        "ur": "گھر اور خاندان"
       },
       "descripcio": {
         "ca": "Membres de la família, espais de la casa i accions de la vida quotidiana.",
@@ -96,7 +110,9 @@ const ACOLLIDA_DATA = {
         "en": "Family members, rooms in the house, and daily routines.",
         "ar": "أفراد العائلة وأرجاء المنزل والأفعال اليومية.",
         "uk": "Члени родини, кімнати в будинку та щоденні дії.",
-        "zh": "家庭成员、房间布局与日常生活动作。"
+        "zh": "家庭成员、房间布局与日常生活动作。",
+        "ro": "Membrii familiei, încăperile casei și activități din viața de zi cu zi.",
+        "ur": "خاندان کے افراد، گھر کے کمرے اور روزمرہ کے کام۔"
       }
     },
     {
@@ -110,7 +126,9 @@ const ACOLLIDA_DATA = {
         "en": "Body, health and feelings",
         "ar": "الجسم والصحة والمشاعر",
         "uk": "Тіло, здоров'я та емоції",
-        "zh": "身体、健康与情绪"
+        "zh": "身体、健康与情绪",
+        "ro": "Corpul, sănătatea și emoțiile",
+        "ur": "جسم، صحت اور جذبات"
       },
       "descripcio": {
         "ca": "Expressar com ens sentim físicament i emocionalment.",
@@ -119,7 +137,9 @@ const ACOLLIDA_DATA = {
         "en": "Express how we feel physically and emotionally.",
         "ar": "التعبير عن مشاعرنا وحالتنا الجسدية.",
         "uk": "Вираження самопочуття, частин тіла та емоційного стану.",
-        "zh": "表达身体感受、健康状况与情绪体验。"
+        "zh": "表达身体感受、健康状况与情绪体验。",
+        "ro": "Cum să exprimăm ceea ce simțim fizic și emoțional.",
+        "ur": "جسمانی اور جذباتی احساسات کا اظہار کرنا۔"
       }
     },
     {
@@ -133,7 +153,9 @@ const ACOLLIDA_DATA = {
         "en": "School cafeteria & food",
         "ar": "المطعم المدرسي والأغذية",
         "uk": "Шкільна їдальня та їжа",
-        "zh": "学校食堂与食物"
+        "zh": "学校食堂与食物",
+        "ro": "Mâncarea și cantina școlară",
+        "ur": "کھانا اور اسکول کینٹین"
       },
       "descripcio": {
         "ca": "Estris per menjar, aliments bàsics i comunicació d'al·lèrgies i preferències.",
@@ -142,7 +164,9 @@ const ACOLLIDA_DATA = {
         "en": "Eating utensils, basic foods, and communicating allergies and preferences.",
         "ar": "أدوات الأكل والأطعمة الأساسية والتعبير عن الحساسية والتفضيلات.",
         "uk": "Столові прибори, основні продукти та повідомлення про алергії.",
-        "zh": "餐具、基础食物以及过敏与饮食偏好。"
+        "zh": "餐具、基础食物以及过敏与饮食偏好。",
+        "ro": "Alimente, tacâmuri, cereri la masă și alergii alimentare.",
+        "ur": "کھانے کی چیزیں، برتن، دسترخوان اور غذائی الرجی۔"
       }
     },
     {
@@ -156,7 +180,9 @@ const ACOLLIDA_DATA = {
         "en": "Clothes & the weather",
         "ar": "الملابس والطقس",
         "uk": "Одяг та погода",
-        "zh": "服装与天气气候"
+        "zh": "服装与天气气候",
+        "ro": "Hainele și vremea",
+        "ur": "لباس اور موسم"
       },
       "descripcio": {
         "ca": "Peces de vestir diàries i expressions per parlar del temps que fa.",
@@ -165,7 +191,9 @@ const ACOLLIDA_DATA = {
         "en": "Everyday clothes and phrases to talk about the weather.",
         "ar": "الملابس اليومية وعبارات للحديث عن حالة الطقس.",
         "uk": "Повсякденний одяг та вирази для розмови про погоду.",
-        "zh": "日常衣物穿着与谈论天气的常用表达。"
+        "zh": "日常衣物穿着与谈论天气的常用表达。",
+        "ro": "Articole de îmbrăcăminte zilnice și expresii despre vreme.",
+        "ur": "روزمرہ کے کپڑے اور موسم کے بارے میں بات چیت۔"
       }
     },
     {
@@ -179,7 +207,9 @@ const ACOLLIDA_DATA = {
         "en": "Numbers, time & the calendar",
         "ar": "الأرقام والوقت والتقويم",
         "uk": "Числа, час та календар",
-        "zh": "数字、时间与日历"
+        "zh": "数字、时间与日历",
+        "ro": "Numerele, timpul și calendarul",
+        "ur": "اعداد، وقت اور کیلنڈر"
       },
       "descripcio": {
         "ca": "Nombres per comptar, mirar l'hora i situar-se en els dies de la setmana.",
@@ -188,7 +218,9 @@ const ACOLLIDA_DATA = {
         "en": "Numbers for counting, telling time, and days of the week.",
         "ar": "الأرقام للعد ومعرفة الوقت وأيام الأسبوع.",
         "uk": "Числа для лічби, перевірки часу та орієнтації в днях тижня.",
-        "zh": "用于计数、辨认时钟和星期日子的词汇。"
+        "zh": "用于计数、辨认时钟和星期日子的词汇。",
+        "ro": "Numere pentru a număra, a citi ceasul și a te orienta în zilele săptămânii.",
+        "ur": "گنتی، وقت دیکھنا اور ہفتے کے دن سمجھنا۔"
       }
     },
     {
@@ -202,7 +234,9 @@ const ACOLLIDA_DATA = {
         "en": "Neighborhood, city & transport",
         "ar": "الحي والمدينة ووسائل النقل",
         "uk": "Район, місто та транспорт",
-        "zh": "社区、城市与交通工具"
+        "zh": "社区、城市与交通工具",
+        "ro": "Cartierul, orașul și transportul",
+        "ur": "شہر، محلہ اور ٹرانسپورٹ"
       },
       "descripcio": {
         "ca": "Com moure's pel carrer amb seguretat, utilitzar el transport i explorar el barri.",
@@ -211,7 +245,9 @@ const ACOLLIDA_DATA = {
         "en": "Navigating streets safely, using public transport, and exploring the neighborhood.",
         "ar": "التنقل بأمان في الشارع واستخدام المواصلات واكتشاف الحي.",
         "uk": "Безпечне пересування вулицею, користування транспортом та знайомство з районом.",
-        "zh": "安全过马路、搭乘公共交通和探索社区。"
+        "zh": "安全过马路、搭乘公共交通和探索社区。",
+        "ro": "Puncte de referință în oraș, magazine, mijloace de transport și siguranță rutieră.",
+        "ur": "راستے، دکانیں، پبلک ٹرانسپورٹ اور سڑک کی حفاظت۔"
       }
     },
     {
@@ -225,7 +261,9 @@ const ACOLLIDA_DATA = {
         "en": "School routines & classroom actions",
         "ar": "الروتين المدرسي وأنشطة القسم",
         "uk": "Шкільний розпорядок та дії на уроці",
-        "zh": "校园常规与课堂行动"
+        "zh": "校园常规与课堂行动",
+        "ro": "Rutinele și instrucțiunile școlare",
+        "ur": "اسکول کی معمولات اور ہدایات"
       },
       "descripcio": {
         "ca": "Instruccions bàsiques, ordre de la jornada i accions per participar a classe.",
@@ -234,7 +272,9 @@ const ACOLLIDA_DATA = {
         "en": "Basic instructions, daily schedule, and actions to participate in class.",
         "ar": "التعليمات الأساسية وترتيب اليوم المدرسي والمشاركة في القسم.",
         "uk": "Базові вказівки, порядок дня та активна участь у класі.",
-        "zh": "基本课堂指令、一日作息与课堂参与。"
+        "zh": "基本课堂指令、一日作息与课堂参与。",
+        "ro": "Instrucțiuni frecvente ale profesorilor și acțiuni zilnice la școală.",
+        "ur": "اساتذہ کی روزمرہ ہدایات اور اسکول کے معمولات۔"
       }
     },
     {
@@ -248,7 +288,9 @@ const ACOLLIDA_DATA = {
         "en": "Our school & campus",
         "ar": "مدرستنا ومرافقها",
         "uk": "Наша школа та приміщення",
-        "zh": "我们的学校与校园"
+        "zh": "我们的学校与校园",
+        "ro": "Școala noastră și spațiile ei",
+        "ur": "ہماری اسکول اور اس کے حصے"
       },
       "descripcio": {
         "ca": "Espais, persones, serveis i projectes propis de la nostra escola.",
@@ -257,7 +299,9 @@ const ACOLLIDA_DATA = {
         "en": "Spaces, staff, services and projects of our school.",
         "ar": "مرافق المدرسة والموظفون والخدمات والمشاريع الخاصة بمدرستنا.",
         "uk": "Приміщення, працівники, служби та проекти нашої школи.",
-        "zh": "我们学校的特色空间、教职人员、服务与校园项目。"
+        "zh": "我们学校的特色空间、教职人员、服务与校园项目。",
+        "ro": "Spații, persoane, servicii și proiecte ale școlii noastre.",
+        "ur": "ہماری اسکول کے مقامات، اساتذہ، خدمات اور پروجیکٹس۔"
       }
     }
   ],
@@ -280,10 +324,15 @@ const ACOLLIDA_DATA = {
         "en": "I'm thirsty, can I drink water?",
         "ar": "أنا عطشان، هل يمكنني شرب الماء؟",
         "uk": "Я хочу пити, можна попити води?",
-        "zh": "我口渴了，我可以喝水吗？"
+        "zh": "我口渴了，我可以喝水吗？",
+        "ro": "Mi-e sete, pot să beau apă?",
+        "ur": "مجھے پیاس لگی ہے، کیا میں پانی پی سکتا ہوں؟"
       },
       "uk": "Вода",
-      "zh": "水"
+      "zh": "水",
+      "ro": "Apa",
+      "ur": "پانی",
+      "ur_fonetica": "Pani"
     },
     {
       "id": "urg_lavabo",
@@ -303,10 +352,15 @@ const ACOLLIDA_DATA = {
         "en": "May I go to the bathroom, please?",
         "ar": "هل يمكنني الذهاب إلى المرحاض من فضلك؟",
         "uk": "Чи можу я вийти в туалет, будь ласка?",
-        "zh": "请问我可以去洗手间吗？"
+        "zh": "请问我可以去洗手间吗？",
+        "ro": "Pot merge la baie, vă rog?",
+        "ur": "کیا میں باتھ روم جا سکتا ہوں، پلیز؟"
       },
       "uk": "Туалет",
-      "zh": "厕所 / 洗手间"
+      "zh": "厕所 / 洗手间",
+      "ro": "Toaleta / Baia",
+      "ur": "باتھ روم / بیت الخلاء",
+      "ur_fonetica": "Bathroom / Washroom"
     },
     {
       "id": "urg_ajuda",
@@ -326,10 +380,15 @@ const ACOLLIDA_DATA = {
         "en": "Can you help me?",
         "ar": "هل يمكنك مساعدتي؟",
         "uk": "Ти можеш мені допомогти?",
-        "zh": "你能帮帮我吗？"
+        "zh": "你能帮帮我吗？",
+        "ro": "Ajutor, vă rog! Am nevoie de ajutor.",
+        "ur": "مدد، پلیز! مجھے مدد کی ضرورت ہے۔"
       },
       "uk": "Допомога",
-      "zh": "帮助"
+      "zh": "帮助",
+      "ro": "Ajutorul",
+      "ur": "مدد",
+      "ur_fonetica": "Madad"
     },
     {
       "id": "urg_dolor",
@@ -349,10 +408,15 @@ const ACOLLIDA_DATA = {
         "en": "I hurt myself, it hurts here.",
         "ar": "لقد تأذيت، يؤلمني هنا.",
         "uk": "Я вдарився, мені тут болить.",
-        "zh": "我受伤了，这里很痛。"
+        "zh": "我受伤了，这里很痛。",
+        "ro": "Mă doare aici, m-am lovit.",
+        "ur": "مجھے یہاں درد ہو رہا ہے، چوٹ لگی ہے۔"
       },
       "uk": "Біль / Забитися",
-      "zh": "疼痛 / 受伤"
+      "zh": "疼痛 / 受伤",
+      "ro": "Durerea / Mă doare",
+      "ur": "درد / چوٹ",
+      "ur_fonetica": "Dard / Chot"
     },
     {
       "id": "urg_noentenc",
@@ -372,10 +436,15 @@ const ACOLLIDA_DATA = {
         "en": "Can you repeat? I don't understand.",
         "ar": "هل يمكنك الإعادة؟ لا أفهم.",
         "uk": "Чи можете ви повторити? Я не розумію.",
-        "zh": "你能再说一遍吗？我不明白。"
+        "zh": "你能再说一遍吗？我不明白。",
+        "ro": "Nu înțeleg, puteți repeta mai rar, vă rog?",
+        "ur": "مجھے سمجھ نہیں آئی، کیا آپ آہستہ دہرا سکتے ہیں؟"
       },
       "uk": "Я не розумію",
-      "zh": "我不懂 / 我不明白"
+      "zh": "我不懂 / 我不明白",
+      "ro": "Nu înțeleg",
+      "ur": "مجھے سمجھ نہیں آئی",
+      "ur_fonetica": "Mujhe samajh nahi aayi"
     },
     {
       "id": "urg_si_no",
@@ -395,10 +464,15 @@ const ACOLLIDA_DATA = {
         "en": "Yes, I want it. / No, thanks.",
         "ar": "نعم، أريد ذلك. / لا، شكراً.",
         "uk": "Так, будь ласка. / Ні, дякую.",
-        "zh": "是的，我要。/ 不用了，谢谢。"
+        "zh": "是的，我要。/ 不用了，谢谢。",
+        "ro": "Da, vreau / Nu, mulțumesc.",
+        "ur": "ہاں، شکریہ / نہیں، شکریہ۔"
       },
       "uk": "Так / Ні",
-      "zh": "是 / 否"
+      "zh": "是 / 否",
+      "ro": "Da / Nu",
+      "ur": "ہاں / نہیں",
+      "ur_fonetica": "Haan / Nahi"
     },
     {
       "id": "esc_llapis",
@@ -418,10 +492,15 @@ const ACOLLIDA_DATA = {
         "en": "I take the pencil to write.",
         "ar": "آخذ قلم الرصاص لأكتب.",
         "uk": "Я беру олівець, щоб писати.",
-        "zh": "我拿铅笔写字。"
+        "zh": "我拿铅笔写字。",
+        "ro": "Scriu cu creionul în caiet.",
+        "ur": "میں پنسل سے کاپی میں لکھتا ہوں۔"
       },
       "uk": "Олівець",
-      "zh": "铅笔"
+      "zh": "铅笔",
+      "ro": "Creionul",
+      "ur": "پنسل",
+      "ur_fonetica": "Pencil"
     },
     {
       "id": "esc_goma",
@@ -441,10 +520,15 @@ const ACOLLIDA_DATA = {
         "en": "Can you lend me the eraser, please?",
         "ar": "هل تعيرني الممحاة من فضلك؟",
         "uk": "Чи можеш позичити мені гумку, будь ласка?",
-        "zh": "请借给我橡皮擦用一下好吗？"
+        "zh": "请借给我橡皮擦用一下好吗？",
+        "ro": "Îmi împrumuți guma de șters, te rog?",
+        "ur": "کیا آپ مجھے ربڑ دے سکتے ہیں، پلیز؟"
       },
       "uk": "Гумка",
-      "zh": "橡皮擦"
+      "zh": "橡皮擦",
+      "ro": "Guma de șters",
+      "ur": "ربڑ / مٹانے والا",
+      "ur_fonetica": "Rubber / Eraser"
     },
     {
       "id": "esc_llibre",
@@ -464,10 +548,15 @@ const ACOLLIDA_DATA = {
         "en": "We open the book to page ten.",
         "ar": "نفتح الكتاب في الصفحة العاشرة.",
         "uk": "Відкриваємо підручник на десятій сторінці.",
-        "zh": "我们把书翻到第十页。"
+        "zh": "我们把书翻到第十页。",
+        "ro": "Deschideți cartea la pagina zece.",
+        "ur": "صفحہ نمبر دس پر کتاب کھولیں۔"
       },
       "uk": "Книга",
-      "zh": "书本"
+      "zh": "书本",
+      "ro": "Cartea",
+      "ur": "کتاب",
+      "ur_fonetica": "Kitab"
     },
     {
       "id": "esc_llibreta",
@@ -487,10 +576,15 @@ const ACOLLIDA_DATA = {
         "en": "Write the date in your notebook.",
         "ar": "اكتب التاريخ في الدفتر.",
         "uk": "Запиши дату в зошиті.",
-        "zh": "在笔记本上写下今天的日期。"
+        "zh": "在笔记本上写下今天的日期。",
+        "ro": "Am un caiet pentru desenat și scris.",
+        "ur": "میرے پاس لکھنے اور ڈرائنگ کے لیے ایک کاپی ہے۔"
       },
       "uk": "Зошит",
-      "zh": "笔记本 / 练习本"
+      "zh": "笔记本 / 练习本",
+      "ro": "Caietul",
+      "ur": "کاپی / نوٹ بک",
+      "ur_fonetica": "Copy / Notebook"
     },
     {
       "id": "esc_tisores",
@@ -510,10 +604,15 @@ const ACOLLIDA_DATA = {
         "en": "I cut the paper with scissors.",
         "ar": "أقص الورق بالمقص.",
         "uk": "Я ріжу папір ножицями.",
-        "zh": "我用剪刀剪纸。"
+        "zh": "我用剪刀剪纸。",
+        "ro": "Tai hârtia cu foarfeca cu grijă.",
+        "ur": "میں قینچی سے احتیاط سے کاغذ کاٹتا ہوں۔"
       },
       "uk": "Ножиці",
-      "zh": "剪刀"
+      "zh": "剪刀",
+      "ro": "Foarfeca",
+      "ur": "قینچی",
+      "ur_fonetica": "Qainchi"
     },
     {
       "id": "esc_motxilla",
@@ -533,10 +632,15 @@ const ACOLLIDA_DATA = {
         "en": "I put all the supplies in the backpack.",
         "ar": "أضع كل الأدوات في المحفظة.",
         "uk": "Я складаю всі речі в рюкзак.",
-        "zh": "我把所有文具都放进书包里。"
+        "zh": "我把所有文具都放进书包里。",
+        "ro": "Îmi pun materialele în ghiozdan.",
+        "ur": "میں اپنا سامان بستہ میں رکھتا ہوں۔"
       },
       "uk": "Рюкзак",
-      "zh": "书包"
+      "zh": "书包",
+      "ro": "Ghiozdanul / Rucsacul",
+      "ur": "بستہ / بیگ",
+      "ur_fonetica": "Basta / Bag"
     },
     {
       "id": "esc_taula",
@@ -556,10 +660,15 @@ const ACOLLIDA_DATA = {
         "en": "Sit on your chair, please.",
         "ar": "اجلسوا على كراسيكم من فضلكم.",
         "uk": "Сідайте на свої стільці, будь ласка.",
-        "zh": "请坐在你们的椅子上。"
+        "zh": "请坐在你们的椅子上。",
+        "ro": "Mă așez pe scaun lângă bancă.",
+        "ur": "میں میز کے ساتھ کرسی پر بیٹھتا ہوں۔"
       },
       "uk": "Стіл та стілець",
-      "zh": "桌子和椅子"
+      "zh": "桌子和椅子",
+      "ro": "Banca și scaunul",
+      "ur": "میز اور کرسی",
+      "ur_fonetica": "Mez aur kursi"
     },
     {
       "id": "pat_pilota",
@@ -579,10 +688,15 @@ const ACOLLIDA_DATA = {
         "en": "Pass me the ball!",
         "ar": "مرر لي الكرة!",
         "uk": "Пасуй мені м'яч!",
-        "zh": "把球传给我！"
+        "zh": "把球传给我！",
+        "ro": "Pasează-mi mingea, hai să jucăm fotbal!",
+        "ur": "مجھے گیند پاس کرو، چلو فٹ بال کھیلتے ہیں!"
       },
       "uk": "М'яч",
-      "zh": "球"
+      "zh": "球",
+      "ro": "Mingea",
+      "ur": "گیند / بال",
+      "ur_fonetica": "Gend / Ball"
     },
     {
       "id": "pat_jugar",
@@ -602,10 +716,15 @@ const ACOLLIDA_DATA = {
         "en": "Can I play with you?",
         "ar": "هل يمكنني اللعب معكم؟",
         "uk": "Можна мені пограти з вами?",
-        "zh": "我可以和你们一起玩吗？"
+        "zh": "我可以和你们一起玩吗？",
+        "ro": "Vreau să mă joc cu voi la baschet.",
+        "ur": "میں آپ کے ساتھ باسکٹ بال کھیلنا چاہتا ہوں۔"
       },
       "uk": "Грати",
-      "zh": "玩耍 / 玩游戏"
+      "zh": "玩耍 / 玩游戏",
+      "ro": "A se juca",
+      "ur": "کھیلنا",
+      "ur_fonetica": "Khelna"
     },
     {
       "id": "pat_correr",
@@ -625,10 +744,15 @@ const ACOLLIDA_DATA = {
         "en": "We run very fast in the playground!",
         "ar": "نركض بسرعة في الساحة!",
         "uk": "Ми швидко бігаємо на шкільному подвір'ї!",
-        "zh": "我们在操场上跑得飞快！"
+        "zh": "我们在操场上跑得飞快！",
+        "ro": "Alergăm foarte repede în curtea școlii.",
+        "ur": "ہم اسکول کے گراؤنڈ میں تیز دوڑتے ہیں۔"
       },
       "uk": "Бігти",
-      "zh": "跑步"
+      "zh": "跑步",
+      "ro": "A alerga",
+      "ur": "دوڑنا",
+      "ur_fonetica": "Dorna"
     },
     {
       "id": "pat_amic",
@@ -648,10 +772,15 @@ const ACOLLIDA_DATA = {
         "en": "You are my friend.",
         "ar": "أنت صديقي.",
         "uk": "Ти мій друг.",
-        "zh": "你是我的好朋友。"
+        "zh": "你是我的好朋友。",
+        "ro": "Ea este noua mea prietenă de la școală.",
+        "ur": "یہ اسکول میں میری نئی دوست ہے۔"
       },
       "uk": "Друг / Подруга",
-      "zh": "朋友"
+      "zh": "朋友",
+      "ro": "Prietenul / Prietena",
+      "ur": "دوست",
+      "ur_fonetica": "Dost"
     },
     {
       "id": "pat_pati",
@@ -671,10 +800,15 @@ const ACOLLIDA_DATA = {
         "en": "It's time to go to the playground!",
         "ar": "إنه وقت الخروج إلى الساحة!",
         "uk": "Час іти на перерву на подвір'я!",
-        "zh": "去操场活动的时间到了！"
+        "zh": "去操场活动的时间到了！",
+        "ro": "În recreație ieșim în curtea școlii.",
+        "ur": "ہم وقفے کے وقت اسکول کے گراؤنڈ میں جاتے ہیں۔"
       },
       "uk": "Шкільне подвір'я",
-      "zh": "操场 / 院子"
+      "zh": "操场 / 院子",
+      "ro": "Curtea școlii",
+      "ur": "اسکول کا میدان",
+      "ur_fonetica": "School ka maidan"
     },
     {
       "id": "cas_casa",
@@ -694,10 +828,15 @@ const ACOLLIDA_DATA = {
         "en": "In the afternoon I go home.",
         "ar": "في المساء أذهب إلى البيت.",
         "uk": "Увечері я йду додому.",
-        "zh": "下午我回家。"
+        "zh": "下午我回家。",
+        "ro": "După școală merg acasă.",
+        "ur": "اسکول کے بعد میں گھر جاتا ہوں۔"
       },
       "uk": "Дім",
-      "zh": "家"
+      "zh": "家",
+      "ro": "Casa",
+      "ur": "گھر",
+      "ur_fonetica": "Ghar"
     },
     {
       "id": "cas_familia",
@@ -717,10 +856,15 @@ const ACOLLIDA_DATA = {
         "en": "I love my family very much.",
         "ar": "أحب عائلتي كثيراً.",
         "uk": "Я дуже люблю свою родину.",
-        "zh": "我非常爱我的家人。"
+        "zh": "我非常爱我的家人。",
+        "ro": "Îmi iubesc familia, locuiesc cu părinții mei.",
+        "ur": "میں اپنے خاندان سے پیار کرتا ہوں، والدین کے ساتھ رہتا ہوں۔"
       },
       "uk": "Сім'я (батько і мати)",
-      "zh": "家人 (爸爸和妈妈)"
+      "zh": "家人 (爸爸和妈妈)",
+      "ro": "Familia (tatăl și mama)",
+      "ur": "خاندان (امی اور ابو)",
+      "ur_fonetica": "Khandan (Ammi aur Abbu)"
     },
     {
       "id": "cas_menjar",
@@ -740,10 +884,15 @@ const ACOLLIDA_DATA = {
         "en": "I'm hungry, I want to eat.",
         "ar": "أنا جائع، أريد أن آكل.",
         "uk": "Я голодний, я хочу їсти.",
-        "zh": "我饿了，我想吃东西。"
+        "zh": "我饿了，我想吃东西。",
+        "ro": "La prânz mâncăm orez cu legume.",
+        "ur": "ہم دوپہر کے کھانے میں چاول اور سبزیاں کھاتے ہیں۔"
       },
       "uk": "Їжа / Обід",
-      "zh": "食物 / 吃饭"
+      "zh": "食物 / 吃饭",
+      "ro": "Mâncarea / A lua prânzul",
+      "ur": "کھانا / دوپہر کا کھانا",
+      "ur_fonetica": "Khana / Lunch"
     },
     {
       "id": "cas_dormir",
@@ -763,10 +912,15 @@ const ACOLLIDA_DATA = {
         "en": "I am tired, I am going to sleep.",
         "ar": "أنا متعب، سأذهب للنوم.",
         "uk": "Я втомився, я йду спати.",
-        "zh": "我累了，我要去睡觉了。"
+        "zh": "我累了，我要去睡觉了。",
+        "ro": "Sunt obosit, merg la culcare devreme.",
+        "ur": "میں تھک گیا ہوں، جلدی سو جاؤں گا۔"
       },
       "uk": "Спати / Ліжко",
-      "zh": "睡觉 / 床"
+      "zh": "睡觉 / 床",
+      "ro": "A dormi / Patul",
+      "ur": "سونا / بستر",
+      "ur_fonetica": "Sona / Bistar"
     },
     {
       "id": "emo_content",
@@ -786,10 +940,15 @@ const ACOLLIDA_DATA = {
         "en": "Today I am very happy!",
         "ar": "اليوم أنا سعيد جداً!",
         "uk": "Сьогодні я дуже радісний!",
-        "zh": "今天我非常开心！"
+        "zh": "今天我非常开心！",
+        "ro": "Azi sunt foarte bucuros la școală!",
+        "ur": "آج میں اسکول میں بہت خوش ہوں!"
       },
       "uk": "Радісний / Веселий",
-      "zh": "高兴 / 开心"
+      "zh": "高兴 / 开心",
+      "ro": "Bucuros / Bucuroasă",
+      "ur": "خوش",
+      "ur_fonetica": "Khush"
     },
     {
       "id": "emo_trist",
@@ -809,10 +968,15 @@ const ACOLLIDA_DATA = {
         "en": "I am sad, I miss my country.",
         "ar": "أنا حزين، أشتاق لبلدي.",
         "uk": "Мені сумно, я сумую за своєю країною.",
-        "zh": "我很难过，我想念我的故乡。"
+        "zh": "我很难过，我想念我的故乡。",
+        "ro": "Sunt trist când îmi lipsește familia.",
+        "ur": "جب مجھے خاندان کی یاد آتی ہے تو میں اداس ہوتا ہوں۔"
       },
       "uk": "Сумний",
-      "zh": "伤心 / 难过"
+      "zh": "伤心 / 难过",
+      "ro": "Trist / Tristă",
+      "ur": "اداس",
+      "ur_fonetica": "Udas"
     },
     {
       "id": "emo_cap",
@@ -832,10 +996,15 @@ const ACOLLIDA_DATA = {
         "en": "My head hurts.",
         "ar": "يؤلمني رأسي.",
         "uk": "У мене болить голова.",
-        "zh": "我头痛。"
+        "zh": "我头痛。",
+        "ro": "Mă doare capul de la zgomot.",
+        "ur": "شور کی وجہ سے میرے سر میں درد ہے۔"
       },
       "uk": "Голова",
-      "zh": "头"
+      "zh": "头",
+      "ro": "Capul",
+      "ur": "سر",
+      "ur_fonetica": "Sar"
     },
     {
       "id": "emo_panxa",
@@ -855,10 +1024,15 @@ const ACOLLIDA_DATA = {
         "en": "My stomach hurts.",
         "ar": "يؤلمني بطني.",
         "uk": "У мене болить живіт.",
-        "zh": "我肚子痛。"
+        "zh": "我肚子痛。",
+        "ro": "Mă doare burta, pot merge la cabinet?",
+        "ur": "میرے پیٹ میں درد ہے، کیا میں نرس کے پاس جا سکتا ہوں؟"
       },
       "uk": "Живіт",
-      "zh": "肚子"
+      "zh": "肚子",
+      "ro": "Burta",
+      "ur": "پیٹ",
+      "ur_fonetica": "Pait"
     },
     {
       "id": "emo_mans",
@@ -878,10 +1052,15 @@ const ACOLLIDA_DATA = {
         "en": "We wash our hands with soap.",
         "ar": "نغسل أيدينا بالصابون.",
         "uk": "Ми миємо руки з милом.",
-        "zh": "我们用肥皂洗手。"
+        "zh": "我们用肥皂洗手。",
+        "ro": "Mă spăl pe mâini cu apă și săpun.",
+        "ur": "میں صابن اور پانی سے ہاتھ دھوتا ہوں۔"
       },
       "uk": "Руки",
-      "zh": "手"
+      "zh": "手",
+      "ro": "Mâinile",
+      "ur": "ہاتھ",
+      "ur_fonetica": "Haath"
     },
     {
       "id": "men_pa",
@@ -901,10 +1080,15 @@ const ACOLLIDA_DATA = {
         "en": "Can I take some bread, please?",
         "ar": "هل يمكنني أخذ قليل من الخبز من فضلك؟",
         "uk": "Чи можу я взяти трохи хліба, будь ласка?",
-        "zh": "请问我可以拿一点面包吗？"
+        "zh": "请问我可以拿一点面包吗？",
+        "ro": "Îmi place pâinea cu roșii și ulei de măsline.",
+        "ur": "مجھے ٹماٹر اور زیتون کے تیل والی روٹی پسند ہے۔"
       },
       "uk": "Хліб",
-      "zh": "面包"
+      "zh": "面包",
+      "ro": "Pâinea",
+      "ur": "روٹی / ڈبل روٹی",
+      "ur_fonetica": "Roti / Bread"
     },
     {
       "id": "men_aigua",
@@ -924,10 +1108,15 @@ const ACOLLIDA_DATA = {
         "en": "Can you fill my glass with water?",
         "ar": "هل يمكنك ملء كأسي بالماء؟",
         "uk": "Чи можеш налити мені склянку води?",
-        "zh": "你能帮我倒一杯水吗？"
+        "zh": "你能帮我倒一杯水吗？",
+        "ro": "Umplu paharul cu apă proaspătă.",
+        "ur": "میں گلاس میں تازہ پانی بھرتا ہوں۔"
       },
       "uk": "Склянка води",
-      "zh": "一杯水"
+      "zh": "一杯水",
+      "ro": "Paharul cu apă",
+      "ur": "پانی کا گلاس",
+      "ur_fonetica": "Pani ka glass"
     },
     {
       "id": "men_cullera",
@@ -947,10 +1136,15 @@ const ACOLLIDA_DATA = {
         "en": "I eat the soup with the spoon.",
         "ar": "آكل الحساء بالملعقة.",
         "uk": "Я їм суп ложкою.",
-        "zh": "我用勺子喝汤。"
+        "zh": "我用勺子喝汤。",
+        "ro": "Mănânc supa caldă cu lingura.",
+        "ur": "میں چمچ سے گرم سوپ پیتا ہوں۔"
       },
       "uk": "Ложка",
-      "zh": "勺子 / 汤匙"
+      "zh": "勺子 / 汤匙",
+      "ro": "Lingura",
+      "ur": "چمچ",
+      "ur_fonetica": "Chammach"
     },
     {
       "id": "men_forquilla",
@@ -970,10 +1164,15 @@ const ACOLLIDA_DATA = {
         "en": "My fork fell on the floor.",
         "ar": "سقطت شوكتي على الأرض.",
         "uk": "Моя виделка впала на підлогу.",
-        "zh": "我的叉子掉在地上了。"
+        "zh": "我的叉子掉在地上了。",
+        "ro": "Folosesc furculița pentru salată.",
+        "ur": "میں سلاد کھانے کے لیے کانٹا استعمال کرتا ہوں۔"
       },
       "uk": "Виделка",
-      "zh": "叉子"
+      "zh": "叉子",
+      "ro": "Furculița",
+      "ur": "کانٹا",
+      "ur_fonetica": "Kaanta / Fork"
     },
     {
       "id": "men_fruita",
@@ -993,10 +1192,15 @@ const ACOLLIDA_DATA = {
         "en": "For dessert I eat an apple.",
         "ar": "في التحلية آكل تفاحة.",
         "uk": "На десерт я їм яблуко.",
-        "zh": "饭后甜点我吃了一个苹果。"
+        "zh": "饭后甜点我吃了一个苹果。",
+        "ro": "Mănânc un măr și o banană la desert.",
+        "ur": "میں میٹھے میں سیب اور کیلا کھاتا ہوں۔"
       },
       "uk": "Фрукти",
-      "zh": "水果"
+      "zh": "水果",
+      "ro": "Fructul / Fructele",
+      "ur": "پھل",
+      "ur_fonetica": "Phal"
     },
     {
       "id": "men_alergia",
@@ -1016,10 +1220,15 @@ const ACOLLIDA_DATA = {
         "en": "I cannot eat pork or nuts.",
         "ar": "لا يمكنني أكل لحم الخنزير أو المكسرات.",
         "uk": "Я не можу їсти свинину та горіхи.",
-        "zh": "我不能吃猪肉和坚果。"
+        "zh": "我不能吃猪肉和坚果。",
+        "ro": "Sunt alergic, nu pot mânca gluten sau nuci.",
+        "ur": "مجھے الرجی ہے، میں یہ نہیں کھا سکتا۔"
       },
       "uk": "Алергія (Я не можу їсти...)",
-      "zh": "过敏 (我不能吃...)"
+      "zh": "过敏 (我不能吃...)",
+      "ro": "Alergia (Nu pot mânca...)",
+      "ur": "الرجی (میں نہیں کھا سکتا...)",
+      "ur_fonetica": "Allergy (Main nahi kha sakta...)"
     },
     {
       "id": "rob_jaqueta",
@@ -1039,10 +1248,15 @@ const ACOLLIDA_DATA = {
         "en": "I put on my jacket to go out to the yard.",
         "ar": "أرتدي السترة للخروج إلى الساحة.",
         "uk": "Я вдягаю куртку, щоб вийти на подвір'я.",
-        "zh": "我穿上外套去操场。"
+        "zh": "我穿上外套去操场。",
+        "ro": "Îmi pun geaca pentru că este frig afară.",
+        "ur": "میں جیکٹ پہنتا ہوں کیونکہ باہر سردی ہے۔"
       },
       "uk": "Куртка",
-      "zh": "外套 / 夹克"
+      "zh": "外套 / 夹克",
+      "ro": "Geaca / Jacheta",
+      "ur": "جیکٹ",
+      "ur_fonetica": "Jacket"
     },
     {
       "id": "rob_sabates",
@@ -1062,10 +1276,15 @@ const ACOLLIDA_DATA = {
         "en": "I tie my shoelaces.",
         "ar": "أربط أربطة حذائي.",
         "uk": "Я зав'язую шнурки на взутті.",
-        "zh": "我系好鞋带。"
+        "zh": "我系好鞋带。",
+        "ro": "Îmi leg șireturile la pantofi.",
+        "ur": "میں اپنے جوتوں کے تسمے باندھتا ہوں۔"
       },
       "uk": "Взуття / Кросівки",
-      "zh": "鞋子 / 运动鞋"
+      "zh": "鞋子 / 运动鞋",
+      "ro": "Pantofii / Adidașii",
+      "ur": "جوتے",
+      "ur_fonetica": "Joote / Shoes"
     },
     {
       "id": "rob_pantalons",
@@ -1085,10 +1304,15 @@ const ACOLLIDA_DATA = {
         "en": "I wear sport pants for gym class.",
         "ar": "أرتدي سروالاً رياضياً للتربية البدنية.",
         "uk": "Я ношу спортивні штани на фізкультуру.",
-        "zh": "上体育课我穿运动裤。"
+        "zh": "上体育课我穿运动裤。",
+        "ro": "Port pantaloni confortabili pentru sport.",
+        "ur": "میں کھیل کے لیے آرام دہ پتلون پہنتا ہوں۔"
       },
       "uk": "Штани",
-      "zh": "裤子"
+      "zh": "裤子",
+      "ro": "Pantalonii",
+      "ur": "پتلون / پینٹ",
+      "ur_fonetica": "Patloon / Pants"
     },
     {
       "id": "rob_fred",
@@ -1108,10 +1332,15 @@ const ACOLLIDA_DATA = {
         "en": "Today it is very cold.",
         "ar": "اليوم الجو بارد جداً.",
         "uk": "Сьогодні дуже холодно.",
-        "zh": "今天天气很冷。"
+        "zh": "今天天气很冷。",
+        "ro": "Azi este foarte frig, ninge la munte.",
+        "ur": "آج بہت سردی ہے، پہاڑوں پر برف باری ہو رہی ہے۔"
       },
       "uk": "Холодно",
-      "zh": "天气冷"
+      "zh": "天气冷",
+      "ro": "Este frig",
+      "ur": "سردی ہے",
+      "ur_fonetica": "Sardi hai"
     },
     {
       "id": "rob_calor",
@@ -1131,10 +1360,15 @@ const ACOLLIDA_DATA = {
         "en": "I'm hot, can I take off my sweater?",
         "ar": "أشعر بالحر، هل يمكنني خلع كنزتي؟",
         "uk": "Мені жарко, чи можу я зняти светр?",
-        "zh": "我觉得很热，可以脱掉毛衣吗？"
+        "zh": "我觉得很热，可以脱掉毛衣吗？",
+        "ro": "Vara este foarte cald și strălucește soarele.",
+        "ur": "گرمیوں میں بہت گرمی ہوتی ہے اور دھوپ چمکتی ہے۔"
       },
       "uk": "Жарко",
-      "zh": "天气热"
+      "zh": "天气热",
+      "ro": "Este cald",
+      "ur": "گرمی ہے",
+      "ur_fonetica": "Garmi hai"
     },
     {
       "id": "rob_pluja",
@@ -1154,10 +1388,15 @@ const ACOLLIDA_DATA = {
         "en": "It's raining and we open the umbrella.",
         "ar": "إنها تمطر ونفتح المظلة.",
         "uk": "Іде дощ, і ми відкриваємо парасольку.",
-        "zh": "下雨了，我们撑开雨伞。"
+        "zh": "下雨了，我们撑开雨伞。",
+        "ro": "Plouă afară, am nevoie de umbrelă.",
+        "ur": "باہر بارش ہو رہی ہے، مجھے چھتری چاہیے۔"
       },
       "uk": "Дощ (Іде дощ)",
-      "zh": "下雨 / 雨水"
+      "zh": "下雨 / 雨水",
+      "ro": "Ploaia (Plouă)",
+      "ur": "بارش (بارش ہو رہی ہے)",
+      "ur_fonetica": "Baarish (Baarish ho rahi hai)"
     },
     {
       "id": "nom_nombres",
@@ -1177,10 +1416,15 @@ const ACOLLIDA_DATA = {
         "en": "I can count from one to ten: one, two, three...",
         "ar": "أعرف العد من واحد إلى عشرة: واحد، اثنان، ثلاثة...",
         "uk": "Я вмію рахувати від одного до десяти: один, два, три...",
-        "zh": "我能从一数到十：一、二、三……"
+        "zh": "我能从一数到十：一、二、三……",
+        "ro": "Știu să număr de la unu la zece în catalană.",
+        "ur": "میں کاتالان میں ایک سے دس تک گنتی کر سکتا ہوں۔"
       },
       "uk": "Числа / Рахувати",
-      "zh": "数字 / 数数"
+      "zh": "数字 / 数数",
+      "ro": "Numerele / A număra",
+      "ur": "نمبرز / گنتی",
+      "ur_fonetica": "Numbers / Ginti"
     },
     {
       "id": "nom_rellotge",
@@ -1200,10 +1444,15 @@ const ACOLLIDA_DATA = {
         "en": "What time is it? Is it almost time to leave?",
         "ar": "كم الساعة؟ هل اقترب وقت الخروج؟",
         "uk": "Котра година? Скоро дзвінок?",
-        "zh": "现在几点了？快放学了吗？"
+        "zh": "现在几点了？快放学了吗？",
+        "ro": "Mă uit la ceas, e ora nouă fix.",
+        "ur": "میں گھڑی دیکھتا ہوں، ٹھیک نو بجے ہیں۔"
       },
       "uk": "Годинник / Час",
-      "zh": "时钟 / 时间"
+      "zh": "时钟 / 时间",
+      "ro": "Ceasul / Ora",
+      "ur": "گھڑی / وقت",
+      "ur_fonetica": "Ghari / Waqt"
     },
     {
       "id": "nom_avui",
@@ -1223,10 +1472,15 @@ const ACOLLIDA_DATA = {
         "en": "What day is today? Today is Monday.",
         "ar": "ما هو اليوم؟ اليوم هو الاثنين.",
         "uk": "Який сьогодні день? Сьогодні понеділок.",
-        "zh": "今天星期几？今天星期一。"
+        "zh": "今天星期几？今天星期一。",
+        "ro": "Azi este marți, ieri a fost luni, iar mâine va fi miercuri.",
+        "ur": "آج منگل ہے، کل پیر تھا اور کل بدھ ہوگا۔"
       },
       "uk": "Сьогодні / Вчора / Завтра",
-      "zh": "今天 / 昨天 / 明天"
+      "zh": "今天 / 昨天 / 明天",
+      "ro": "Azi / Ieri / Mâine",
+      "ur": "آج / کل / آنے والا کل",
+      "ur_fonetica": "Aaj / Kal (guzra) / Kal (aane wala)"
     },
     {
       "id": "nom_mati_tarda",
@@ -1246,10 +1500,15 @@ const ACOLLIDA_DATA = {
         "en": "In the morning I come to school and in the afternoon I go home.",
         "ar": "في الصباح آتي إلى المدرسة وفي المساء أذهب إلى البيت.",
         "uk": "Вранці я йду до школи, а ввечері повертаюся додому.",
-        "zh": "早上我去学校，下午我回家。"
+        "zh": "早上我去学校，下午我回家。",
+        "ro": "Mergem la școală dimineața și după-amiaza ne jucăm.",
+        "ur": "ہم صبح اسکول جاتے ہیں اور دوپہر کو کھیلتے ہیں۔"
       },
       "uk": "Ранок і вечір",
-      "zh": "上午与下午"
+      "zh": "上午与下午",
+      "ro": "Dimineața și după-amiaza",
+      "ur": "صبح اور دوپہر",
+      "ur_fonetica": "Subah aur Dopehar"
     },
     {
       "id": "nom_dilluns_divendres",
@@ -1269,10 +1528,15 @@ const ACOLLIDA_DATA = {
         "en": "From Monday to Friday we have class.",
         "ar": "من الاثنين إلى الجمعة لدينا دروس.",
         "uk": "З понеділка по п'ятницю у нас уроки.",
-        "zh": "从星期一到星期五我们都要上课。"
+        "zh": "从星期一到星期五我们都要上课。",
+        "ro": "De luni până vineri învățăm multe lucruri la clasă.",
+        "ur": "پیر سے جمعہ ہم کلاس میں بہت سی چیزیں سیکھتے ہیں۔"
       },
       "uk": "Шкільні дні (з понеділка по п'ятницю)",
-      "zh": "上学日 (周一至周五)"
+      "zh": "上学日 (周一至周五)",
+      "ro": "Zilele de școală (De luni până vineri)",
+      "ur": "اسکول کے دن (پیر سے جمعہ)",
+      "ur_fonetica": "School ke din (Peer se Jummah)"
     },
     {
       "id": "nom_cap_setmana",
@@ -1292,10 +1556,15 @@ const ACOLLIDA_DATA = {
         "en": "On the weekend there is no school, I rest with my family.",
         "ar": "في عطلة نهاية الأسبوع لا توجد مدرسة، أستريح مع عائلتي.",
         "uk": "У вихідні школи немає, я відпочиваю з сім'єю.",
-        "zh": "周末不上学，我和家人一起休息。"
+        "zh": "周末不上学，我和家人一起休息。",
+        "ro": "În weekend mă plimb în parc cu familia.",
+        "ur": "ہفتے کے آخر میں، میں خاندان کے ساتھ پارک جاتا ہوں۔"
       },
       "uk": "Вихідні (субота та неділя)",
-      "zh": "周末 (周六和周日)"
+      "zh": "周末 (周六和周日)",
+      "ro": "Weekendul (Sâmbătă și duminică)",
+      "ur": "ہفتے کا اختتام (ہفتہ اور اتوار)",
+      "ur_fonetica": "Weekend (Hafta aur Itwar)"
     },
     {
       "id": "ciu_carrer",
@@ -1315,10 +1584,15 @@ const ACOLLIDA_DATA = {
         "en": "I look left and right before crossing the street.",
         "ar": "أنظر يميناً ويساراً قبل عبور الشارع.",
         "uk": "Я дивлюся ліворуч і праворуч перед тим, як перейти вулицю.",
-        "zh": "过马路前我先看左边再看右边。"
+        "zh": "过马路前我先看左边再看右边。",
+        "ro": "Traversăm strada doar pe trecerea de pietoni.",
+        "ur": "ہم صرف زیبرا کراسنگ پر سڑک پار کرتے ہیں۔"
       },
       "uk": "Вулиця та пішохідний перехід",
-      "zh": "街道与人行横道"
+      "zh": "街道与人行横道",
+      "ro": "Strada și trecerea de pietoni",
+      "ur": "سڑک اور پیدل چلنے والوں کا راستہ",
+      "ur_fonetica": "Sarak aur Zebra crossing"
     },
     {
       "id": "ciu_autobus",
@@ -1338,10 +1612,15 @@ const ACOLLIDA_DATA = {
         "en": "I come to school by bus.",
         "ar": "آتي إلى المدرسة بالحافلة.",
         "uk": "Я приїжджаю до школи автобусом.",
-        "zh": "我坐公共汽车来学校。"
+        "zh": "我坐公共汽车来学校。",
+        "ro": "Merg la școală cu autobuzul galben.",
+        "ur": "میں پیلی بس میں اسکول جاتا ہوں۔"
       },
       "uk": "Шкільний автобус / Автобус",
-      "zh": "校车 / 公共汽车"
+      "zh": "校车 / 公共汽车",
+      "ro": "Autobuzul școlar / Autobuzul",
+      "ur": "اسکول بس / بس",
+      "ur_fonetica": "School bus / Bus"
     },
     {
       "id": "ciu_tren",
@@ -1361,10 +1640,15 @@ const ACOLLIDA_DATA = {
         "en": "We get on the train to go to the city.",
         "ar": "نركب القطار للذهاب إلى المدينة.",
         "uk": "Ми сідаємо на потяг, щоб поїхати до міста.",
-        "zh": "我们坐火车去城里。"
+        "zh": "我们坐火车去城里。",
+        "ro": "Trenul circulă pe șine până la gara centrală.",
+        "ur": "ٹرین پٹریوں پر مرکزی اسٹیشن تک جاتی ہے۔"
       },
       "uk": "Поїзд і метро",
-      "zh": "火车与地铁"
+      "zh": "火车与地铁",
+      "ro": "Trenul și metroul",
+      "ur": "ٹرین اور میٹرو",
+      "ur_fonetica": "Train aur Metro"
     },
     {
       "id": "ciu_parada",
@@ -1384,10 +1668,15 @@ const ACOLLIDA_DATA = {
         "en": "I wait at the bus stop.",
         "ar": "أنتظر في موقف الحافلة.",
         "uk": "Я чекаю на автобусній зупинці.",
-        "zh": "我在公交车站等车。"
+        "zh": "我在公交车站等车。",
+        "ro": "Așteptăm autobuzul la stație cu biletul pregătit.",
+        "ur": "ہم ٹکٹ لے کر اسٹاپ پر بس کا انتظار کرتے ہیں۔"
       },
       "uk": "Автобусна зупинка / Станція",
-      "zh": "公交车站 / 车站"
+      "zh": "公交车站 / 车站",
+      "ro": "Stația de autobuz / Gara",
+      "ur": "بس اسٹاپ / اسٹیشن",
+      "ur_fonetica": "Bus stop / Station"
     },
     {
       "id": "ciu_botiga",
@@ -1407,10 +1696,15 @@ const ACOLLIDA_DATA = {
         "en": "We go to the store to buy a snack.",
         "ar": "نذهب إلى الدكان لشراء اللمجة.",
         "uk": "Ми йдемо в магазин купити полуденок.",
-        "zh": "我们去商店买课间点心。"
+        "zh": "我们去商店买课间点心。",
+        "ro": "Cumpărăm fructe proaspete de la magazinul din colț.",
+        "ur": "ہم کونے والی دکان سے تازہ پھل خریدتے ہیں۔"
       },
       "uk": "Магазин / Супермаркет",
-      "zh": "商店 / 超市"
+      "zh": "商店 / 超市",
+      "ro": "Magazinul / Supermarketul",
+      "ur": "دکان / سپر مارکیٹ",
+      "ur_fonetica": "Dukan / Supermarket"
     },
     {
       "id": "ciu_parc",
@@ -1430,10 +1724,15 @@ const ACOLLIDA_DATA = {
         "en": "After school I go play at the park.",
         "ar": "بعد المدرسة أذهب للعب في الحديقة.",
         "uk": "Після школи я йду гратися в парк.",
-        "zh": "放学后我去公园玩耍。"
+        "zh": "放学后我去公园玩耍。",
+        "ro": "Ne jucăm pe leagăne și pe tobogan în parc.",
+        "ur": "ہم پارک میں جھولوں اور سلائیڈ پر کھیلتے ہیں۔"
       },
       "uk": "Парк і площа",
-      "zh": "公园与广场"
+      "zh": "公园与广场",
+      "ro": "Parcul și piața",
+      "ur": "پارک اور چوک",
+      "ur_fonetica": "Park aur Chowk"
     },
     {
       "id": "rut_fila",
@@ -1453,10 +1752,15 @@ const ACOLLIDA_DATA = {
         "en": "We line up without pushing to go up to class.",
         "ar": "نقف في الصف دون تدافع للصعود إلى القسم.",
         "uk": "Ми шикуємося без штовханини, щоб піднятися до класу.",
-        "zh": "我们排好队不推挤，一起走进教室。"
+        "zh": "我们排好队不推挤，一起走进教室。",
+        "ro": "Ne așezăm în rând doi câte doi pentru a intra în clasă.",
+        "ur": "ہم کلاس میں جانے کے لیے دو دو کر کے لائن بناتے ہیں۔"
       },
       "uk": "Стати в шеренгу / Зайти в клас",
-      "zh": "排队 / 进入教室"
+      "zh": "排队 / 进入教室",
+      "ro": "A face rândul / A intra în clasă",
+      "ur": "قطار بنانا / کلاس میں داخل ہونا",
+      "ur_fonetica": "Qataar banana / Class mein jana"
     },
     {
       "id": "rut_escoltar",
@@ -1476,10 +1780,15 @@ const ACOLLIDA_DATA = {
         "en": "We listen to the teacher when she explains the activity.",
         "ar": "نستمع إلى المعلمة عندما تشرح النشاط.",
         "uk": "Ми уважно слухаємо вчительку, коли вона пояснює завдання.",
-        "zh": "老师讲解活动要求时，我们认真听讲。"
+        "zh": "老师讲解活动要求时，我们认真听讲。",
+        "ro": "Ascultăm cu atenție explicația învățătorului.",
+        "ur": "ہم استاد کی بات توجہ سے سنتے ہیں۔"
       },
       "uk": "Слухати / Дотримуватися тиші",
-      "zh": "倾听 / 保持安静"
+      "zh": "倾听 / 保持安静",
+      "ro": "A asculta / A face liniște",
+      "ur": "سننا / خاموشی اختیار کرنا",
+      "ur_fonetica": "Sunna / Khamoshi ikhtiyar karna"
     },
     {
       "id": "rut_seure",
@@ -1499,10 +1808,15 @@ const ACOLLIDA_DATA = {
         "en": "We sit on our chair and pay attention.",
         "ar": "نجلس على الكرسي وننتبه.",
         "uk": "Ми сідаємо на стільці та зосереджуємося.",
-        "zh": "我们坐在椅子上，集中注意力。"
+        "zh": "我们坐在椅子上，集中注意力。",
+        "ro": "Așază-te pe scaun, te rog, începem activitatea.",
+        "ur": "براہ کرم کرسی پر بیٹھیں، ہم کام شروع کرتے ہیں۔"
       },
       "uk": "Сісти на стілець / Встати",
-      "zh": "坐在椅子上 / 起立"
+      "zh": "坐在椅子上 / 起立",
+      "ro": "A se așeza pe scaun / A se ridica",
+      "ur": "کرسی پر بیٹھنا / کھڑے ہونا",
+      "ur_fonetica": "Kursi par baithna / Khare hona"
     },
     {
       "id": "rut_escriure",
@@ -1522,10 +1836,15 @@ const ACOLLIDA_DATA = {
         "en": "Write the date in your notebook and make a drawing.",
         "ar": "اكتب التاريخ في الدفتر وارسم رسماً.",
         "uk": "Напиши дату в зошиті і намалюй малюнок.",
-        "zh": "在笔记本上写下日期并画一幅画。"
+        "zh": "在笔记本上写下日期并画一幅画。",
+        "ro": "Scriu data și desenez o floare colorată pe foaie.",
+        "ur": "میں صفحے پر تاریخ لکھتا ہوں اور پھول بناتا ہوں۔"
       },
       "uk": "Писати та малювати",
-      "zh": "写字与画画"
+      "zh": "写字与画画",
+      "ro": "A scrie și a desena",
+      "ur": "لکھنا اور ڈرائنگ کرنا",
+      "ur_fonetica": "Likhna aur Drawing karna"
     },
     {
       "id": "rut_llegir",
@@ -1545,10 +1864,15 @@ const ACOLLIDA_DATA = {
         "en": "We open the book to the indicated page to read.",
         "ar": "نفتح الكتاب في الصفحة المحددة للقراءة.",
         "uk": "Ми відкриваємо книгу на потрібній сторінці для читання.",
-        "zh": "我们打开书读指定的那一页。"
+        "zh": "我们打开书读指定的那一页。",
+        "ro": "Citim o poveste frumoasă la biblioteca clasei.",
+        "ur": "ہم کلاس کی لائبریری میں ایک خوبصورت کہانی پڑھتے ہیں۔"
       },
       "uk": "Читати казку / Книгу",
-      "zh": "读故事 / 读书"
+      "zh": "读故事 / 读书",
+      "ro": "A citi o poveste / O carte",
+      "ur": "کہانی / کتاب پڑھنا",
+      "ur_fonetica": "Kahani / Kitab parhna"
     },
     {
       "id": "rut_endrecar",
@@ -1568,10 +1892,15 @@ const ACOLLIDA_DATA = {
         "en": "Class is over: let's pack up our pencils and tidy the desk.",
         "ar": "انتهى الدرس: نجمع الأقلام ونرتب الطاولة.",
         "uk": "Урок закінчився: збираємо олівці та прибираємо зі столу.",
-        "zh": "下课了：我们收好铅笔，把桌子整理干净。"
+        "zh": "下课了：我们收好铅笔，把桌子整理干净。",
+        "ro": "Strângem creioanele colorate în penar.",
+        "ur": "ہم رنگین پنسلیں باکس میں سمیٹ کر رکھتے ہیں۔"
       },
       "uk": "Зібрати та скласти приладдя",
-      "zh": "收拾与整理用具"
+      "zh": "收拾与整理用具",
+      "ro": "A strânge și a face ordine la materiale",
+      "ur": "سامان سمیٹنا اور ترتیب دینا",
+      "ur_fonetica": "Saman sametna aur tarteeb dena"
     },
     {
       "id": "cen_biblioteca",
@@ -1593,8 +1922,13 @@ const ACOLLIDA_DATA = {
         "en": "We go to the library to look for a book.",
         "ar": "نذهب إلى المكتبة للبحث عن كتاب.",
         "uk": "Ми йдемо до бібліотеки шукати книгу.",
-        "zh": "我们去图书馆找书。"
-      }
+        "zh": "我们去图书馆找书。",
+        "ro": "Împrumutăm cărți interesante de la biblioteca școlii.",
+        "ur": "ہم اسکول کی لائبریری سے دلچسپ کتابیں لیتے ہیں۔"
+      },
+      "ro": "Biblioteca școlară",
+      "ur": "اسکول کی لائبریری",
+      "ur_fonetica": "School ki Library"
     },
     {
       "id": "cen_hort",
@@ -1616,8 +1950,13 @@ const ACOLLIDA_DATA = {
         "en": "In the school garden we water the plants.",
         "ar": "في حديقة المدرسة نسقي النباتات.",
         "uk": "На шкільному городі ми поливаємо рослини.",
-        "zh": "在学校菜园里我们给植物浇水。"
-      }
+        "zh": "在学校菜园里我们给植物浇水。",
+        "ro": "Udăm salata verde și roșiile din grădina școlii.",
+        "ur": "ہم اسکول کے باغیچے میں پودوں کو پانی دیتے ہیں۔"
+      },
+      "ro": "Grădina școlară",
+      "ur": "اسکول کا باغیچہ",
+      "ur_fonetica": "School ka bagheecha"
     },
     {
       "id": "cen_consergeria",
@@ -1639,8 +1978,13 @@ const ACOLLIDA_DATA = {
         "en": "I go to the caretaker to ask for chalk.",
         "ar": "أذهب إلى مكتب الاستقبال لطلب الطباشير.",
         "uk": "Я йду до чергової частини попросити крейду.",
-        "zh": "我去传达室要粉笔。"
-      }
+        "zh": "我去传达室要粉笔。",
+        "ro": "Dacă ai nevoie de chei sau de ajutor, mergi la recepția școlii.",
+        "ur": "اگر آپ کو مدد کی ضرورت ہے تو اسکول کے استقبالیہ پر جائیں۔"
+      },
+      "ro": "Recepția școlii / Punctul de informare",
+      "ur": "اسکول کا استقبالیہ / انکوائری",
+      "ur_fonetica": "Reception / Enquiry"
     }
   ],
   "ui": {
@@ -1651,7 +1995,9 @@ const ACOLLIDA_DATA = {
       "en": "Digital Welcome Classroom",
       "ar": "قسم الاستقبال الرقمي",
       "uk": "Цифровий вітальний клас",
-      "zh": "数字化迎新课堂"
+      "zh": "数字化迎新课堂",
+      "ro": "Clasa Digitală de Primire",
+      "ur": "ڈیجیٹل ویلکم کلاس"
     },
     "appSubtitle": {
       "ca": "Suport lingüístic i d'acollida per a l'alumnat nouvingut",
@@ -1660,7 +2006,9 @@ const ACOLLIDA_DATA = {
       "en": "Linguistic and welcoming support for newly arrived students",
       "ar": "دعم لغوي واستقبال للتلاميذ الوافدين الجدد",
       "uk": "Мовна та адаптаційна підтримка новоприбулих учнів",
-      "zh": "新入学学生的语言与适应支持"
+      "zh": "新入学学生的语言与适应支持",
+      "ro": "Învață catalana cu sprijin în limba ta maternă",
+      "ur": "اپنی مادری زبان کی مدد سے کاتالان سیکھیں"
     },
     "studentNameLabel": {
       "ca": "El teu nom:",
@@ -1669,7 +2017,9 @@ const ACOLLIDA_DATA = {
       "en": "Your name:",
       "ar": "اسمك:",
       "uk": "Твоє ім'я:",
-      "zh": "你的名字："
+      "zh": "你的名字：",
+      "ro": "Numele tău (sau elev nou):",
+      "ur": "آپ کا نام (یا نیا طالب علم):"
     },
     "bridgeLangLabel": {
       "ca": "La teva llengua de suport:",
@@ -1678,7 +2028,9 @@ const ACOLLIDA_DATA = {
       "en": "Your bridge language:",
       "ar": "لغة المساعدة:",
       "uk": "Твоя допоміжна мова:",
-      "zh": "你的辅助语言："
+      "zh": "你的辅助语言：",
+      "ro": "Limba ta de sprijin:",
+      "ur": "آپ کی معاون زبان:"
     },
     "startSessionBtn": {
       "ca": "Comença la sessió ✨",
@@ -1687,7 +2039,9 @@ const ACOLLIDA_DATA = {
       "en": "Start session ✨",
       "ar": "ابدأ الحصة ✨",
       "uk": "Почати заняття ✨",
-      "zh": "开始学习 ✨"
+      "zh": "开始学习 ✨",
+      "ro": "Începe sesiunea",
+      "ur": "سیشن شروع کریں"
     },
     "modeDiscover": {
       "ca": "1. Descobreix i Escolta 🎧",
@@ -1696,7 +2050,9 @@ const ACOLLIDA_DATA = {
       "en": "1. Discover & Listen 🎧",
       "ar": "١. اكتشف واستمع 🎧",
       "uk": "1. Досліджуй і слухай 🎧",
-      "zh": "1. 探索与聆听 🎧"
+      "zh": "1. 探索与聆听 🎧",
+      "ro": "Descoperă 🎧",
+      "ur": "دریافت کریں 🎧"
     },
     "modePractice": {
       "ca": "2. Jocs i Reptes 🎯",
@@ -1705,7 +2061,9 @@ const ACOLLIDA_DATA = {
       "en": "2. Games & Challenges 🎯",
       "ar": "٢. ألعاب وتحديات 🎯",
       "uk": "2. Ігри та завдання 🎯",
-      "zh": "2. 互动挑战 🎯"
+      "zh": "2. 互动挑战 🎯",
+      "ro": "Provocări 🎯",
+      "ur": "چیلنجز 🎯"
     },
     "finishSessionBtn": {
       "ca": "Finalitza i Descarrega Progrés 📄",
@@ -1714,7 +2072,9 @@ const ACOLLIDA_DATA = {
       "en": "Finish & Download Progress 📄",
       "ar": "إنهاء وتحميل التقرير 📄",
       "uk": "Завершити та завантажити прогрес 📄",
-      "zh": "完成并下载学习报告 📄"
+      "zh": "完成并下载学习报告 📄",
+      "ro": "Finalizează și Descarcă",
+      "ur": "مکمل کریں اور ڈاؤن لوڈ کریں"
     },
     "changeCategoryBtn": {
       "ca": "Tornar als temes 📚",
@@ -1723,7 +2083,9 @@ const ACOLLIDA_DATA = {
       "en": "Back to topics 📚",
       "ar": "العودة للمواضيع 📚",
       "uk": "Повернутися до тем 📚",
-      "zh": "返回主题列表 📚"
+      "zh": "返回主题列表 📚",
+      "ro": "Înapoi",
+      "ur": "واپس"
     },
     "listenCatalan": {
       "ca": "Escolta en català",
@@ -1732,7 +2094,9 @@ const ACOLLIDA_DATA = {
       "en": "Listen in Catalan",
       "ar": "استمع بالكتالونية",
       "uk": "Слухати каталонською",
-      "zh": "听加泰罗尼亚语"
+      "zh": "听加泰罗尼亚语",
+      "ro": "Ascultă în catalană",
+      "ur": "کاتالان میں سنیں"
     },
     "listenSupport": {
       "ca": "Escolta en la teva llengua",
@@ -1741,7 +2105,9 @@ const ACOLLIDA_DATA = {
       "en": "Listen in your language",
       "ar": "استمع بلغتك",
       "uk": "Слухати твоєю мовою",
-      "zh": "听你的母语"
+      "zh": "听你的母语",
+      "ro": "Ascultă în limba ta",
+      "ur": "اپنی زبان میں سنیں"
     },
     "challengeListenTitle": {
       "ca": "Repte auditiu: Què escoltes?",
@@ -1750,7 +2116,9 @@ const ACOLLIDA_DATA = {
       "en": "Listening challenge: What do you hear?",
       "ar": "تحدي الاستماع: ماذا تسمع؟",
       "uk": "Слуховий виклик: Що ти чуєш?",
-      "zh": "听力挑战：你听到了什么？"
+      "zh": "听力挑战：你听到了什么？",
+      "ro": "Provocare auditivă: Ce auzi?",
+      "ur": "سماعت کا چیلنج: آپ کیا سن رہے ہیں؟"
     },
     "challengeListenInstr": {
       "ca": "Clica l'altaveu i selecciona la imatge corresponent:",
@@ -1759,7 +2127,9 @@ const ACOLLIDA_DATA = {
       "en": "Click the speaker and choose the matching image:",
       "ar": "اضغط على مكبر الصوت واختر الصورة المطابقة:",
       "uk": "Натисни динамік і вибери відповідний малюнок:",
-      "zh": "点击喇叭，选择对应的图片："
+      "zh": "点击喇叭，选择对应的图片：",
+      "ro": "Apasă pe difuzor și selectează imaginea potrivită:",
+      "ur": "اسپیکر دبائیں اور متعلقہ تصویر منتخب کریں:"
     },
     "challengeMemoryTitle": {
       "ca": "Joc de parelles (Memory)",
@@ -1768,7 +2138,9 @@ const ACOLLIDA_DATA = {
       "en": "Memory Matching Game",
       "ar": "لعبة مطابقة الأزواج (الذاكرة)",
       "uk": "Гра в пари (Меморі)",
-      "zh": "连连看记忆游戏 (Memory)"
+      "zh": "连连看记忆游戏 (Memory)",
+      "ro": "Joc de memorie (Perechi)",
+      "ur": "جوڑوں کا کھیل (میموری)"
     },
     "challengeMemoryInstr": {
       "ca": "Gira dues targetes per associar la imatge amb la paraula en català:",
@@ -1777,7 +2149,9 @@ const ACOLLIDA_DATA = {
       "en": "Flip two cards to match the picture with the Catalan word:",
       "ar": "اقلب بطاقتين لمطابقة الصورة مع الكلمة بالكتالونية:",
       "uk": "Переверни дві картки, щоб поєднати малюнок зі словом каталонською:",
-      "zh": "翻开两张卡片，将图片与加泰罗尼亚语单词配对："
+      "zh": "翻开两张卡片，将图片与加泰罗尼亚语单词配对：",
+      "ro": "Întoarce două cărți pentru a asocia imaginea cu cuvântul în catalană:",
+      "ur": "تصویر کو کاتالان لفظ سے ملانے کے لیے دو کارڈ الٹائیں:"
     },
     "challengeIntruderTitle": {
       "ca": "Troba l'intrús",
@@ -1786,7 +2160,9 @@ const ACOLLIDA_DATA = {
       "en": "Find the intruder",
       "ar": "اعثر على الدخيل",
       "uk": "Знайди зайвого",
-      "zh": "找出卧底"
+      "zh": "找出卧底",
+      "ro": "Găsește intrusul",
+      "ur": "اجنبی کو تلاش کریں"
     },
     "challengeIntruderInstr": {
       "ca": "Tres elements pertanyen a aquest tema. Quin és l'intrús que no hi pertany?",
@@ -1795,7 +2171,9 @@ const ACOLLIDA_DATA = {
       "en": "Three items belong to this topic. Which one is the intruder?",
       "ar": "ثلاثة عناصر تنتمي لهذا الموضوع. ما هو العنصر الدخيل الذي لا ينتمي؟",
       "uk": "Три елементи належать до цієї теми. Хто тут зайвий?",
-      "zh": "有三项属于这个主题。哪一个是多余的卧底？"
+      "zh": "有三项属于这个主题。哪一个是多余的卧底？",
+      "ro": "Trei elemente aparțin acestei teme. Care este intrusul?",
+      "ur": "تین چیزیں اس موضوع سے متعلق ہیں۔ کون سی چیز مختلف ہے؟"
     },
     "memoryWellDone": {
       "ca": "Fantàstic! Has trobat totes les parelles! 🌟",
@@ -1804,7 +2182,9 @@ const ACOLLIDA_DATA = {
       "en": "Fantastic! You found all the pairs! 🌟",
       "ar": "رائع! لقد وجدت جميع الأزواج! 🌟",
       "uk": "Чудово! Ти знайшов усі пари! 🌟",
-      "zh": "太棒了！你找到了所有的配对！🌟"
+      "zh": "太棒了！你找到了所有的配对！🌟",
+      "ro": "Fantastic! Ai găsit toate perechile! 🌟",
+      "ur": "بہت خوب! آپ نے تمام جوڑے تلاش کر لیے! 🌟"
     },
     "playAgainBtn": {
       "ca": "Jugar una altra partida 🔄",
@@ -1813,7 +2193,9 @@ const ACOLLIDA_DATA = {
       "en": "Play again 🔄",
       "ar": "العب جولة أخرى 🔄",
       "uk": "Грати ще раз 🔄",
-      "zh": "再玩一次 🔄"
+      "zh": "再玩一次 🔄",
+      "ro": "Joacă din nou 🔄",
+      "ur": "دوبارہ کھیلیں 🔄"
     },
     "challengeMatchTitle": {
       "ca": "Repte de lectura: Quina paraula és?",
@@ -1822,7 +2204,9 @@ const ACOLLIDA_DATA = {
       "en": "Reading challenge: Which word is it?",
       "ar": "تحدي القراءة: ما هي الكلمة؟",
       "uk": "Завдання з читання: Яке це слово?",
-      "zh": "阅读挑战：这是哪个单词？"
+      "zh": "阅读挑战：这是哪个单词？",
+      "ro": "Provocare de citire: Ce cuvânt este?",
+      "ur": "پڑھنے کا چیلنج: یہ کون سا لفظ ہے؟"
     },
     "challengeSentenceTitle": {
       "ca": "La frase útil del dia",
@@ -1831,7 +2215,9 @@ const ACOLLIDA_DATA = {
       "en": "Useful phrase of the day",
       "ar": "العبارة المفيدة لليوم",
       "uk": "Корисна фраза дня",
-      "zh": "每日实用短句"
+      "zh": "每日实用短句",
+      "ro": "Propoziția utilă a zilei",
+      "ur": "آج کا مفید جملہ"
     },
     "wellDone": {
       "ca": "Molt bé! Felicitats! 🌟",
@@ -1840,7 +2226,9 @@ const ACOLLIDA_DATA = {
       "en": "Well done! Congratulations! 🌟",
       "ar": "أحسنت! مبروك! 🌟",
       "uk": "Молодець! Вітаємо! 🌟",
-      "zh": "做得很棒！恭喜你！🌟"
+      "zh": "做得很棒！恭喜你！🌟",
+      "ro": "Foarte bine! Felicitări! 🌟",
+      "ur": "بہت اچھے! مبارک ہو! 🌟"
     },
     "tryAgain": {
       "ca": "Torna-ho a provar! Tu pots! 💪",
@@ -1849,7 +2237,9 @@ const ACOLLIDA_DATA = {
       "en": "Try again! You can do it! 💪",
       "ar": "حاول مرة أخرى! أنت تستطيع! 💪",
       "uk": "Спробуй ще раз! Ти зможеш! 💪",
-      "zh": "再试一次！你一定可以的！💪"
+      "zh": "再试一次！你一定可以的！💪",
+      "ro": "Mai încearcă o dată! Poți reuși! 💪",
+      "ur": "دوبارہ کوشش کریں! آپ کر سکتے ہیں! 💪"
     }
   }
 };

@@ -84,7 +84,9 @@ const AudioManager = {
       en: ['en-GB', 'en-US', 'en'],
       ar: ['ar-SA', 'ar-XA', 'ar-EG', 'ar'],
       uk: ['uk-UA', 'uk'],
-      zh: ['zh-CN', 'zh-TW', 'zh-HK', 'zh']
+      zh: ['zh-CN', 'zh-TW', 'zh-HK', 'zh'],
+      ro: ['ro-RO', 'ro'],
+      ur: ['ur-PK', 'ur-IN', 'ur']
     };
     const targetLocales = langMap[lang] || [lang];
     return this.voices.some(v => 
@@ -228,7 +230,9 @@ const AudioManager = {
         en: ['en-GB', 'en-US', 'en'],
         ar: ['ar-SA', 'ar-XA', 'ar-EG', 'ar'],
         uk: ['uk-UA', 'uk'],
-        zh: ['zh-CN', 'zh-TW', 'zh-HK', 'zh']
+        zh: ['zh-CN', 'zh-TW', 'zh-HK', 'zh'],
+        ro: ['ro-RO', 'ro'],
+        ur: ['ur-PK', 'ur-IN', 'ur']
       };
 
       const targetLocales = langMap[lang] || [lang];

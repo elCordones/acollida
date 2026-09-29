@@ -277,8 +277,10 @@ body {
   transition: background-color 0.2s ease, color 0.2s ease;
 }
 
-/* --- SUPORT PER A LLENGUA ÀRAB (RTL) --- */
-.arabic-text {
+/* --- SUPORT PER A LLENGÜES AMB ESCRIPTURA RTL (ÀRAB I URDÚ) --- */
+.arabic-text,
+.urdu-text,
+.rtl-text {
   font-family: var(--font-arabic);
   direction: rtl;
   text-align: right;

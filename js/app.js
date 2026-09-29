@@ -172,7 +172,7 @@ const App = {
 
     // Carregar alumnes existents per mostrar xips d'accés ràpid
     const students = this.loadStudents();
-    const flags = { es: "🇪🇸", fr: "🇫🇷", en: "🇬🇧", ar: "🇲🇦", uk: "🇺🇦", zh: "🇨🇳" };
+    const flags = { es: "🇪🇸", fr: "🇫🇷", en: "🇬🇧", ar: "🇲🇦", uk: "🇺🇦", zh: "🇨🇳", ro: "🇷🇴", ur: "🇵🇰" };
 
     let quickChipsHtml = "";
     if (students.length > 0) {
@@ -257,6 +257,14 @@ const App = {
                 <span class="flag">🇨🇳</span>
                 <span class="name">中文</span>
               </button>
+              <button type="button" class="lang-btn ${this.state.bridgeLang === 'ro' ? 'active' : ''}" data-lang="ro">
+                <span class="flag">🇷🇴</span>
+                <span class="name">Română</span>
+              </button>
+              <button type="button" class="lang-btn ${this.state.bridgeLang === 'ur' ? 'active' : ''}" data-lang="ur">
+                <span class="flag">🇵🇰</span>
+                <span class="name arabic-text">اردو</span>
+              </button>
             </div>
           </div>
 
@@ -291,7 +299,7 @@ const App = {
     const userBadge = document.getElementById("user-badge");
     const userNameSpan = document.getElementById("user-name-display");
     if (userBadge && userNameSpan) {
-      const flags = { es: "🇪🇸", fr: "🇫🇷", en: "🇬🇧", ar: "🇲🇦", uk: "🇺🇦", zh: "🇨🇳" };
+      const flags = { es: "🇪🇸", fr: "🇫🇷", en: "🇬🇧", ar: "🇲🇦", uk: "🇺🇦", zh: "🇨🇳", ro: "🇷🇴", ur: "🇵🇰" };
       const flag = flags[this.state.bridgeLang] || "🌍";
       userNameSpan.innerHTML = `${this.escapeHTML(this.state.studentName)} <span title="Llengua de suport: ${this.state.bridgeLang.toUpperCase()}" style="font-size: 1.1em; margin-left: 0.25rem;">${flag}</span>`;
       userBadge.style.display = "flex";
@@ -303,7 +311,7 @@ const App = {
     this.state.currentCategory = null;
     const mainWrapper = document.getElementById("main-wrapper");
     const lang = this.state.bridgeLang;
-    const isArabic = lang === "ar";
+    const isArabic = lang === "ar" || lang === "ur";
 
     let cardsHtml = ACOLLIDA_DATA.categories.map(cat => {
       const titleBridge = cat.titol[lang] || cat.titol.es;
@@ -375,7 +383,7 @@ const App = {
 
     const mainWrapper = document.getElementById("main-wrapper");
     const lang = this.state.bridgeLang;
-    const isArabic = lang === "ar";
+    const isArabic = lang === "ar" || lang === "ur";
     const words = this.getCategoryWords(cat.id);
 
     mainWrapper.innerHTML = `
@@ -424,13 +432,15 @@ const App = {
   // --- MODE DESCOBREIX: TARGETES LÈXIQUES AMB ÀUDIO ---
   renderDiscoverCards(words) {
     const lang = this.state.bridgeLang;
-    const isArabic = lang === "ar";
+    const isArabic = lang === "ar" || lang === "ur";
 
     return `
       <div class="vocab-grid">
         ${words.map(w => {
           const bridgeWord = w[lang] || w.es;
-          const phonetic = (lang === 'ar' && w.ar_fonetica) ? `<div class="card-phonetic">Pronunciació: ${w.ar_fonetica}</div>` : '';
+          const phonetic = (lang === 'ar' && w.ar_fonetica) 
+            ? `<div class="card-phonetic">Pronunciació: ${w.ar_fonetica}</div>` 
+            : ((lang === 'ur' && w.ur_fonetica) ? `<div class="card-phonetic">Pronunciació: ${w.ur_fonetica}</div>` : '');
           const phraseCa = w.frase_model ? w.frase_model.ca : '';
           const phraseBridge = (w.frase_model && w.frase_model[lang]) ? w.frase_model[lang] : '';
 
@@ -557,7 +567,7 @@ const App = {
   // --- REPTE AUDITIU: ESCOLTA I TRIA ---
   renderListenChallenge(words) {
     const lang = this.state.bridgeLang;
-    const isArabic = lang === "ar";
+    const isArabic = lang === "ar" || lang === "ur";
 
     // Triem una paraula aleatòria com a repte
     const targetWord = words[Math.floor(Math.random() * words.length)];
@@ -710,7 +720,7 @@ const App = {
     }
 
     const lang = this.state.bridgeLang;
-    const isArabic = lang === "ar";
+    const isArabic = lang === "ar" || lang === "ur";
     const mg = this.memoryGame;
     const isFinished = mg.matchedPairs >= mg.totalPairs && mg.totalPairs > 0;
 
@@ -889,7 +899,7 @@ const App = {
     if (!game) return '';
 
     const lang = this.state.bridgeLang;
-    const isArabic = lang === "ar";
+    const isArabic = lang === "ar" || lang === "ur";
 
     return `
       <div class="practice-header">
@@ -948,7 +958,7 @@ const App = {
     const feedbackBox = document.getElementById("intruder-feedback");
     const actionsBox = document.getElementById("intruder-actions");
     const lang = this.state.bridgeLang;
-    const isArabic = lang === "ar";
+    const isArabic = lang === "ar" || lang === "ur";
 
     if (isIntruder) {
       game.answered = true;
@@ -1113,11 +1123,13 @@ const App = {
 
     const words = this.getCategoryWords(cat.id);
     const lang = this.state.bridgeLang;
-    const isArabic = lang === "ar";
+    const isArabic = lang === "ar" || lang === "ur";
 
     const cardsHtml = words.map(w => {
       const bridgeWord = w[lang] || w.es;
-      const phonetic = (lang === 'ar' && w.ar_fonetica) ? `<div class="flashcard-phonetic">(${w.ar_fonetica})</div>` : '';
+      const phonetic = (lang === 'ar' && w.ar_fonetica) 
+        ? `<div class="flashcard-phonetic">(${w.ar_fonetica})</div>` 
+        : ((lang === 'ur' && w.ur_fonetica) ? `<div class="flashcard-phonetic">(${w.ur_fonetica})</div>` : '');
 
       return `
         <div class="flashcard-item">
@@ -1254,7 +1266,7 @@ const App = {
 
     const words = this.getCategoryWords(cat.id);
     const lang = this.state.bridgeLang;
-    const isArabic = lang === 'ar';
+    const isArabic = lang === 'ar' || lang === 'ur';
 
     // Generació d'opcions de categories per al selector
     const catOptionsHtml = ACOLLIDA_DATA.categories.map(c => `
@@ -1728,7 +1740,7 @@ const App = {
   showStudentsModal() {
     const students = this.loadStudents();
     const totalVocab = this.getAllVocabulary().length || 40;
-    const flags = { es: "🇪🇸", fr: "🇫🇷", en: "🇬🇧", ar: "🇲🇦", uk: "🇺🇦", zh: "🇨🇳" };
+    const flags = { es: "🇪🇸", fr: "🇫🇷", en: "🇬🇧", ar: "🇲🇦", uk: "🇺🇦", zh: "🇨🇳", ro: "🇷🇴", ur: "🇵🇰" };
 
     const studentsHtml = students.length ? students.map(s => {
       const wordsCount = (s.discoveredWords || []).length;
@@ -1842,6 +1854,8 @@ const App = {
                   <option value="ar">🇲🇦 العربية (Àrab)</option>
                   <option value="uk">🇺🇦 Українська (Ucraïnès)</option>
                   <option value="zh">🇨🇳 中文 (Xinès)</option>
+                  <option value="ro">🇷🇴 Română (Romanès)</option>
+                  <option value="ur">🇵🇰 اردو (Urdú / Panjabi)</option>
                 </select>
               </div>
               <div style="display:flex; gap:0.4rem;">
@@ -1943,14 +1957,16 @@ const App = {
     }
 
     const lang = student.bridgeLang || "es";
-    const flags = { es: "🇪🇸", fr: "🇫🇷", en: "🇬🇧", ar: "🇲🇦", uk: "🇺🇦", zh: "🇨🇳" };
+    const flags = { es: "🇪🇸", fr: "🇫🇷", en: "🇬🇧", ar: "🇲🇦", uk: "🇺🇦", zh: "🇨🇳", ro: "🇷🇴", ur: "🇵🇰" };
     const langNames = {
       es: "Castellà",
       fr: "Francès",
       en: "Anglès",
       ar: "Àrab",
       uk: "Ucraïnès",
-      zh: "Xinès"
+      zh: "Xinès",
+      ro: "Romanès",
+      ur: "Urdú / Panjabi"
     };
 
     const allVocab = this.getAllVocabulary();
@@ -1976,10 +1992,12 @@ const App = {
       en: `${this.escapeHTML(student.name)} is making great progress in learning Catalan through the Digital Welcome Classroom. We encourage you to support their learning journey by sharing conversations at home and valuing their curiosity.`,
       ar: `يحرز ${this.escapeHTML(student.name)} تقدماً ممتازاً في تعلم اللغة الكتالونية من خلال فصل الاستقبال الرقمي. نشجعكم على مواصلة دعمه من خلال التحدث والمشاركة في المنزل والثناء على مجهوده.`,
       uk: `${this.escapeHTML(student.name)} робить чудові успіхи у засвоєнні каталонської мови через Цифровий Клас Прийому. Заохочуємо підтримувати дитину вдома спільними розмовами та схвалювати її старанність.`,
-      zh: `${this.escapeHTML(student.name)} 通过数字化迎新课堂在加泰罗尼亚语学习方面取得了显著进步。我们鼓励家长在家中多陪伴交流，共同促进语言学习与融入。`
+      zh: `${this.escapeHTML(student.name)} 通过数字化迎新课堂在加泰罗尼亚语学习方面取得了显著进步。我们鼓励家长在家中多陪伴交流，共同促进语言学习与融入。`,
+      ro: `${this.escapeHTML(student.name)} face progrese remarcabile în învățarea limbii catalane prin Clasa Digitală de Primire. Vă încurajăm să continuați să-i susțineți învățarea prin momente de conversație acasă și apreciindu-i curiozitatea pentru noua limbă școlară.`,
+      ur: `${this.escapeHTML(student.name)} ڈیجیٹل ویلکم کلاس کے ذریعے کاتالان زبان سیکھنے میں شاندار پیش رفت کر رہا/رہی ہے۔ ہم آپ کی حوصلہ افزائی کرتے ہیں کہ گھر میں بات چیت کے ذریعے ان کی تعلیم میں تعاون جاری رکھیں اور ان کی لگن کو سراہیں۔`
     };
 
-    const isArabic = lang === "ar";
+    const isArabic = lang === "ar" || lang === "ur";
     const familyMsgBridge = familyMessages[lang] || familyMessages.es;
 
     // Repartiment per categories
@@ -2616,6 +2634,14 @@ const App = {
                   <label for="c-zh">Xinès (ZH)</label>
                   <input type="text" id="c-zh" placeholder="学校菜园">
                 </div>
+                <div class="teacher-form-group">
+                  <label for="c-ro">Romanès (RO)</label>
+                  <input type="text" id="c-ro" placeholder="Grădina școlară">
+                </div>
+                <div class="teacher-form-group">
+                  <label for="c-ur">Urdú (UR)</label>
+                  <input type="text" id="c-ur" placeholder="اسکول کا باغیچہ" dir="rtl" class="arabic-text">
+                </div>
               </div>
 
               <div style="font-size: 0.85rem; font-weight: 700; color: var(--text-muted); margin: 0.75rem 0 0.4rem;">
@@ -2673,6 +2699,8 @@ const App = {
       document.getElementById("c-ar").value = "";
       document.getElementById("c-uk").value = "";
       document.getElementById("c-zh").value = "";
+      document.getElementById("c-ro").value = "";
+      document.getElementById("c-ur").value = "";
       document.getElementById("c-frase-ca").value = "";
       document.getElementById("c-frase-bridge").value = "";
       document.getElementById("c-ca").focus();
@@ -2702,6 +2730,8 @@ const App = {
     document.getElementById("c-ar").value = item.ar || "";
     document.getElementById("c-uk").value = item.uk || "";
     document.getElementById("c-zh").value = item.zh || "";
+    document.getElementById("c-ro").value = item.ro || "";
+    document.getElementById("c-ur").value = item.ur || "";
     document.getElementById("c-frase-ca").value = item.frase_model ? (item.frase_model.ca || "") : "";
     document.getElementById("c-frase-bridge").value = item.frase_model ? (item.frase_model.es || item.frase_model[this.state.bridgeLang] || "") : "";
   },
@@ -2720,6 +2750,8 @@ const App = {
     const ar = document.getElementById("c-ar").value.trim() || es;
     const uk = document.getElementById("c-uk").value.trim() || es;
     const zh = document.getElementById("c-zh").value.trim() || es;
+    const ro = (document.getElementById("c-ro") && document.getElementById("c-ro").value.trim()) || es;
+    const ur = (document.getElementById("c-ur") && document.getElementById("c-ur").value.trim()) || es;
 
     const fraseCa = document.getElementById("c-frase-ca").value.trim();
     const fraseBridge = document.getElementById("c-frase-bridge").value.trim();
@@ -2735,6 +2767,8 @@ const App = {
       ar: ar,
       uk: uk,
       zh: zh,
+      ro: ro,
+      ur: ur,
       frase_model: {
         ca: fraseCa || ca,
         es: fraseBridge || es,
@@ -2742,7 +2776,9 @@ const App = {
         en: fraseBridge || en,
         ar: fraseBridge || ar,
         uk: fraseBridge || uk,
-        zh: fraseBridge || zh
+        zh: fraseBridge || zh,
+        ro: fraseBridge || ro,
+        ur: fraseBridge || ur
       },
       isCustom: true
     };
