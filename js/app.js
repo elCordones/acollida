@@ -314,6 +314,8 @@ const App = {
     this.state.practiceType = type;
     if (type === 'memory') {
       this.initMemoryGame();
+    } else if (type === 'intruder') {
+      this.initIntruderGame();
     }
     this.renderCategoryContent();
   },
@@ -494,9 +496,16 @@ const App = {
             aria-selected="${type === 'memory'}">
             🃏 ${ACOLLIDA_DATA.ui.challengeMemoryTitle[lang] || "Joc de parelles (Memory)"}
           </button>
+          <button 
+            class="subnav-btn ${type === 'intruder' ? 'active' : ''}" 
+            onclick="App.setPracticeType('intruder')"
+            role="tab"
+            aria-selected="${type === 'intruder'}">
+            🕵️‍♂️ ${ACOLLIDA_DATA.ui.challengeIntruderTitle[lang] || "Troba l'intrús"}
+          </button>
         </div>
 
-        ${type === 'listen' ? this.renderListenChallenge(words) : this.renderMemoryGame(words)}
+        ${type === 'listen' ? this.renderListenChallenge(words) : (type === 'memory' ? this.renderMemoryGame(words) : this.renderIntruderGame(words))}
       </div>
     `;
   },
@@ -586,6 +595,7 @@ const App = {
       this.currentChallenge.answered = true;
       if (selectedBtn) selectedBtn.classList.add("correct");
       AudioManager.playSuccessSound();
+      this.launchConfetti();
 
       feedbackBox.className = "feedback-banner success";
       feedbackBox.innerHTML = `🌟 ${ACOLLIDA_DATA.ui.wellDone[this.state.bridgeLang] || "Molt bé! Felicitats!"}`;
@@ -751,6 +761,7 @@ const App = {
           AudioManager.playSuccessSound();
 
           if (mg.matchedPairs >= mg.totalPairs) {
+            this.launchConfetti();
             this.renderCategoryContent();
           } else {
             const scoreDisplay = document.getElementById("memory-score-display");
@@ -783,6 +794,272 @@ const App = {
   restartMemoryGame() {
     this.initMemoryGame();
     this.renderCategoryContent();
+  },
+
+  // --- NOU MINIJOC: TROBA L'INTRÚS (ODD ONE OUT) ---
+  initIntruderGame() {
+    const catWords = this.getCategoryWords(this.state.currentCategory);
+    if (!catWords.length) return;
+
+    // Triem 3 paraules de la categoria activa
+    const shuffledCurrent = [...catWords].sort(() => 0.5 - Math.random());
+    const targetCurrentWords = shuffledCurrent.slice(0, Math.min(3, catWords.length)).map(w => ({
+      ...w,
+      isIntruder: false
+    }));
+
+    // Triem una altra categoria diferent per extreure l'intrús
+    const otherCats = ACOLLIDA_DATA.categories.filter(c => c.id !== this.state.currentCategory);
+    const otherCat = otherCats[Math.floor(Math.random() * otherCats.length)];
+    const otherWords = this.getCategoryWords(otherCat.id);
+    const intruderWordRaw = otherWords[Math.floor(Math.random() * otherWords.length)];
+
+    const intruderWord = {
+      ...intruderWordRaw,
+      isIntruder: true
+    };
+
+    // Barregem els 4 elements resultants
+    const allOptions = [...targetCurrentWords, intruderWord].sort(() => 0.5 - Math.random());
+
+    const currentScore = (this.state.intruderGame && this.state.intruderGame.category === this.state.currentCategory)
+      ? this.state.intruderGame.score
+      : 0;
+
+    this.state.intruderGame = {
+      category: this.state.currentCategory,
+      catObj: ACOLLIDA_DATA.categories.find(c => c.id === this.state.currentCategory),
+      intruderWord: intruderWord,
+      intruderCat: otherCat,
+      options: allOptions,
+      answered: false,
+      score: currentScore
+    };
+  },
+
+  renderIntruderGame(words) {
+    if (!this.state.intruderGame || this.state.intruderGame.category !== this.state.currentCategory) {
+      this.initIntruderGame();
+    }
+    const game = this.state.intruderGame;
+    if (!game) return '';
+
+    const lang = this.state.bridgeLang;
+    const isArabic = lang === "ar";
+
+    return `
+      <div class="practice-header">
+        <h3>🕵️‍♂️ ${ACOLLIDA_DATA.ui.challengeIntruderTitle[lang] || "Troba l'intrús"}</h3>
+        <p class="${isArabic ? 'arabic-text' : ''}">
+          ${ACOLLIDA_DATA.ui.challengeIntruderInstr[lang] || "Tres elements pertanyen a aquest tema. Quin és l'intrús que no hi pertany?"}
+        </p>
+      </div>
+
+      <div class="intruder-box">
+        <div class="intruder-meta">
+          <div class="intruder-score" id="intruder-score-display">
+            🏆 Intrusos descoberts: ${game.score}
+          </div>
+          <button class="btn-secondary" onclick="App.nextRoundIntruder()" style="padding: 0.35rem 0.8rem; font-size: 0.85rem;" title="Generar un nou repte d'intrús">
+            🔄 Nou repte
+          </button>
+        </div>
+
+        <div class="intruder-grid">
+          ${game.options.map(opt => `
+            <div 
+              class="intruder-card" 
+              id="icard-${opt.id}" 
+              onclick="App.checkIntruder('${opt.id}', ${opt.isIntruder})"
+              role="button"
+              tabindex="0"
+              aria-label="${this.escapeHTML(opt.ca)}">
+              <span class="intruder-card-icon">${opt.icon}</span>
+              <span class="intruder-card-word">${this.escapeHTML(opt.ca)}</span>
+              <span class="intruder-card-bridge ${isArabic ? 'arabic-text' : ''}">
+                ${this.escapeHTML(opt[lang] || opt.es || '')}
+              </span>
+              <button 
+                class="intruder-audio-btn" 
+                onclick="event.stopPropagation(); AudioManager.speak('${this.escapeHTML(opt.ca).replace(/'/g, "\\'")}', 'ca')" 
+                title="Escolta com es diu en català"
+                aria-label="Escolta la pronunciació">
+                🔊
+              </button>
+            </div>
+          `).join("")}
+        </div>
+
+        <div id="intruder-feedback" class="feedback-banner"></div>
+        <div id="intruder-actions"></div>
+      </div>
+    `;
+  },
+
+  checkIntruder(optId, isIntruder) {
+    const game = this.state.intruderGame;
+    if (!game || game.answered) return;
+
+    const clickedEl = document.getElementById(`icard-${optId}`);
+    const feedbackBox = document.getElementById("intruder-feedback");
+    const actionsBox = document.getElementById("intruder-actions");
+    const lang = this.state.bridgeLang;
+    const isArabic = lang === "ar";
+
+    if (isIntruder) {
+      game.answered = true;
+      game.score++;
+
+      AudioManager.playSuccessSound();
+      this.launchConfetti();
+
+      // Pronunciar el mot intrús
+      setTimeout(() => {
+        AudioManager.speak(game.intruderWord.ca, 'ca');
+      }, 300);
+
+      this.state.discoveredWords.add(game.intruderWord.id);
+      this.state.quizAnswers.push({
+        wordId: game.intruderWord.id,
+        selectedId: optId,
+        isCorrect: true,
+        timestamp: new Date().toISOString()
+      });
+      this.saveToStorage();
+
+      if (clickedEl) {
+        clickedEl.classList.add("intruder-correct");
+      }
+      game.options.forEach(opt => {
+        if (!opt.isIntruder) {
+          const el = document.getElementById(`icard-${opt.id}`);
+          if (el) el.classList.add("intruder-dimmed");
+        }
+      });
+
+      const intruderCatName = game.intruderCat.titol[lang] || game.intruderCat.titol.ca;
+      if (feedbackBox) {
+        feedbackBox.className = "feedback-banner success";
+        feedbackBox.innerHTML = `
+          <div style="font-size: 1.1rem; line-height: 1.4;">
+            🎉 <strong>Molt bé!</strong> L'intrús és <strong>${game.intruderWord.icon} ${this.escapeHTML(game.intruderWord.ca)}</strong> perquè pertany a: <em>${game.intruderCat.icon} ${this.escapeHTML(intruderCatName)}</em>!
+          </div>
+        `;
+      }
+
+      if (actionsBox) {
+        actionsBox.innerHTML = `
+          <button class="btn-primary" onclick="App.nextRoundIntruder()" style="margin: 1.25rem auto 0 auto; animation: popSuccess 0.4s ease;">
+            Següent intrús ➡️
+          </button>
+        `;
+      }
+
+      const scoreEl = document.getElementById("intruder-score-display");
+      if (scoreEl) {
+        scoreEl.textContent = `🏆 Intrusos descoberts: ${game.score}`;
+      }
+    } else {
+      AudioManager.playRetrySound();
+
+      if (clickedEl) {
+        clickedEl.classList.add("intruder-wrong");
+        setTimeout(() => {
+          clickedEl.classList.remove("intruder-wrong");
+        }, 800);
+      }
+
+      const clickedWord = game.options.find(o => o.id === optId);
+      const clickedName = clickedWord ? clickedWord.ca : "";
+
+      if (feedbackBox) {
+        feedbackBox.className = "feedback-banner warning";
+        feedbackBox.innerHTML = `
+          <div>
+            🤔 <strong>${this.escapeHTML(clickedName)}</strong> sí que pertany a aquest tema. Busca quin no hi té res a veure!
+          </div>
+        `;
+      }
+    }
+  },
+
+  nextRoundIntruder() {
+    this.initIntruderGame();
+    this.renderCategoryContent();
+  },
+
+  // --- EFECTE CELEBRATIU VISUAL AMB CANVAS (CONFETI DUA) ---
+  launchConfetti() {
+    let canvas = document.getElementById("confetti-canvas");
+    if (!canvas) {
+      canvas = document.createElement("canvas");
+      canvas.id = "confetti-canvas";
+      canvas.style.position = "fixed";
+      canvas.style.top = "0";
+      canvas.style.left = "0";
+      canvas.style.width = "100%";
+      canvas.style.height = "100%";
+      canvas.style.pointerEvents = "none";
+      canvas.style.zIndex = "99999";
+      document.body.appendChild(canvas);
+    }
+
+    const ctx = canvas.getContext("2d");
+    const width = (canvas.width = window.innerWidth);
+    const height = (canvas.height = window.innerHeight);
+
+    const colors = ["#2563eb", "#38bdf8", "#f59e0b", "#fbbf24", "#10b981", "#ec4899", "#8b5cf6"];
+    const particles = [];
+    const count = 75;
+
+    for (let i = 0; i < count; i++) {
+      particles.push({
+        x: width / 2 + (Math.random() - 0.5) * 200,
+        y: height / 2 + (Math.random() - 0.5) * 80,
+        vx: (Math.random() - 0.5) * 14,
+        vy: (Math.random() - 1.2) * 12,
+        size: Math.random() * 8 + 6,
+        color: colors[Math.floor(Math.random() * colors.length)],
+        rotation: Math.random() * 360,
+        rotationSpeed: (Math.random() - 0.5) * 10,
+        opacity: 1
+      });
+    }
+
+    let start = null;
+    const duration = 2200;
+
+    function render(time) {
+      if (!start) start = time;
+      const progress = time - start;
+
+      ctx.clearRect(0, 0, width, height);
+
+      particles.forEach(p => {
+        p.x += p.vx;
+        p.y += p.vy;
+        p.vy += 0.35;
+        p.vx *= 0.98;
+        p.rotation += p.rotationSpeed;
+        p.opacity = Math.max(0, 1 - progress / duration);
+
+        ctx.save();
+        ctx.translate(p.x, p.y);
+        ctx.rotate((p.rotation * Math.PI) / 180);
+        ctx.fillStyle = p.color;
+        ctx.globalAlpha = p.opacity;
+        ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size * 0.6);
+        ctx.restore();
+      });
+
+      if (progress < duration) {
+        requestAnimationFrame(render);
+      } else {
+        ctx.clearRect(0, 0, width, height);
+      }
+    }
+
+    requestAnimationFrame(render);
   },
 
   // --- GENERADOR DE FLASHCARDS D'AULA IMPRIMIBLES (RETOLACIÓ FÍSICA) ---

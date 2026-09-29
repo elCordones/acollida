@@ -943,6 +943,154 @@ body {
   width: 100%;
 }
 
+/* --- JOC TROBA L'INTRÚS --- */
+.intruder-box {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 2rem 1.5rem;
+  max-width: 740px;
+  margin: 0 auto;
+  text-align: center;
+  box-shadow: var(--shadow-sm);
+}
+
+.intruder-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.intruder-score {
+  background: var(--card-subtle-bg);
+  border: 1px solid var(--border-color);
+  padding: 0.4rem 0.9rem;
+  border-radius: var(--radius-full);
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--text-heading);
+}
+
+.intruder-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.25rem;
+  margin-bottom: 1.5rem;
+}
+
+@media (min-width: 680px) {
+  .intruder-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.intruder-card {
+  background: var(--card-subtle-bg);
+  border: 2.5px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 1.5rem 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  user-select: none;
+}
+
+.intruder-card:hover:not(.intruder-correct):not(.intruder-dimmed),
+.intruder-card:focus-visible:not(.intruder-correct):not(.intruder-dimmed) {
+  border-color: var(--primary-color);
+  background: var(--card-bg);
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+}
+
+.intruder-card-icon {
+  font-size: 3.4rem;
+  margin-bottom: 0.5rem;
+  line-height: 1;
+  transition: transform 0.2s ease;
+}
+
+.intruder-card:hover .intruder-card-icon {
+  transform: scale(1.1);
+}
+
+.intruder-card-word {
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: var(--text-heading);
+  margin-bottom: 0.2rem;
+}
+
+.intruder-card-bridge {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+.intruder-audio-btn {
+  margin-top: 0.6rem;
+  background: none;
+  border: 1px solid var(--border-color);
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+  cursor: pointer;
+  color: var(--text-muted);
+  transition: all 0.2s ease;
+}
+
+.intruder-audio-btn:hover {
+  background: var(--primary-color);
+  color: white;
+  border-color: var(--primary-color);
+}
+
+/* Efectes d'encert i error */
+.intruder-card.intruder-correct {
+  border-color: #10b981 !important;
+  background: rgba(16, 185, 129, 0.14) !important;
+  transform: scale(1.05);
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.4);
+  animation: popSuccess 0.4s ease;
+}
+
+.intruder-card.intruder-wrong {
+  border-color: #ef4444 !important;
+  background: rgba(239, 68, 68, 0.1) !important;
+  animation: shake 0.4s ease;
+}
+
+.intruder-card.intruder-dimmed {
+  opacity: 0.45;
+  filter: grayscale(40%);
+  transform: scale(0.96);
+  pointer-events: none;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-6px); }
+  75% { transform: translateX(6px); }
+}
+
+@keyframes popSuccess {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.08); }
+  100% { transform: scale(1.05); }
+}
+
 .practice-header {
   text-align: center;
   margin-bottom: 2rem;

@@ -1779,6 +1779,24 @@ const ACOLLIDA_DATA = {
       "uk": "Переверни дві картки, щоб поєднати малюнок зі словом каталонською:",
       "zh": "翻开两张卡片，将图片与加泰罗尼亚语单词配对："
     },
+    "challengeIntruderTitle": {
+      "ca": "Troba l'intrús",
+      "es": "Encuentra al intruso",
+      "fr": "Trouve l'intrus",
+      "en": "Find the intruder",
+      "ar": "اعثر على الدخيل",
+      "uk": "Знайди зайвого",
+      "zh": "找出卧底"
+    },
+    "challengeIntruderInstr": {
+      "ca": "Tres elements pertanyen a aquest tema. Quin és l'intrús que no hi pertany?",
+      "es": "Tres elementos pertenecen a este tema. ¿Cuál es el intruso que no pertenece?",
+      "fr": "Trois éléments appartiennent à ce thème. Quel est l'intrus ?",
+      "en": "Three items belong to this topic. Which one is the intruder?",
+      "ar": "ثلاثة عناصر تنتمي لهذا الموضوع. ما هو العنصر الدخيل الذي لا ينتمي؟",
+      "uk": "Три елементи належать до цієї теми. Хто тут зайвий?",
+      "zh": "有三项属于这个主题。哪一个是多余的卧底？"
+    },
     "memoryWellDone": {
       "ca": "Fantàstic! Has trobat totes les parelles! 🌟",
       "es": "¡Fantástico! ¡Has encontrado todas las parejas! 🌟",

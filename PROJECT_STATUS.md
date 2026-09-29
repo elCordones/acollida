@@ -22,7 +22,7 @@
 ---
 
 ## 2. Estat Actual i Punt de Control (Darrera sessió: 2026-09-29)
-- **Estat general**: Totalment funcional, auditat i actualitzat (Versió 2.2: Restyling del Favicon i Icones PWA: Pont de Diàleg i Acollida Lingüística, memòria cau renovada a `acollida-cache-v2.2`).
+- **Estat general**: Totalment funcional, auditat i actualitzat (Versió 2.3: Minijoc «Troba l'intrús», Motor de celebració Confeti en Canvas pur, Generador de fitxes d'aula i Restyling de favicon/icones PWA).
 - **Funcionalitats completades**:
   - [x] **Restyling Modern del Favicon i Iconografia PWA (v2.2)**:
     - [x] Nou `favicon.svg` en format vectorial escalable representant el "Pont de Diàleg i Acollida" (bafarada d'acollida blanca i bafarada d'aprenentatge daurada en contenidor *squircle* blau corporatiu).
@@ -74,14 +74,21 @@
     - [x] Opcions DUA: Selector de tipus de lletra (🔤 Minúscula / 🔠 Majúscula de pal per a iniciació) i bastiment de suport bilingüe (llengua pont activable/desactivable).
     - [x] Estils d'impressió optimitzats (`@media print`) en blanc i negre estalvi de tinta ajustats a 1 pàgina A4 sense desbordament.
     - [x] Accés ràpid des de qualsevol tema (botó `📝 Fitxa de treball`) i des de la barra de l'Espai Docent (`📝 Fitxes d'Aula`).
+  - [x] **Nou Minijoc de Comprensió Ràpida: «Troba l'intrús» (🕵️‍♂️) i Efecte Festiu Confeti (Canvas) (v2.3)**:
+    - [x] Tercer mode de joc interactiu afegit a la subnavegació de Reptes (`🎧 Repte auditiu`, `🃏 Joc de parelles`, `🕵️‍♂️ Troba l'intrús`).
+    - [x] Algoritme dinàmic d'intrusos: extreu 3 conceptes de la categoria activa i 1 concepte d'una altra categoria diferent com a intrús.
+    - [x] Targetes tàctils de mida gran amb icona, paraula en català, llengua pont i botó d'escolta d'àudio independent (`🔊`).
+    - [x] Feedback pedagògic enriquidor: en encertar, s'explica a quina altra categoria pertany l'intrús per reforçar la classificació semàntica.
+    - [x] Motor d'animació de partícules de confeti en HTML5 Canvas pur (`launchConfetti`) integrat als 3 jocs per a celebració visual DUA.
+    - [x] Comptador de puntuació persistent d'intrusos descoberts.
   - [x] Suport dual complet per a **Mode Fosc / Clar**: detecció automàtica per defecte del dispositiu/sistema operatiu (`prefers-color-scheme`) i commutador manual.
   - [x] Disseny responsive revisat i optimitzat per a tauletes d'aula i telèfons intel·ligents (touch targets >= 48px, graelles adaptatives i impressió forçada en blanc/negre).
   - [x] Auditoria i correcció integral de contrastos (WCAG AAA).
 - **Punt exacte on ens hem quedat**:
-  - Aplicació consolidada a la versió 2.2 amb restyling de favicon/icones PWA i generador complet de fitxes d'activitats en paper (escriptura, unió amb fletxes i sopa de lletres adaptada).
+  - Aplicació consolidada a la versió 2.3 amb 3 modes de reptes lúdics (auditiu, memory i intrús), efecte confeti en Canvas, generador de fitxes imprimibles i iconografia renovada.
 - **Decisions tècniques i incidències conegudes**:
-  - El Service Worker empra la versió `acollida-cache-v2.2` i `index.html` té cache-busting `?v=2.2` per a tots els fitxers de l'App Shell.
-  - El generador de sopa de lletres neteja accents i caràcters especials automàticament per generar graelles tipogràficament homogènies i amigables per a Primària.
+  - El Service Worker empra la versió `acollida-cache-v2.2` (o superior) i `index.html` té cache-busting per a tots els fitxers de l'App Shell.
+  - El motor de confeti s'executa mitjançant un llenç Canvas d'un sol ús amb `pointer-events: none` que s'autoneteja als 2,2 segons sense càrrega a la memòria ni necessitat de llibreries externes.
 
 ---
 
@@ -90,5 +97,5 @@
   - [ ] Pas 1: Laboratori de Veu «Escolta't i Repeteix» (gravadora local en memòria RAM per a l'autoavaluació fonètica de l'expressió oral amb `MediaRecorder API`).
   - [ ] Pas 2: Historial acumulatiu multisesió i perfils d'alumnes per fer el seguiment trimestral de l'aula d'acollida.
 - **Millores futures i backlog**:
-  - [ ] Nous minijocs: «Troba l'intrús» de vocabulari i reconeixement ràpid 1 de 3 amb efecte confeti en Canvas.
+  - [ ] Reconeixement ràpid 1 de 3 (associació de so i 3 opcions gràfiques contrarellotge relaxat).
   - [ ] Ampliació de llengües pont: Romanès (🇷🇴) i Panjabi / Urdu (🇵🇰).
