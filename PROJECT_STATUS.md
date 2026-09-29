@@ -22,7 +22,7 @@
 ---
 
 ## 2. Estat Actual i Punt de Control (Darrera sessió: 2026-09-29)
-- **Estat general**: Totalment funcional, auditat i actualitzat (Versió 2.3: Minijoc «Troba l'intrús», Motor de celebració Confeti en Canvas pur, Generador de fitxes d'aula i Restyling de favicon/icones PWA).
+- **Estat general**: Totalment funcional, auditat i optimitzat (Versió 2.6: Refactorització ergonòmica de la interfície d'usuari, correcció de visualització de botons superiors a modals sense requerir zoom out, 8 llengües pont i quadern multialumne).
 - **Funcionalitats completades**:
   - [x] **Restyling Modern del Favicon i Iconografia PWA (v2.2)**:
     - [x] Nou `favicon.svg` en format vectorial escalable representant el "Pont de Diàleg i Acollida" (bafarada d'acollida blanca i bafarada d'aprenentatge daurada en contenidor *squircle* blau corporatiu).
@@ -110,15 +110,22 @@
     - [x] Integració de síntesi de veu nativa Web Speech API (`ro-RO`, `ur-PK`) i fallback resilient a Google TTS.
     - [x] Selector d'idioma gràfic actualitzat a la benvinguda i als formularis de registre d'alumnes i docents.
     - [x] Missatge de reforç bilingüe per a famílies en romanès i urdú als Informes de Seguiment SLS.
+  - [x] **Revisió Ergonòmica de la Interfície i Solució de Desbordaments de Modals (v2.6)**:
+    - [x] Resolució definitiva del problema de desbordament vertical a la **Guia Docent**, **Espai Docent**, **Quadern d'Alumnes**, **Fitxes d'Aula** i **Informes**: els botons superiors i el botó de tancar (`✖️`) ja mai queden amagats a la part superior de la pantalla ni requereixen fer *zoom out*.
+    - [x] Arquitectura de modals flex avançada (`modal-dialog-flex`): capçalera fixada (`modal-header-pinned`), pestanyes fixades (`guide-tabs`), àrea de contingut amb scroll vertical independent (`guide-content-area` amb `flex: 1 1 auto; min-height: 0; overflow-y: auto;`) i peu d'accions fixat a la part inferior (`modal-footer-pinned`).
+    - [x] Canvi a `.modal-overlay` amb `align-items: flex-start; overflow-y: auto;` i `.modal-content` amb `margin: auto; max-height: calc(100vh - 2.5rem);` per garantir que qualsevol diàleg comenci sempre des de dalt de la finestra visible en monitors petits o amb escalat de pantalla de Windows (125%/150%).
+    - [x] Responsivitat de les pestanyes de la Guia Docent: adaptació automàtica a graella de 2 columnes en pantalles `<= 820px` (i 1 columna en mòbils `<= 520px`) per evitar desbordaments horitzontals invisibles.
+    - [x] Optimització de la barra superior (`app-header`): redueix marges i oculta el subtítol en pantalles reduïdes per evitar que els 5 botons d'acció docent i la insígnia d'alumne facin un salt de línia brusc.
+    - [x] Ocultació de capçaleres i peus fixats a `@media print` per mantenir les impressions en paper o PDF netes i d'alta fidelitat.
   - [x] Suport dual complet per a **Mode Fosc / Clar**: detecció automàtica per defecte del dispositiu/sistema operatiu (`prefers-color-scheme`) i commutador manual.
   - [x] Disseny responsive revisat i optimitzat per a tauletes d'aula i telèfons intel·ligents (touch targets >= 48px, graelles adaptatives i impressió forçada en blanc/negre).
   - [x] Auditoria i correcció integral de contrastos (WCAG AAA).
 - **Punt exacte on ens hem quedat**:
-  - Aplicació consolidada a la versió 2.5 amb 8 llengües pont de suport (Castellà, Francès, Anglès, Àrab, Ucraïnès, Xinès, Romanès i Urdú/Panjabi), quadern multialumne persistent, informes bilingües formatius per a famílies/CAD i Guia Docent metodològica completa.
+  - Aplicació consolidada a la versió 2.6: interfície totalment adaptativa, botons superiors de modals permanentment accessibles sense zoom out, 8 llengües pont, quadern multialumne persistent, informes bilingües formatius per a famílies/CAD i Guia Docent metodològica.
 - **Decisions tècniques i incidències conegudes**:
-  - El Service Worker empra la versió `acollida-cache-v2.5` i `index.html` té cache-busting `?v=2.5` per a tots els fitxers de l'App Shell.
-  - Els perfils d'alumnes s'emmagatzemen a `acollida_students` de forma 100% local i privada (compliment estricte de privacitat escolar / RGPD).
-  - Les 8 llengües pont permeten cobrir pràcticament la totalitat de l'alumnat nouvingut que s'incorpora als centres educatius de Catalunya.
+  - El Service Worker empra la versió `acollida-cache-v2.6` i `index.html` té cache-busting `?v=2.6` per a tots els fitxers de l'App Shell.
+  - El patró de modal amb `align-items: flex-start`, `margin: auto` i fills `flex-shrink: 0` resol el comportament intrínsec de centrat vertical de flexbox que empenyia el contingut a coordenades negatives inaccessibles a la pantalla del navegador.
+  - Les 8 llengües pont cobreixen la totalitat de l'alumnat nouvingut habitual a Catalunya.
 
 ---
 

@@ -1428,10 +1428,10 @@ const App = {
 
     const modalHtml = `
       <div class="modal-overlay" id="worksheet-modal" role="dialog" aria-modal="true" aria-labelledby="modal-ws-title">
-        <div class="modal-content" style="max-width: 900px; max-height: 92vh; overflow-y: auto;">
+        <div class="modal-content modal-dialog-flex" style="max-width: 920px;">
           
           <!-- BARRA D'EINES I PERSONALITZACIÓ DOCENT DUA -->
-          <div class="worksheet-toolbar">
+          <div class="worksheet-toolbar" style="flex-shrink: 0; margin-bottom: 0.75rem;">
             <div class="worksheet-toolbar-group">
               <label for="ws-cat-select" style="font-size: 0.85rem; font-weight: 700;">Tema:</label>
               <select id="ws-cat-select" onchange="App.setWorksheetOption('categoryId', this.value)" aria-label="Seleccionar categoria de fitxa">
@@ -1488,6 +1488,7 @@ const App = {
             </div>
           </div>
 
+          <div style="flex: 1 1 auto; min-height: 0; overflow-y: auto; display: flex; justify-content: center; background: var(--card-subtle-bg); padding: 1rem; border-radius: var(--radius-md);">
           <!-- FULL DE TREBALL SIMULAT A4 (IMPRIMIBLE) -->
           <div class="worksheet-paper">
             
@@ -1521,6 +1522,8 @@ const App = {
               </div>
               <span>Aula d'Acollida Digital • David Cordones (2026)</span>
             </div>
+
+          </div>
 
           </div>
 
@@ -1807,20 +1810,20 @@ const App = {
 
     const modalHtml = `
       <div class="modal-overlay" id="students-modal" role="dialog" aria-modal="true" aria-labelledby="modal-students-title">
-        <div class="modal-content" style="max-width: 920px;">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+        <div class="modal-content modal-dialog-flex" style="max-width: 920px;">
+          <div class="modal-header-pinned">
             <div>
-              <h3 id="modal-students-title" style="font-size: 1.35rem; color: var(--text-heading); margin-bottom: 0.2rem;">
+              <h3 id="modal-students-title">
                 👥 Quadern de Seguiment d'Alumnes
               </h3>
-              <p style="color: var(--text-muted); font-size: 0.88rem;">
+              <p style="color: var(--text-muted); font-size: 0.88rem; margin: 0;">
                 Gestió de perfils multialumne, historial de progrés acumulatiu i informes formatius per a famílies i la CAD.
               </p>
             </div>
             <button class="btn-secondary" onclick="App.closeModal()" aria-label="Tancar finestra">✖️</button>
           </div>
 
-          <div class="students-toolbar">
+          <div class="students-toolbar" style="flex-shrink: 0; margin-bottom: 0.75rem;">
             <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
               <button class="btn-primary" style="padding: 0.5rem 1rem; font-size: 0.9rem;" onclick="App.toggleNewStudentForm()">
                 ➕ Nou Alumne
@@ -1837,39 +1840,41 @@ const App = {
             </div>
           </div>
 
-          <!-- Formulari per afegir nou alumne -->
-          <div id="new-student-form-wrap" style="display: none; background: var(--card-subtle-bg); border: 1.5px solid var(--border-color); border-radius: var(--radius-md); padding: 1.25rem; margin-bottom: 1.25rem;">
-            <h4 style="font-size: 1.05rem; color: var(--text-heading); margin-bottom: 0.85rem;">➕ Registrar un nou alumne/a</h4>
-            <form onsubmit="App.handleCreateStudent(event)" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)) auto; gap: 0.75rem; align-items: flex-end;">
-              <div>
-                <label style="display:block; font-size: 0.85rem; font-weight:700; margin-bottom: 0.35rem;">Nom de l'alumne/a *</label>
-                <input type="text" id="new-std-name" class="form-input" placeholder="Ex: Fatima, Omar, Chen..." required autocomplete="off" style="padding: 0.55rem 0.75rem;">
-              </div>
-              <div>
-                <label style="display:block; font-size: 0.85rem; font-weight:700; margin-bottom: 0.35rem;">Llengua pont inicial *</label>
-                <select id="new-std-lang" class="form-input" style="padding: 0.55rem 0.75rem;">
-                  <option value="es">🇪🇸 Castellano</option>
-                  <option value="fr">🇫🇷 Français</option>
-                  <option value="en">🇬🇧 English</option>
-                  <option value="ar">🇲🇦 العربية (Àrab)</option>
-                  <option value="uk">🇺🇦 Українська (Ucraïnès)</option>
-                  <option value="zh">🇨🇳 中文 (Xinès)</option>
-                  <option value="ro">🇷🇴 Română (Romanès)</option>
-                  <option value="ur">🇵🇰 اردو (Urdú / Panjabi)</option>
-                </select>
-              </div>
-              <div style="display:flex; gap:0.4rem;">
-                <button type="submit" class="btn-primary" style="padding: 0.58rem 1rem;">Desar Alumne</button>
-                <button type="button" class="btn-secondary" style="padding: 0.58rem 0.8rem;" onclick="App.toggleNewStudentForm()">Cancel·lar</button>
-              </div>
-            </form>
+          <div style="flex: 1 1 auto; min-height: 0; overflow-y: auto; padding-right: 0.25rem;">
+            <!-- Formulari per afegir nou alumne -->
+            <div id="new-student-form-wrap" style="display: none; background: var(--card-subtle-bg); border: 1.5px solid var(--border-color); border-radius: var(--radius-md); padding: 1.25rem; margin-bottom: 1.25rem;">
+              <h4 style="font-size: 1.05rem; color: var(--text-heading); margin-bottom: 0.85rem;">➕ Registrar un nou alumne/a</h4>
+              <form onsubmit="App.handleCreateStudent(event)" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)) auto; gap: 0.75rem; align-items: flex-end;">
+                <div>
+                  <label style="display:block; font-size: 0.85rem; font-weight:700; margin-bottom: 0.35rem;">Nom de l'alumne/a *</label>
+                  <input type="text" id="new-std-name" class="form-input" placeholder="Ex: Fatima, Omar, Chen..." required autocomplete="off" style="padding: 0.55rem 0.75rem;">
+                </div>
+                <div>
+                  <label style="display:block; font-size: 0.85rem; font-weight:700; margin-bottom: 0.35rem;">Llengua pont inicial *</label>
+                  <select id="new-std-lang" class="form-input" style="padding: 0.55rem 0.75rem;">
+                    <option value="es">🇪🇸 Castellano</option>
+                    <option value="fr">🇫🇷 Français</option>
+                    <option value="en">🇬🇧 English</option>
+                    <option value="ar">🇲🇦 العربية (Àrab)</option>
+                    <option value="uk">🇺🇦 Українська (Ucraïnès)</option>
+                    <option value="zh">🇨🇳 中文 (Xinès)</option>
+                    <option value="ro">🇷🇴 Română (Romanès)</option>
+                    <option value="ur">🇵🇰 اردو (Urdú / Panjabi)</option>
+                  </select>
+                </div>
+                <div style="display:flex; gap:0.4rem;">
+                  <button type="submit" class="btn-primary" style="padding: 0.58rem 1rem;">Desar Alumne</button>
+                  <button type="button" class="btn-secondary" style="padding: 0.58rem 0.8rem;" onclick="App.toggleNewStudentForm()">Cancel·lar</button>
+                </div>
+              </form>
+            </div>
+
+            <div class="students-grid">
+              ${studentsHtml}
+            </div>
           </div>
 
-          <div class="students-grid">
-            ${studentsHtml}
-          </div>
-
-          <div class="modal-actions" style="margin-top: 1rem; border-top: 1px solid var(--border-color); padding-top: 1rem;">
+          <div class="modal-actions modal-footer-pinned">
             <button class="btn-secondary" onclick="App.closeModal()">Tancar ✖️</button>
           </div>
         </div>
@@ -2021,93 +2026,109 @@ const App = {
 
     const modalHtml = `
       <div class="modal-overlay" id="student-report-modal" role="dialog" aria-modal="true" aria-labelledby="report-doc-title">
-        <div class="modal-content" style="max-width: 860px; max-height: 90vh; overflow-y: auto;">
-          <div class="student-report-paper">
-            <div class="report-header">
-              <div style="font-size: 0.85rem; font-weight: 700; color: #64748b; letter-spacing: 0.05em; margin-bottom: 0.25rem;">
-                GENERALITAT DE CATALUNYA • SERVEI EDUCATIU
-              </div>
-              <h2 id="report-doc-title">INFORME DE SEGUIMENT DE L'AULA D'ACOLLIDA</h2>
-              <div style="font-size: 0.95rem; color: #475569;">
-                Suport Lingüístic i Social (SLS) • Document per a la Família i la CAD
-              </div>
-            </div>
-
-            <div class="report-grid">
-              <div>
-                <p style="margin: 0 0 0.4rem 0;"><strong>Alumne/a:</strong> ${this.escapeHTML(student.name)}</p>
-                <p style="margin: 0 0 0.4rem 0;"><strong>Llengua de suport inicial:</strong> ${flags[lang] || ''} ${langNames[lang] || lang.toUpperCase()}</p>
-                <p style="margin: 0;"><strong>Data de l'informe:</strong> ${dateFormatted}</p>
-              </div>
-              <div>
-                <p style="margin: 0 0 0.4rem 0;"><strong>Vocabulari assolit:</strong> <strong>${discoveredCount}</strong> de ${totalVocabCount} paraules (${progressPct}%)</p>
-                <p style="margin: 0 0 0.4rem 0;"><strong>Precisió en activitats i reptes:</strong> <strong>${totalQuiz > 0 ? accuracy + '%' : 'En procés d\'avaluació'}</strong> (${correctQuiz}/${totalQuiz})</p>
-                <p style="margin: 0;"><strong>Estat d'incorporació:</strong> Fase d'immersió i acollida</p>
-              </div>
-            </div>
-
-            <!-- Missatge per a la família en català i en la llengua d'origen -->
-            <div class="report-family-message">
-              <div style="font-weight: 800; font-size: 0.95rem; margin-bottom: 0.4rem; color: #1e40af;">
-                💌 Comunicació amb la Família / Carta a la llar:
-              </div>
-              <p style="margin: 0 0 0.6rem 0; font-size: 0.92rem; line-height: 1.5;">
-                "${familyMessages.ca}"
+        <div class="modal-content modal-dialog-flex" style="max-width: 860px;">
+          <div class="modal-header-pinned">
+            <div>
+              <h3 style="font-size: 1.25rem; color: var(--text-heading); margin-bottom: 0.2rem;">
+                💌 Informe de Seguiment de l'Alumne/a
+              </h3>
+              <p style="color: var(--text-muted); font-size: 0.88rem; margin: 0;">
+                Document oficial per a la família i la Comissió d'Atenció a la Diversitat (CAD).
               </p>
-              ${lang !== 'ca' ? `
-                <div style="border-top: 1px dashed #93c5fd; padding-top: 0.5rem; margin-top: 0.5rem; font-style: italic; font-size: 0.9rem; line-height: 1.5; color: #1e3a8a;" class="${isArabic ? 'arabic-text' : ''}">
-                  "${familyMsgBridge}"
+            </div>
+            <button class="btn-secondary" onclick="App.closeModal()" aria-label="Tancar finestra">✖️</button>
+          </div>
+
+          <div style="flex: 1 1 auto; min-height: 0; overflow-y: auto; padding: 0.5rem 0.25rem;">
+            <div class="student-report-paper">
+              <div class="report-header">
+                <div style="font-size: 0.85rem; font-weight: 700; color: #64748b; letter-spacing: 0.05em; margin-bottom: 0.25rem;">
+                  GENERALITAT DE CATALUNYA • SERVEI EDUCATIU
                 </div>
-              ` : ''}
-            </div>
-
-            <h4 style="font-size: 1rem; color: #0f172a; margin: 1rem 0 0.5rem 0;">Distribució del lèxic treballat per àmbits:</h4>
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0.5rem; margin-bottom: 1.25rem;">
-              ${categoriesBreakdownHtml}
-            </div>
-
-            <h4 style="font-size: 1rem; color: #0f172a; margin: 1rem 0 0.5rem 0;">Mostra de vocabulari adquirit (${discoveredCount} paraules):</h4>
-            <div style="display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 1.25rem; max-height: 140px; overflow-y: auto; padding: 0.5rem; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px;">
-              ${wordsBadgesHtml || '<span style="color: #94a3b8; font-size: 0.85rem;">Cap paraula registrada encara.</span>'}
-            </div>
-
-            <div style="margin-top: 1rem;">
-              <label for="report-student-notes" style="font-size: 0.88rem; font-weight: 700; color: #334155; display: block; margin-bottom: 0.3rem;">
-                Observacions pedagògiques del docent / Mesures DUA aplicades:
-              </label>
-              <textarea 
-                id="report-student-notes" 
-                class="form-input" 
-                rows="3" 
-                placeholder="Ex: Mostra bona comprensió auditiva i interès per participar. Respon favorablement al suport visual i als jocs de discriminació auditiva..."
-                style="width: 100%; font-size: 0.88rem; box-sizing: border-box;"
-                onchange="App.saveStudentNotes('${student.id}', this.value)"
-              >${this.escapeHTML(student.notes || '')}</textarea>
-            </div>
-
-            <div class="report-signature-row">
-              <div class="report-sig-box">
-                Segell del Centre Educatiu
+                <h2 id="report-doc-title">INFORME DE SEGUIMENT DE L'AULA D'ACOLLIDA</h2>
+                <div style="font-size: 0.95rem; color: #475569;">
+                  Suport Lingüístic i Social (SLS) • Document per a la Família i la CAD
+                </div>
               </div>
-              <div class="report-sig-box">
-                Signatura del/de la Docent d'Acollida
+
+              <div class="report-grid">
+                <div>
+                  <p style="margin: 0 0 0.4rem 0;"><strong>Alumne/a:</strong> ${this.escapeHTML(student.name)}</p>
+                  <p style="margin: 0 0 0.4rem 0;"><strong>Llengua de suport inicial:</strong> ${flags[lang] || ''} ${langNames[lang] || lang.toUpperCase()}</p>
+                  <p style="margin: 0;"><strong>Data de l'informe:</strong> ${dateFormatted}</p>
+                </div>
+                <div>
+                  <p style="margin: 0 0 0.4rem 0;"><strong>Vocabulari assolit:</strong> <strong>${discoveredCount}</strong> de ${totalVocabCount} paraules (${progressPct}%)</p>
+                  <p style="margin: 0 0 0.4rem 0;"><strong>Precisió en activitats i reptes:</strong> <strong>${totalQuiz > 0 ? accuracy + '%' : 'En procés d\'avaluació'}</strong> (${correctQuiz}/${totalQuiz})</p>
+                  <p style="margin: 0;"><strong>Estat d'incorporació:</strong> Fase d'immersió i acollida</p>
+                </div>
               </div>
-              <div class="report-sig-box">
-                Rebut de la Família
+
+              <!-- Missatge per a la família en català i en la llengua d'origen -->
+              <div class="report-family-message">
+                <div style="font-weight: 800; font-size: 0.95rem; margin-bottom: 0.4rem; color: #1e40af;">
+                  💌 Comunicació amb la Família / Carta a la llar:
+                </div>
+                <p style="margin: 0 0 0.6rem 0; font-size: 0.92rem; line-height: 1.5;">
+                  "${familyMessages.ca}"
+                </p>
+                ${lang !== 'ca' ? `
+                  <div style="border-top: 1px dashed #93c5fd; padding-top: 0.5rem; margin-top: 0.5rem; font-style: italic; font-size: 0.9rem; line-height: 1.5; color: #1e3a8a;" class="${isArabic ? 'arabic-text' : ''}">
+                    "${familyMsgBridge}"
+                  </div>
+                ` : ''}
+              </div>
+
+              <h4 style="font-size: 1rem; color: #0f172a; margin: 1rem 0 0.5rem 0;">Distribució del lèxic treballat per àmbits:</h4>
+              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0.5rem; margin-bottom: 1.25rem;">
+                ${categoriesBreakdownHtml}
+              </div>
+
+              <h4 style="font-size: 1rem; color: #0f172a; margin: 1rem 0 0.5rem 0;">Mostra de vocabulari adquirit (${discoveredCount} paraules):</h4>
+              <div style="display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 1.25rem; max-height: 140px; overflow-y: auto; padding: 0.5rem; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px;">
+                ${wordsBadgesHtml || '<span style="color: #94a3b8; font-size: 0.85rem;">Cap paraula registrada encara.</span>'}
+              </div>
+
+              <div style="margin-top: 1rem;">
+                <label for="report-student-notes" style="font-size: 0.88rem; font-weight: 700; color: #334155; display: block; margin-bottom: 0.3rem;">
+                  Observacions pedagògiques del docent / Mesures DUA aplicades:
+                </label>
+                <textarea 
+                  id="report-student-notes" 
+                  class="form-input" 
+                  rows="3" 
+                  placeholder="Ex: Mostra bona comprensió auditiva i interès per participar. Respon favorablement al suport visual i als jocs de discriminació auditiva..."
+                  style="width: 100%; font-size: 0.88rem; box-sizing: border-box;"
+                  onchange="App.saveStudentNotes('${student.id}', this.value)"
+                >${this.escapeHTML(student.notes || '')}</textarea>
+              </div>
+
+              <div class="report-signature-row">
+                <div class="report-sig-box">
+                  Segell del Centre Educatiu
+                </div>
+                <div class="report-sig-box">
+                  Signatura del/de la Docent d'Acollida
+                </div>
+                <div class="report-sig-box">
+                  Rebut de la Família
+                </div>
               </div>
             </div>
           </div>
 
-          <div class="modal-actions" style="margin-top: 1.25rem;">
+          <div class="modal-actions modal-footer-pinned">
             <button class="btn-primary" onclick="window.print()" aria-label="Imprimir informe en PDF o paper">
               🖨️ Imprimir Informe (PDF)
             </button>
-            <button class="btn-secondary" onclick="App.showStudentsModal()" aria-label="Tornar al quadern de seguiment">
-              👥 Tornar al Quadern
-            </button>
-            <button class="btn-secondary" onclick="App.closeModal()" aria-label="Tancar finestra">
-              Tancar ✖️
-            </button>
+            <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+              <button class="btn-secondary" onclick="App.showStudentsModal()" aria-label="Tornar al quadern de seguiment">
+                👥 Tornar al Quadern
+              </button>
+              <button class="btn-secondary" onclick="App.closeModal()" aria-label="Tancar finestra">
+                Tancar ✖️
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -2305,10 +2326,10 @@ const App = {
 
     const modalHtml = `
       <div class="modal-overlay" id="guide-modal" role="dialog" aria-modal="true" aria-labelledby="modal-guide-title">
-        <div class="modal-content" style="max-width: 900px; max-height: 90vh; display: flex; flex-direction: column;">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.75rem;">
+        <div class="modal-content modal-dialog-flex" style="max-width: 900px;">
+          <div class="modal-header-pinned">
             <div>
-              <h3 id="modal-guide-title" style="font-size: 1.35rem; color: var(--text-heading); margin-bottom: 0.2rem;">
+              <h3 id="modal-guide-title">
                 📖 Guia Docent i Orientacions Pedagògiques
               </h3>
               <p style="color: var(--text-muted); font-size: 0.88rem; margin: 0;">
@@ -2337,11 +2358,11 @@ const App = {
             ${activeContent}
           </div>
 
-          <div class="modal-actions" style="margin-top: 1rem; border-top: 1px solid var(--border-color); padding-top: 0.75rem; display: flex; justify-content: space-between;">
+          <div class="modal-actions modal-footer-pinned">
             <button class="btn-primary" onclick="App.printGuideDossier()" title="Imprimir el dossier pedagògic complet en PDF o paper">
               🖨️ Imprimeix Dossier Guia (PDF)
             </button>
-            <div style="display: flex; gap: 0.5rem;">
+            <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
               <button class="btn-secondary" onclick="App.showStudentsModal()" title="Obrir quadern de seguiment d'alumnes">
                 👥 Quadern d'Alumnes
               </button>
@@ -2534,20 +2555,20 @@ const App = {
 
     modalContainer.innerHTML = `
       <div class="modal-overlay" id="teacher-modal" role="dialog" aria-modal="true" aria-labelledby="modal-teacher-title">
-        <div class="modal-content" style="max-width: 840px;">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+        <div class="modal-content modal-dialog-flex" style="max-width: 860px;">
+          <div class="modal-header-pinned">
             <div>
-              <h3 id="modal-teacher-title" style="font-size: 1.35rem; color: var(--text-heading); margin-bottom: 0.2rem;">
+              <h3 id="modal-teacher-title">
                 🏫 Espai Docent: Vocabulari de l'Escola
               </h3>
-              <p style="color: var(--text-muted); font-size: 0.88rem;">
+              <p style="color: var(--text-muted); font-size: 0.88rem; margin: 0;">
                 Crea, edita i comparteix paraules i espais propis del centre escolar.
               </p>
             </div>
             <button class="btn-secondary" onclick="App.closeModal()" aria-label="Tancar finestra">✖️</button>
           </div>
 
-          <div class="teacher-toolbar">
+          <div class="teacher-toolbar" style="flex-shrink: 0; margin-bottom: 0.75rem; padding-bottom: 0.75rem;">
             <button class="teacher-btn-action primary" onclick="App.toggleCustomWordForm()">
               ➕ Nova Paraula / Espai
             </button>
@@ -2574,6 +2595,7 @@ const App = {
             ` : ''}
           </div>
 
+          <div style="flex: 1 1 auto; min-height: 0; overflow-y: auto; padding-right: 0.25rem;">
           <!-- Formulari d'afegir/editar (ocult per defecte) -->
           <div id="teacher-form-wrap" style="display: none;" class="teacher-form-card">
             <h4 id="teacher-form-title" style="font-size: 1.1rem; color: var(--text-heading); margin-bottom: 0.85rem;">
@@ -2673,9 +2695,11 @@ const App = {
             ${itemsHtml}
           </div>
 
-          <div class="modal-actions" style="margin-top: 1.25rem;">
+          </div>
+
+          <div class="modal-actions modal-footer-pinned">
             <button class="btn-primary" onclick="App.closeModal()">
-              Tanca l'Espai Docent
+              Tanca l'Espai Docent ✖️
             </button>
           </div>
         </div>

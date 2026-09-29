@@ -3,7 +3,7 @@
  * Permet el funcionament 100% autònom fora de línia (Offline) a les escoles
  */
 
-const CACHE_NAME = 'acollida-cache-v2.5';
+const CACHE_NAME = 'acollida-cache-v2.6';
 
 // Recursos de l'App Shell imprescindibles per funcionar sense connexió
 const APP_SHELL = [
