@@ -308,6 +308,7 @@ const App = {
 
   // --- VISTA DE TEMES I CATEGORIES ---
   renderCategoriesView() {
+    if (typeof VoiceLab !== "undefined") VoiceLab.clearAll();
     this.state.currentCategory = null;
     const mainWrapper = document.getElementById("main-wrapper");
     const lang = this.state.bridgeLang;
@@ -357,6 +358,7 @@ const App = {
 
   // --- VISTA DETALLADA DEL TEMA (DESCOBREIX & REPTES) ---
   openCategory(catId) {
+    if (typeof VoiceLab !== "undefined") VoiceLab.clearAll();
     this.state.currentCategory = catId;
     this.initMemoryGame();
     this.renderCategoryContent();
@@ -462,6 +464,10 @@ const App = {
                 </button>
               </div>
 
+              <div class="card-voice-lab" id="voice-lab-${w.id}">
+                ${this.renderVoiceLabControls(w.id)}
+              </div>
+
               ${phraseCa ? `
                 <div class="card-phrase-box">
                   <p class="phrase-ca">
@@ -526,6 +532,179 @@ const App = {
       : null;
 
     AudioManager.speak(textToSpeak, lang, localAudio);
+  },
+
+  // --- LABORATORI DE VEU «ESCOLTA'T I REPETEIX» (PROPOSTA 2) ---
+  renderVoiceLabControls(wordId) {
+    const lang = this.state.bridgeLang || 'es';
+    if (typeof VoiceLab !== "undefined" && VoiceLab.isRecording(wordId)) {
+      return `
+        <div class="recording-badge" role="status" aria-live="assertive">
+          <span class="rec-dot" aria-hidden="true">🔴</span>
+          <span>${ACOLLIDA_DATA.ui.recordingNow[lang] || "Gravant..."} (<span id="rec-sec-${wordId}">6</span>s)</span>
+          <button class="btn-stop-rec" onclick="App.stopRecordingVoice('${wordId}')" title="${ACOLLIDA_DATA.ui.stopRecordingBtn[lang] || 'Atura'}" aria-label="${ACOLLIDA_DATA.ui.stopRecordingBtn[lang] || 'Atura ⏹️'}">
+            ${ACOLLIDA_DATA.ui.stopRecordingBtn[lang] || 'Atura ⏹️'}
+          </button>
+        </div>
+      `;
+    }
+
+    if (typeof VoiceLab !== "undefined" && VoiceLab.hasRecording(wordId)) {
+      return `
+        <div class="voice-lab-controls">
+          <button class="btn-play-rec" id="btn-play-${wordId}" onclick="App.playRecordedVoice('${wordId}')" title="${ACOLLIDA_DATA.ui.listenYourselfBtn[lang] || 'Escolta\'t'}" aria-label="${ACOLLIDA_DATA.ui.listenYourselfBtn[lang] || 'Escolta\'t'}">
+            ${ACOLLIDA_DATA.ui.listenYourselfBtn[lang] || 'Escolta\'t ▶️'}
+          </button>
+          <button class="btn-retry-rec" onclick="App.startRecordingVoice('${wordId}')" title="${ACOLLIDA_DATA.ui.reRecordBtn[lang] || 'Repeteix'}" aria-label="${ACOLLIDA_DATA.ui.reRecordBtn[lang] || 'Repeteix'}">
+            ${ACOLLIDA_DATA.ui.reRecordBtn[lang] || 'Repeteix 🔄'}
+          </button>
+        </div>
+      `;
+    }
+
+    return `
+      <button class="btn-record-trigger" onclick="App.startRecordingVoice('${wordId}')" title="${ACOLLIDA_DATA.ui.recordVoiceBtn[lang] || 'Grava\'t'}" aria-label="${ACOLLIDA_DATA.ui.recordVoiceBtn[lang] || 'Grava\'t'}">
+        ${ACOLLIDA_DATA.ui.recordVoiceBtn[lang] || 'Grava\'t 🎙️'}
+      </button>
+    `;
+  },
+
+  startRecordingVoice(wordId) {
+    if (typeof VoiceLab === "undefined" || !VoiceLab.isSupported()) {
+      this.showVoiceLabPermissionModal("unsupported");
+      return;
+    }
+
+    // Aturem qualsevol reproducció de síntesi de veu o àudio natiu previ per no gravar soroll
+    if (typeof AudioManager !== "undefined" && typeof AudioManager.stop === "function") {
+      AudioManager.stop();
+    }
+
+    // Si hi havia un altre mot gravant-se, restaurem el seu contenidor visual
+    if (VoiceLab.activeWordId && VoiceLab.activeWordId !== wordId) {
+      const prevId = VoiceLab.activeWordId;
+      VoiceLab.stopRecording();
+      const prevContainer = document.getElementById(`voice-lab-${prevId}`);
+      if (prevContainer) {
+        prevContainer.innerHTML = this.renderVoiceLabControls(prevId);
+      }
+    }
+
+    // Actualització immediata de la targeta seleccionada a l'estat "gravant"
+    const container = document.getElementById(`voice-lab-${wordId}`);
+    const lang = this.state.bridgeLang || 'es';
+    if (container) {
+      container.innerHTML = `
+        <div class="recording-badge" role="status" aria-live="assertive">
+          <span class="rec-dot" aria-hidden="true">🔴</span>
+          <span>${ACOLLIDA_DATA.ui.recordingNow[lang] || "Gravant..."} (<span id="rec-sec-${wordId}">6</span>s)</span>
+          <button class="btn-stop-rec" onclick="App.stopRecordingVoice('${wordId}')" title="${ACOLLIDA_DATA.ui.stopRecordingBtn[lang] || 'Atura'}" aria-label="${ACOLLIDA_DATA.ui.stopRecordingBtn[lang] || 'Atura ⏹️'}">
+            ${ACOLLIDA_DATA.ui.stopRecordingBtn[lang] || 'Atura ⏹️'}
+          </button>
+        </div>
+      `;
+    }
+
+    VoiceLab.startRecording(
+      wordId,
+      (secondsLeft) => {
+        const span = document.getElementById(`rec-sec-${wordId}`);
+        if (span) span.textContent = secondsLeft;
+      },
+      (finishedWordId) => {
+        const c = document.getElementById(`voice-lab-${finishedWordId}`);
+        if (c) c.innerHTML = this.renderVoiceLabControls(finishedWordId);
+      },
+      (errorType) => {
+        const c = document.getElementById(`voice-lab-${wordId}`);
+        if (c) c.innerHTML = this.renderVoiceLabControls(wordId);
+        this.showVoiceLabPermissionModal(errorType);
+      }
+    );
+  },
+
+  stopRecordingVoice(wordId) {
+    if (typeof VoiceLab !== "undefined") {
+      VoiceLab.stopRecording();
+      const container = document.getElementById(`voice-lab-${wordId}`);
+      if (container) {
+        setTimeout(() => {
+          if (container) container.innerHTML = this.renderVoiceLabControls(wordId);
+        }, 120);
+      }
+    }
+  },
+
+  playRecordedVoice(wordId) {
+    if (typeof VoiceLab === "undefined") return;
+    const btn = document.getElementById(`btn-play-${wordId}`);
+    VoiceLab.playRecording(
+      wordId,
+      () => {
+        if (btn) btn.classList.add("playing");
+      },
+      () => {
+        if (btn) btn.classList.remove("playing");
+      }
+    );
+  },
+
+  showVoiceLabPermissionModal(errorType) {
+    let title = "🎙️ Accés al Micròfon";
+    let message = "";
+    let help = "";
+
+    if (errorType === "permission_denied") {
+      title = "🎙️ Permís de Micròfon Denegat";
+      message = "El navegador o el sistema operatiu ha bloquejat l'accés al micròfon.";
+      help = `
+        <div style="background: var(--card-subtle-bg); padding: 1rem; border-radius: var(--radius-md); font-size: 0.9rem; text-align: left; margin: 1rem 0;">
+          <strong>Com solucionar-ho:</strong>
+          <ul style="margin: 0.5rem 0 0 1.25rem; padding: 0; line-height: 1.5;">
+            <li><strong>A Chrome / Edge / Chromebook:</strong> Clica a la icona del candau o ajustos al costat de l'adreça web (URL) i activa l'opció <em>Micròfon</em>.</li>
+            <li><strong>A Safari / iPadOS / iOS:</strong> Vés a <em>Ajustos > Safari > Micròfon</em> i selecciona <em>Permetre</em> o <em>Preguntar</em>. Assegura't també que la pestanya no estigui silenciada.</li>
+            <li><strong>A Android:</strong> Comprova que el navegador tingui permís de micròfon concedit als ajustos d'aplicacions del dispositiu.</li>
+          </ul>
+        </div>
+      `;
+    } else if (errorType === "no_device") {
+      title = "🎙️ Micròfon No Detectat";
+      message = "No s'ha detectat cap micròfon o entrada d'àudio connectada al dispositiu.";
+      help = "<p style='font-size: 0.9rem; color: var(--text-muted);'>Connecta uns auriculars amb micròfon o revisa la configuració de so del teu dispositiu.</p>";
+    } else if (errorType === "unsupported" || errorType === "insecure_context") {
+      title = "⚠️ Funcionalitat no disponible";
+      message = "L'enregistrament de veu requereix connexió segura (HTTPS) o un navegador compatible amb l'estàndard MediaStream.";
+      help = "<p style='font-size: 0.9rem; color: var(--text-muted);'>Si estàs provant l'aplicació en un entorn local o xarxa escolar, assegura't d'accedir via HTTPS o localhost.</p>";
+    } else {
+      title = "🎙️ Avís del Laboratori de Veu";
+      message = "No s'ha pogut iniciar l'enregistrament.";
+      help = "<p style='font-size: 0.9rem; color: var(--text-muted);'>Torna-ho a provar d'aquí a uns segons o comprova que cap altra aplicació estigui blocant el micròfon.</p>";
+    }
+
+    const modalHtml = `
+      <div class="modal-overlay" id="voicelab-modal" role="dialog" aria-modal="true" aria-labelledby="voicelab-title">
+        <div class="modal-content modal-dialog-flex" style="max-width: 520px; text-align: center;">
+          <div class="modal-header-pinned">
+            <h3 id="voicelab-title" style="margin: 0; color: var(--text-heading); font-size: 1.15rem;">
+              ${title}
+            </h3>
+            <button class="btn-secondary" onclick="App.closeModal()" aria-label="Tancar finestra">✖️</button>
+          </div>
+          <div style="padding: 1.25rem 0.5rem;">
+            <p style="font-size: 0.95rem; color: var(--text-main); margin-bottom: 0.5rem;">${message}</p>
+            ${help}
+            <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 1rem; border-top: 1px dashed var(--border-color); padding-top: 0.75rem;">
+              🔒 <strong>Privacitat DUA:</strong> La teva veu es processa 100% a la memòria RAM del teu dispositiu i s'esborra automàticament en canviar de tema o tancar la sessió. Mai s'envia a cap servidor extern.
+            </p>
+          </div>
+          <div class="modal-footer-pinned">
+            <button class="btn-primary" onclick="App.closeModal()" style="width: 100%;">D'acord, entesos 👍</button>
+          </div>
+        </div>
+      </div>
+    `;
+
+    document.getElementById("modal-container").innerHTML = modalHtml;
   },
 
   // --- MODE PRÀCTICA / REPTES AUTOAVALUATIUS ---

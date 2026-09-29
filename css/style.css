@@ -801,6 +801,155 @@ body {
   font-size: 0.84rem;
 }
 
+/* --- LABORATORI DE VEU «ESCOLTA'T I REPETEIX» (FONÈTICA DUA) --- */
+.card-voice-lab {
+  margin-top: 0.65rem;
+  padding-top: 0.55rem;
+  border-top: 1px dashed var(--border-color);
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+}
+
+.btn-record-trigger {
+  background: var(--card-subtle-bg);
+  border: 1.5px solid var(--border-color);
+  color: var(--text-main);
+  padding: 0.4rem 0.85rem;
+  border-radius: var(--radius-full);
+  font-size: 0.82rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  transition: all 0.2s ease;
+  user-select: none;
+}
+
+.btn-record-trigger:hover {
+  border-color: #ef4444;
+  color: #ef4444;
+  background: #fef2f2;
+  transform: scale(1.02);
+}
+
+.recording-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  background: #fee2e2;
+  color: #991b1b;
+  border: 1.5px solid #f87171;
+  padding: 0.35rem 0.75rem;
+  border-radius: var(--radius-full);
+  font-size: 0.82rem;
+  font-weight: 700;
+  animation: pulse-rec 1.2s infinite;
+}
+
+@keyframes pulse-rec {
+  0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); }
+  50% { transform: scale(1.02); box-shadow: 0 0 0 6px rgba(239, 68, 68, 0); }
+  100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+}
+
+.btn-stop-rec {
+  background: #ef4444;
+  color: #ffffff;
+  border: none;
+  border-radius: var(--radius-sm);
+  padding: 0.2rem 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  cursor: pointer;
+  margin-left: 0.25rem;
+  transition: background 0.15s;
+}
+
+.btn-stop-rec:hover {
+  background: #dc2626;
+}
+
+.voice-lab-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.btn-play-rec {
+  background: #ecfdf5;
+  color: #065f46;
+  border: 1.5px solid #10b981;
+  padding: 0.35rem 0.75rem;
+  border-radius: var(--radius-full);
+  font-size: 0.82rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  transition: all 0.2s ease;
+}
+
+.btn-play-rec:hover {
+  background: #10b981;
+  color: #ffffff;
+}
+
+.btn-play-rec.playing {
+  background: #059669;
+  color: #ffffff;
+  border-color: #047857;
+  animation: pulse-play 1s infinite;
+}
+
+@keyframes pulse-play {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.04); }
+  100% { transform: scale(1); }
+}
+
+.btn-retry-rec {
+  background: var(--card-subtle-bg);
+  color: var(--text-muted);
+  border: 1px solid var(--border-color);
+  padding: 0.35rem 0.6rem;
+  border-radius: var(--radius-full);
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  transition: all 0.15s ease;
+}
+
+.btn-retry-rec:hover {
+  color: var(--text-main);
+  border-color: var(--primary-color);
+  background: var(--badge-bg);
+}
+
+[data-theme="dark"] .btn-record-trigger:hover {
+  background: #450a0a;
+}
+[data-theme="dark"] .recording-badge {
+  background: #450a0a;
+  color: #fca5a5;
+  border-color: #ef4444;
+}
+[data-theme="dark"] .btn-play-rec {
+  background: #064e3b;
+  color: #6ee7b7;
+  border-color: #059669;
+}
+
 /* --- PANTALLA DE REPTES I JOCS --- */
 .practice-container {
   background: var(--card-bg);

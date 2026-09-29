@@ -22,8 +22,18 @@
 ---
 
 ## 2. Estat Actual i Punt de Control (Darrera sessió: 2026-09-29)
-- **Estat general**: Totalment funcional, auditat i optimitzat (Versió 2.6: Refactorització ergonòmica de la interfície d'usuari, correcció de visualització de botons superiors a modals sense requerir zoom out, 8 llengües pont i quadern multialumne).
+- **Estat general**: Totalment funcional, auditat i optimitzat (Versió 2.7: Laboratori de Veu «Escolta't i Repeteix» per a autoavaluació fonètica DUA, arquitectura de modals lliure de desbordaments, 8 llengües pont i quadern multialumne persistent).
 - **Funcionalitats completades**:
+  - [x] **Laboratori de Veu «Escolta't i Repeteix» per a l'autoavaluació fonètica (DUA) (v2.7)**:
+    - [x] Motor d'àudio autònom `VoiceLab` integrat a `js/audio.js` basat en `MediaRecorder API` i `navigator.mediaDevices.getUserMedia`.
+    - [x] Detecció dinàmica i resilient de formats MIME i còdecs: selecció intel·ligent d'`audio/webm;codecs=opus` (Chromebooks, Chrome, Android, Firefox) o fallback natiu a `audio/mp4` / `audio/aac` per a Safari i iPadOS/iOS.
+    - [x] Filtres d'àudio per a ambients d'aula escolar: sol·licitud de flux amb `echoCancellation: true, noiseSuppression: true, autoGainControl: true`.
+    - [x] Temporitzador d'aturada automàtica de 6 segons per targeta amb visualització de compte enrere i alliberament explícit immediat del maquinari de micròfon (`track.stop()`) per protegir la bateria del dispositiu i la privacitat.
+    - [x] Privacitat estricta i zero dades al servidor: emmagatzematge efímer en memòria RAM (`Blob` + `URL.createObjectURL`), neteja i revocació periòdica (`URL.revokeObjectURL`) en canviar de tema o tancar sessió.
+    - [x] Interfície no punitiva DUA: botons d'enregistrament `Grava't 🎙️`, indicador dinàmic `Gravant... (6s)` amb polsació visual i opció `Atura ⏹️`, escolta `Escolta't ▶️` amb animació de reproducció i `Repeteix 🔄`.
+    - [x] Traducció completa dels nous textos a les 9 llengües (Català + Castellà, Francès, Anglès, Àrab, Ucraïnès, Xinès, Romanès i Urdú).
+    - [x] Modal d'orientació tècnica ergonòmic en cas de permís denegat, manca de micròfon físic o context no segur amb instruccions pas a pas per navegador.
+    - [x] Actualització de Service Worker a `acollida-cache-v2.7` i cache-busting a `index.html` (`?v=2.7`).
   - [x] **Restyling Modern del Favicon i Iconografia PWA (v2.2)**:
     - [x] Nou `favicon.svg` en format vectorial escalable representant el "Pont de Diàleg i Acollida" (bafarada d'acollida blanca i bafarada d'aprenentatge daurada en contenidor *squircle* blau corporatiu).
     - [x] Regeneració d'icones PWA natiu (`icon-192.png` i `icon-512.png`) per a pantalles d'inici i tauletes.
@@ -121,17 +131,23 @@
   - [x] Disseny responsive revisat i optimitzat per a tauletes d'aula i telèfons intel·ligents (touch targets >= 48px, graelles adaptatives i impressió forçada en blanc/negre).
   - [x] Auditoria i correcció integral de contrastos (WCAG AAA).
 - **Punt exacte on ens hem quedat**:
-  - Aplicació consolidada a la versió 2.6: interfície totalment adaptativa, botons superiors de modals permanentment accessibles sense zoom out, 8 llengües pont, quadern multialumne persistent, informes bilingües formatius per a famílies/CAD i Guia Docent metodològica.
+  - Aplicació consolidada a la versió 2.7: paquet complet de 5 propostes de millora integralment implementat (Fitxes d'Aula imprimibles, Laboratori de Veu «Escolta't i Repeteix», Quadern de Seguiment Multialumne, Minijoc «Troba l'intrús» amb Confeti, i Guia Docent Metodològica/SLS, més l'ampliació a 8 llengües pont i la refactorització ergonòmica de modals).
 - **Decisions tècniques i incidències conegudes**:
-  - El Service Worker empra la versió `acollida-cache-v2.6` i `index.html` té cache-busting `?v=2.6` per a tots els fitxers de l'App Shell.
+  - El Service Worker empra la versió `acollida-cache-v2.7` i `index.html` té cache-busting `?v=2.7` per a tots els fitxers de l'App Shell.
+  - El Laboratori de Veu utilitza exclusivament memòria RAM volàtil (`Blob` + `URL.createObjectURL`) amb neteja explícita de pistes (`track.stop()`) i revocació d'objectes URL per màxima privacitat escolar (DUA / RGPD) i zero impacte en bateria o dades.
+  - Compatibilitat multiplataforma auditada: suport automàtic de WebM/Opus per a Chrome/Android/Chromebooks i MP4/AAC per a Safari/iOS/iPadOS.
   - El patró de modal amb `align-items: flex-start`, `margin: auto` i fills `flex-shrink: 0` resol el comportament intrínsec de centrat vertical de flexbox que empenyia el contingut a coordenades negatives inaccessibles a la pantalla del navegador.
   - Les 8 llengües pont cobreixen la totalitat de l'alumnat nouvingut habitual a Catalunya.
 
 ---
 
 ## 3. Full de Ruta d'Implementació (Roadmap / Propers Passos)
-- **Tasques immediates per a la següent sessió**:
-  - [ ] Pas 1: Laboratori de Veu «Escolta't i Repeteix» (gravadora local en memòria RAM per a l'autoavaluació fonètica de l'expressió oral amb `MediaRecorder API`).
-  - [ ] Pas 2: Reconeixement ràpid 1 de 3 (associació de so i 3 opcions gràfiques contrarellotge relaxat).
+- **Estat del Pla de Millores**:
+  - [x] Proposta 1: Generador de Fitxes d'Activitats d'Aula Imprimibles (Worksheets en PDF) (v2.2)
+  - [x] Proposta 2: Laboratori de Veu «Escolta't i Repeteix» per a l'autoavaluació fonètica (v2.7)
+  - [x] Proposta 3: Quadern de Seguiment Multialumne i Informes Bilingües Famílies/CAD (v2.4)
+  - [x] Proposta 4: Nou Minijoc «Troba l'intrús» (🕵️‍♂️) i Confeti Canvas (v2.3)
+  - [x] Proposta 5: Ampliació a Romanès (🇷🇴) i Urdú (🇵🇰) i Guia Docent Metodològica Completa (v2.5 & v2.4)
 - **Millores futures i backlog**:
   - [ ] Mode d'impressió de diplomes en colors suaus per a final de trimestre.
+  - [ ] Reconeixement ràpid 1 de 3 (associació de so i 3 opcions gràfiques contrarellotge relaxat).

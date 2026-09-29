@@ -2240,6 +2240,61 @@ const ACOLLIDA_DATA = {
       "zh": "再试一次！你一定可以的！💪",
       "ro": "Mai încearcă o dată! Poți reuși! 💪",
       "ur": "دوبارہ کوشش کریں! آپ کر سکتے ہیں! 💪"
+    },
+    "recordVoiceBtn": {
+      "ca": "Grava't 🎙️",
+      "es": "Grábate 🎙️",
+      "fr": "Enregistre-toi 🎙️",
+      "en": "Record yourself 🎙️",
+      "ar": "سجّل صوتك 🎙️",
+      "uk": "Запиши себе 🎙️",
+      "zh": "录音练习 🎙️",
+      "ro": "Înregistrează-te 🎙️",
+      "ur": "اپنی آواز ریکارڈ کریں 🎙️"
+    },
+    "recordingNow": {
+      "ca": "Gravant...",
+      "es": "Grabando...",
+      "fr": "Enregistrement...",
+      "en": "Recording...",
+      "ar": "جارٍ التسجيل...",
+      "uk": "Запис...",
+      "zh": "正在录音...",
+      "ro": "Înregistrare...",
+      "ur": "ریکارڈنگ..."
+    },
+    "listenYourselfBtn": {
+      "ca": "Escolta't ▶️",
+      "es": "Escúchate ▶️",
+      "fr": "Écoute-toi ▶️",
+      "en": "Listen to yourself ▶️",
+      "ar": "استمع إلى نفسك ▶️",
+      "uk": "Послухай себе ▶️",
+      "zh": "听听自己 ▶️",
+      "ro": "Ascultă-te ▶️",
+      "ur": "اپنی آواز سنیں ▶️"
+    },
+    "stopRecordingBtn": {
+      "ca": "Atura ⏹️",
+      "es": "Detener ⏹️",
+      "fr": "Arrêter ⏹️",
+      "en": "Stop ⏹️",
+      "ar": "إيقاف ⏹️",
+      "uk": "Зупинити ⏹️",
+      "zh": "停止 ⏹️",
+      "ro": "Oprește ⏹️",
+      "ur": "روکیں ⏹️"
+    },
+    "reRecordBtn": {
+      "ca": "Repeteix 🔄",
+      "es": "Repetir 🔄",
+      "fr": "Répéter 🔄",
+      "en": "Retry 🔄",
+      "ar": "إعادة 🔄",
+      "uk": "Повторити 🔄",
+      "zh": "重录 🔄",
+      "ro": "Repetă 🔄",
+      "ur": "دوبارہ 🔄"
     }
   }
 };

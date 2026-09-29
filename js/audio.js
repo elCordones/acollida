@@ -326,6 +326,257 @@ const AudioManager = {
   }
 };
 
+/**
+ * VoiceLab: Laboratori de Veu «Escolta't i Repeteix» per a l'autoavaluació fonètica (DUA)
+ * 100% autònom, privat (memòria RAM volàtil), resilient a iOS/Safari i Android/Chromebook.
+ */
+const VoiceLab = {
+  mediaRecorder: null,
+  activeStream: null,
+  activeWordId: null,
+  recordedAudios: new Map(), // wordId -> { blob, url, timestamp }
+  currentPlayback: null,
+  maxRecordSeconds: 6, // Aturada de seguretat automàtica per no deixar el micròfon obert
+  autoStopTimer: null,
+
+  /**
+   * Comprova si el navegador i el dispositiu suporten l'enregistrament d'àudio
+   */
+  isSupported() {
+    return !!(
+      typeof navigator !== "undefined" &&
+      navigator.mediaDevices &&
+      typeof navigator.mediaDevices.getUserMedia === "function" &&
+      typeof window !== "undefined" &&
+      window.MediaRecorder
+    );
+  },
+
+  /**
+   * Detecta el tipus MIME i còdec òptim per al dispositiu actual
+   * (audio/webm a Chrome/Android vs audio/mp4 a Safari/iOS iPad)
+   */
+  getSupportedMimeType() {
+    if (!window.MediaRecorder) return "";
+    const candidateTypes = [
+      'audio/webm;codecs=opus',
+      'audio/webm',
+      'audio/ogg;codecs=opus',
+      'audio/mp4',
+      'audio/aac',
+      ''
+    ];
+    for (const type of candidateTypes) {
+      if (type === '' || MediaRecorder.isTypeSupported(type)) {
+        return type;
+      }
+    }
+    return '';
+  },
+
+  /**
+   * Inicia la gravació de veu per a una paraula concreta
+   */
+  async startRecording(wordId, onTick, onFinish, onError) {
+    if (!this.isSupported()) {
+      if (onError) onError("unsupported");
+      return;
+    }
+
+    // Atura qualsevol gravació o reproducció prèvia
+    this.stopPlayback();
+    this.stopRecording();
+
+    try {
+      // Petició del micròfon amb filtres natius d'aula (cancel·lació de ressò i supressió de soroll)
+      const stream = await navigator.mediaDevices.getUserMedia({
+        audio: {
+          echoCancellation: true,
+          noiseSuppression: true,
+          autoGainControl: true
+        }
+      });
+
+      this.activeStream = stream;
+      this.activeWordId = wordId;
+
+      const mimeType = this.getSupportedMimeType();
+      const options = mimeType ? { mimeType } : {};
+      
+      const recorder = new MediaRecorder(stream, options);
+      this.mediaRecorder = recorder;
+      const chunks = [];
+
+      recorder.ondataavailable = (e) => {
+        if (e.data && e.data.size > 0) {
+          chunks.push(e.data);
+        }
+      };
+
+      recorder.onstop = () => {
+        // Alliberament de maquinari immediat (apagar el micròfon físic per privacitat i bateria)
+        if (this.activeStream) {
+          this.activeStream.getTracks().forEach(track => track.stop());
+          this.activeStream = null;
+        }
+
+        const blobType = mimeType || (recorder.mimeType || 'audio/webm');
+        const blob = new Blob(chunks, { type: blobType });
+
+        // Revocar URL anterior si existia per no consumir memòria RAM
+        if (this.recordedAudios.has(wordId)) {
+          const old = this.recordedAudios.get(wordId);
+          if (old && old.url) URL.revokeObjectURL(old.url);
+        }
+
+        const audioUrl = URL.createObjectURL(blob);
+        this.recordedAudios.set(wordId, {
+          blob,
+          url: audioUrl,
+          timestamp: Date.now()
+        });
+
+        this.mediaRecorder = null;
+        this.activeWordId = null;
+
+        if (onFinish) onFinish(wordId, audioUrl);
+      };
+
+      recorder.start();
+
+      // Compte enrere visual
+      let secondsLeft = this.maxRecordSeconds;
+      if (onTick) onTick(secondsLeft);
+
+      if (this.autoStopTimer) clearInterval(this.autoStopTimer);
+      this.autoStopTimer = setInterval(() => {
+        secondsLeft--;
+        if (onTick) onTick(secondsLeft);
+        if (secondsLeft <= 0) {
+          this.stopRecording();
+        }
+      }, 1000);
+
+    } catch (err) {
+      console.warn("Error en accedir al micròfon:", err);
+      if (this.activeStream) {
+        this.activeStream.getTracks().forEach(track => track.stop());
+        this.activeStream = null;
+      }
+      this.mediaRecorder = null;
+      this.activeWordId = null;
+
+      let errType = "unknown";
+      if (err.name === "NotAllowedError" || err.name === "PermissionDeniedError") {
+        errType = "permission_denied";
+      } else if (err.name === "NotFoundError" || err.name === "DevicesNotFoundError") {
+        errType = "no_device";
+      } else if (err.name === "SecurityError") {
+        errType = "insecure_context";
+      }
+
+      if (onError) onError(errType, err);
+    }
+  },
+
+  /**
+   * Atura manualment o automàticament la gravació en curs
+   */
+  stopRecording() {
+    if (this.autoStopTimer) {
+      clearInterval(this.autoStopTimer);
+      this.autoStopTimer = null;
+    }
+    if (this.mediaRecorder && this.mediaRecorder.state !== "inactive") {
+      try {
+        this.mediaRecorder.stop();
+      } catch (e) {
+        console.warn("Error aturant MediaRecorder:", e);
+      }
+    }
+    if (this.activeStream) {
+      this.activeStream.getTracks().forEach(track => track.stop());
+      this.activeStream = null;
+    }
+  },
+
+  isRecording(wordId) {
+    if (wordId) {
+      return this.activeWordId === wordId && this.mediaRecorder && this.mediaRecorder.state === "recording";
+    }
+    return !!(this.mediaRecorder && this.mediaRecorder.state === "recording");
+  },
+
+  hasRecording(wordId) {
+    return this.recordedAudios.has(wordId);
+  },
+
+  /**
+   * Reprodueix l'àudio gravat per l'alumne
+   */
+  playRecording(wordId, onStart, onEnd) {
+    this.stopPlayback();
+    const item = this.recordedAudios.get(wordId);
+    if (!item || !item.url) return;
+
+    try {
+      const audio = new Audio(item.url);
+      this.currentPlayback = audio;
+
+      audio.onplay = () => {
+        if (onStart) onStart();
+      };
+      audio.onended = () => {
+        this.currentPlayback = null;
+        if (onEnd) onEnd();
+      };
+      audio.onerror = (e) => {
+        console.warn("Error reproduint gravació pròpia:", e);
+        this.currentPlayback = null;
+        if (onEnd) onEnd();
+      };
+
+      audio.play().catch(e => {
+        console.warn("Error en play():", e);
+        this.currentPlayback = null;
+        if (onEnd) onEnd();
+      });
+    } catch (e) {
+      console.warn("Excepció creant àudio:", e);
+      if (onEnd) onEnd();
+    }
+  },
+
+  stopPlayback() {
+    if (this.currentPlayback) {
+      try {
+        this.currentPlayback.pause();
+        this.currentPlayback.currentTime = 0;
+      } catch (e) {}
+      this.currentPlayback = null;
+    }
+  },
+
+  deleteRecording(wordId) {
+    if (this.recordedAudios.has(wordId)) {
+      const old = this.recordedAudios.get(wordId);
+      if (old && old.url) {
+        URL.revokeObjectURL(old.url);
+      }
+      this.recordedAudios.delete(wordId);
+    }
+  },
+
+  clearAll() {
+    this.stopRecording();
+    this.stopPlayback();
+    for (const [id, item] of this.recordedAudios.entries()) {
+      if (item && item.url) URL.revokeObjectURL(item.url);
+    }
+    this.recordedAudios.clear();
+  }
+};
+
 // Inicialització automàtica
 if (typeof window !== "undefined") {
   window.addEventListener('DOMContentLoaded', () => {
