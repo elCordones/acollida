@@ -21,9 +21,13 @@
 
 ---
 
-## 2. Estat Actual i Punt de Control (Darrera sessió: 2026-09-23)
-- **Estat general**: Totalment funcional, auditat i actualitzat (Versió 2.1 Espai Docent: Personalització de Vocabulari Escolar, Exportació/Importació JSON i 11 Categories).
+## 2. Estat Actual i Punt de Control (Darrera sessió: 2026-09-29)
+- **Estat general**: Totalment funcional, auditat i actualitzat (Versió 2.2: Restyling del Favicon i Icones PWA: Pont de Diàleg i Acollida Lingüística, memòria cau renovada a `acollida-cache-v2.2`).
 - **Funcionalitats completades**:
+  - [x] **Restyling Modern del Favicon i Iconografia PWA (v2.2)**:
+    - [x] Nou `favicon.svg` en format vectorial escalable representant el "Pont de Diàleg i Acollida" (bafarada d'acollida blanca i bafarada d'aprenentatge daurada en contenidor *squircle* blau corporatiu).
+    - [x] Regeneració d'icones PWA natiu (`icon-192.png` i `icon-512.png`) per a pantalles d'inici i tauletes.
+    - [x] Renovació de memòria cau Service Worker a `acollida-cache-v2.2` i cache-busting a `index.html` (`?v=2.2`).
   - [x] **Panell Docent de Gestió de Vocabulari Escolar (`🏫 Espai Docent`)**:
     - [x] Accés ràpid des de la capçalera (botó `🏫`) i des de la vista principal de temes.
     - [x] Formulari interactiu per afegir noves paraules i espais amb selecció d'emoji visual ràpid, categoria, traduccions a les 6 llengües pont i frases model.
