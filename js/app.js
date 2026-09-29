@@ -13,7 +13,14 @@ const App = {
     startTime: null,
     discoveredWords: new Set(),
     quizAnswers: [],
-    customVocabulary: []
+    customVocabulary: [],
+    worksheetState: {
+      categoryId: null,
+      type: "standard", // standard | wordsearch
+      letterCase: "lowercase", // lowercase | uppercase
+      showBridge: false,
+      seed: 1
+    }
   },
 
   // --- MÈTODES DE SEGURETAT I UTILITATS (SECURITY-AND-HARDENING) ---
@@ -343,6 +350,9 @@ const App = {
         <div style="display: flex; gap: 0.6rem; align-items: center; flex-wrap: wrap;">
           <button class="btn-secondary" onclick="App.showFlashcardsModal()" title="Imprimir targetes de vocabulari d'aquest tema">
             🖨️ Targetes
+          </button>
+          <button class="btn-secondary" onclick="App.showWorksheetModal()" title="Generar fitxes d'activitats de treball en paper d'aquest tema">
+            📝 Fitxa de treball
           </button>
           <div class="tabs-container">
             <button 
@@ -833,6 +843,361 @@ const App = {
     document.getElementById("modal-container").innerHTML = modalHtml;
   },
 
+  // --- GENERADOR DE FITXES D'ACTIVITATS D'AULA IMPRIMIBLES (WORKSHEETS) ---
+  showWorksheetModal(catId) {
+    if (!catId) {
+      catId = this.state.currentCategory || (ACOLLIDA_DATA.categories[0] ? ACOLLIDA_DATA.categories[0].id : "urgencies");
+    }
+    this.state.worksheetState.categoryId = catId;
+    this.renderWorksheetModal();
+  },
+
+  setWorksheetOption(key, val) {
+    this.state.worksheetState[key] = val;
+    this.renderWorksheetModal();
+  },
+
+  regenerateWorksheet() {
+    this.state.worksheetState.seed = Math.floor(Math.random() * 10000);
+    this.renderWorksheetModal();
+  },
+
+  cleanWordForSearch(str) {
+    if (!str) return "";
+    return str
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/[^a-zA-Z]/g, '')
+      .toUpperCase();
+  },
+
+  generateWordSearchGrid(words, size = 8) {
+    const grid = Array.from({ length: size }, () => Array(size).fill(''));
+    const placedWords = [];
+
+    const candidates = words
+      .map(w => ({ raw: w.ca, icon: w.icon, clean: this.cleanWordForSearch(w.ca), orig: w }))
+      .filter(w => w.clean.length >= 3 && w.clean.length <= size)
+      .sort((a, b) => b.clean.length - a.clean.length);
+
+    for (const item of candidates) {
+      if (placedWords.length >= 5) break;
+      const word = item.clean;
+      let placed = false;
+      let attempts = 0;
+
+      while (!placed && attempts < 100) {
+        attempts++;
+        const dir = Math.random() < 0.5 ? 'H' : 'V';
+        const row = Math.floor(Math.random() * (dir === 'V' ? (size - word.length + 1) : size));
+        const col = Math.floor(Math.random() * (dir === 'H' ? (size - word.length + 1) : size));
+
+        let canPlace = true;
+        for (let i = 0; i < word.length; i++) {
+          const r = dir === 'V' ? row + i : row;
+          const c = dir === 'H' ? col + i : col;
+          if (grid[r][c] !== '' && grid[r][c] !== word[i]) {
+            canPlace = false;
+            break;
+          }
+        }
+
+        if (canPlace) {
+          for (let i = 0; i < word.length; i++) {
+            const r = dir === 'V' ? row + i : row;
+            const c = dir === 'H' ? col + i : col;
+            grid[r][c] = word[i];
+          }
+          placed = true;
+          placedWords.push(item);
+        }
+      }
+    }
+
+    const letters = 'ABCDEEFGHIIJLMNNOOPQRSTUUV';
+    for (let r = 0; r < size; r++) {
+      for (let c = 0; c < size; c++) {
+        if (grid[r][c] === '') {
+          grid[r][c] = letters[Math.floor(Math.random() * letters.length)];
+        }
+      }
+    }
+
+    return { grid, placedWords };
+  },
+
+  renderWorksheetModal() {
+    const ws = this.state.worksheetState;
+    const cat = ACOLLIDA_DATA.categories.find(c => c.id === ws.categoryId) || ACOLLIDA_DATA.categories[0];
+    if (!cat) return;
+
+    const words = this.getCategoryWords(cat.id);
+    const lang = this.state.bridgeLang;
+    const isArabic = lang === 'ar';
+
+    // Generació d'opcions de categories per al selector
+    const catOptionsHtml = ACOLLIDA_DATA.categories.map(c => `
+      <option value="${c.id}" ${c.id === cat.id ? 'selected' : ''}>${c.icon} ${this.escapeHTML(c.titol.ca)}</option>
+    `).join("");
+
+    let worksheetBodyHtml = "";
+
+    if (ws.type === 'standard') {
+      // --- FITXA ESTÀNDARD: RELACIONA + PAUTA + DIBUIX ---
+      // 1. Unir amb fletxes (fins a 5 paraules)
+      const matchCount = Math.min(5, words.length);
+      const matchWords = words.slice(0, matchCount);
+
+      // Barrejada de la columna dreta
+      const rightColWords = [...matchWords];
+      for (let i = rightColWords.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [rightColWords[i], rightColWords[j]] = [rightColWords[j], rightColWords[i]];
+      }
+      // Assegurar diferent ordre si hi ha més de 2 paraules
+      if (matchWords.length > 2 && rightColWords.every((w, idx) => w.id === matchWords[idx].id)) {
+        [rightColWords[0], rightColWords[1]] = [rightColWords[1], rightColWords[0]];
+      }
+
+      // 2. Pauta cal·ligràfica (3 paraules)
+      const calligraphyWords = words.slice(0, Math.min(3, words.length));
+      const calligraphyRows = calligraphyWords.map(w => {
+        const wordText = ws.letterCase === 'uppercase' ? w.ca.toUpperCase() : w.ca;
+        return `
+          <div class="ws-calligraphy-row">
+            <div class="ws-calligraphy-model">
+              <span class="icon">${w.icon}</span>
+              <span>${this.escapeHTML(wordText)}</span>
+            </div>
+            <div class="ws-pauta-box">
+              <div class="ws-pauta-line-mid"></div>
+              <div class="ws-pauta-line-base"></div>
+            </div>
+            <div class="ws-pauta-box">
+              <div class="ws-pauta-line-mid"></div>
+              <div class="ws-pauta-line-base"></div>
+            </div>
+          </div>
+        `;
+      }).join("");
+
+      worksheetBodyHtml = `
+        <!-- ACTIVITAT 1: RELACIONAR -->
+        <div class="ws-activity-block">
+          <div class="ws-activity-title">
+            <span>1.</span> Uneix cada imatge amb la seva paraula: ✏️
+          </div>
+          <div class="ws-matching-grid">
+            <div class="ws-matching-col">
+              ${matchWords.map(w => `
+                <div class="ws-match-item-left">
+                  <span class="ws-match-icon">${w.icon}</span>
+                  <span class="ws-match-connector"></span>
+                </div>
+              `).join("")}
+            </div>
+            <div class="ws-matching-col">
+              ${rightColWords.map(w => {
+                const wText = ws.letterCase === 'uppercase' ? w.ca.toUpperCase() : w.ca;
+                const bridge = ws.showBridge ? `<span class="ws-match-word-bridge ${isArabic ? 'arabic-text' : ''}">(${this.escapeHTML(w[lang] || w.es)})</span>` : '';
+                return `
+                  <div class="ws-match-item-right">
+                    <span class="ws-match-connector"></span>
+                    <div>
+                      <span class="ws-match-word-ca">${this.escapeHTML(wText)}</span>
+                      ${bridge}
+                    </div>
+                  </div>
+                `;
+              }).join("")}
+            </div>
+          </div>
+        </div>
+
+        <!-- ACTIVITAT 2: CAL·LIGRAFIA I TRAÇ -->
+        <div class="ws-activity-block">
+          <div class="ws-activity-title">
+            <span>2.</span> Copia i practica l'escriptura dels mots a la pauta: ✍️
+          </div>
+          <div class="ws-calligraphy-list">
+            ${calligraphyRows}
+          </div>
+        </div>
+
+        <!-- ACTIVITAT 3: DIBUIX I FRASE -->
+        <div class="ws-activity-block" style="margin-bottom: 0.6rem;">
+          <div class="ws-activity-title">
+            <span>3.</span> Dibuixa el teu concepte preferit i completa: 🎨
+          </div>
+          <div class="ws-draw-container">
+            <div class="ws-draw-box">
+              Dibuixa aquí i pinta 🖍️
+            </div>
+            <div class="ws-sentence-box">
+              <div>Això és un / una:</div>
+              <div class="ws-sentence-pauta"></div>
+            </div>
+          </div>
+        </div>
+      `;
+    } else {
+      // --- FITXA DE SOPA DE LLETRES (WORDSEARCH) ---
+      const { grid, placedWords } = this.generateWordSearchGrid(words, 8);
+
+      const gridRowsHtml = grid.map(row => `
+        <tr>
+          ${row.map(cell => `<td class="ws-grid-cell">${cell}</td>`).join("")}
+        </tr>
+      `).join("");
+
+      const wordsListHtml = placedWords.map(item => {
+        const bridge = ws.showBridge ? `<span style="font-size: 0.85rem; color: #64748b; font-style: italic;">(${this.escapeHTML(item.orig[lang] || item.orig.es)})</span>` : '';
+        return `
+          <div class="ws-find-item">
+            <span class="ws-checkbox"></span>
+            <span>${item.icon}</span>
+            <span style="letter-spacing: 0.05em;">${item.clean}</span>
+            ${bridge}
+          </div>
+        `;
+      }).join("");
+
+      worksheetBodyHtml = `
+        <div class="ws-activity-block" style="margin-bottom: 0.8rem;">
+          <div class="ws-activity-title">
+            <span>🔍</span> Troba les ${placedWords.length} paraules amagades en línia recta (➡️ horitzontal o ⬇️ vertical):
+          </div>
+          <div class="ws-wordsearch-layout">
+            <table class="ws-grid-table" aria-label="Sopa de lletres">
+              ${gridRowsHtml}
+            </table>
+            <div class="ws-words-to-find">
+              <h4 style="font-size: 0.95rem; font-weight: 800; color: #0f172a; margin-bottom: 0.4rem; text-transform: uppercase;">
+                📋 Llista de paraules a cercar:
+              </h4>
+              ${wordsListHtml}
+            </div>
+          </div>
+        </div>
+
+        <!-- ACTIVITAT COMPLEMENTÀRIA: COPIAR EL MOT TROBAT -->
+        <div class="ws-activity-block" style="margin-bottom: 0.6rem;">
+          <div class="ws-activity-title">
+            <span>✍️</span> Tria una paraula que hagis trobat i copia-la a la pauta:
+          </div>
+          <div class="ws-pauta-box" style="height: 42px; width: 100%;">
+            <div class="ws-pauta-line-mid"></div>
+            <div class="ws-pauta-line-base"></div>
+          </div>
+        </div>
+      `;
+    }
+
+    const modalHtml = `
+      <div class="modal-overlay" id="worksheet-modal" role="dialog" aria-modal="true" aria-labelledby="modal-ws-title">
+        <div class="modal-content" style="max-width: 900px; max-height: 92vh; overflow-y: auto;">
+          
+          <!-- BARRA D'EINES I PERSONALITZACIÓ DOCENT DUA -->
+          <div class="worksheet-toolbar">
+            <div class="worksheet-toolbar-group">
+              <label for="ws-cat-select" style="font-size: 0.85rem; font-weight: 700;">Tema:</label>
+              <select id="ws-cat-select" onchange="App.setWorksheetOption('categoryId', this.value)" aria-label="Seleccionar categoria de fitxa">
+                ${catOptionsHtml}
+              </select>
+
+              <button 
+                class="worksheet-btn-toggle ${ws.type === 'standard' ? 'active' : ''}" 
+                onclick="App.setWorksheetOption('type', 'standard')" 
+                title="Fitxa d'aprenentatge amb unió de fletxes, pauta de traç i dibuix">
+                ✍️ Fitxa d'Escriptura
+              </button>
+              <button 
+                class="worksheet-btn-toggle ${ws.type === 'wordsearch' ? 'active' : ''}" 
+                onclick="App.setWorksheetOption('type', 'wordsearch')" 
+                title="Sopa de lletres visual amb les paraules del tema">
+                🔍 Sopa de Lletres
+              </button>
+            </div>
+
+            <div class="worksheet-toolbar-group">
+              ${ws.type === 'standard' ? `
+                <button 
+                  class="worksheet-btn-toggle ${ws.letterCase === 'lowercase' ? 'active' : ''}" 
+                  onclick="App.setWorksheetOption('letterCase', 'lowercase')" 
+                  title="Lletra d'impremta minúscula">
+                  🔤 Minúscula
+                </button>
+                <button 
+                  class="worksheet-btn-toggle ${ws.letterCase === 'uppercase' ? 'active' : ''}" 
+                  onclick="App.setWorksheetOption('letterCase', 'uppercase')" 
+                  title="Lletra majúscula (Pal) per a iniciació">
+                  🔠 Majúscula
+                </button>
+              ` : ''}
+
+              <label class="worksheet-checkbox-label" title="Mostrar la traducció en la llengua d'origen de l'alumne com a bastiment d'aprenentatge">
+                <input 
+                  type="checkbox" 
+                  ${ws.showBridge ? 'checked' : ''} 
+                  onchange="App.setWorksheetOption('showBridge', this.checked)">
+                <span>Llengua pont</span>
+              </label>
+
+              <button class="btn-secondary" onclick="App.regenerateWorksheet()" title="Generar noves combinacions de posició" style="padding: 0.4rem 0.6rem;">
+                🔄
+              </button>
+              <button class="btn-primary" onclick="window.print()" title="Imprimir la fitxa en paper o desar com a PDF" style="padding: 0.45rem 1rem;">
+                🖨️ Imprimeix (PDF)
+              </button>
+              <button class="btn-secondary" onclick="App.closeModal()" title="Tancar finestra" style="padding: 0.4rem 0.6rem;">
+                ✖️
+              </button>
+            </div>
+          </div>
+
+          <!-- FULL DE TREBALL SIMULAT A4 (IMPRIMIBLE) -->
+          <div class="worksheet-paper">
+            
+            <!-- CAPÇALERA DE FITXA -->
+            <div class="ws-header">
+              <div class="ws-top-banner">
+                <span>Aula d'Acollida • Suport Lingüístic i Social</span>
+                <span>Generalitat de Catalunya</span>
+              </div>
+              <div class="ws-student-meta">
+                <div>Nom i cognoms: <span class="ws-field-line" style="min-width: 220px;"></span></div>
+                <div style="text-align: right;">Data: <span class="ws-field-line" style="min-width: 100px;"></span></div>
+              </div>
+              <div class="ws-topic-badge">
+                <span>Tema:</span>
+                <span>${cat.icon} ${this.escapeHTML(cat.titol.ca)}</span>
+                ${ws.showBridge ? `<span style="font-weight: 500; font-size: 0.85rem; color: #475569;" class="${isArabic ? 'arabic-text' : ''}">(${this.escapeHTML(cat.titol[lang] || '')})</span>` : ''}
+              </div>
+            </div>
+
+            <!-- COS D'ACTIVITATS -->
+            ${worksheetBodyHtml}
+
+            <!-- PEU DE FITXA I AUTOAVALUACIÓ FORMATIVA -->
+            <div class="ws-footer-bar">
+              <div class="ws-self-eval">
+                <span>Autoavaluació:</span>
+                <div class="ws-eval-option"><span class="ws-checkbox"></span> 😊 Molt bé</div>
+                <div class="ws-eval-option"><span class="ws-checkbox"></span> 😐 Bé</div>
+                <div class="ws-eval-option"><span class="ws-checkbox"></span> 🤔 M'ha costat</div>
+              </div>
+              <span>Aula d'Acollida Digital • David Cordones (2026)</span>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+    `;
+
+    document.getElementById("modal-container").innerHTML = modalHtml;
+  },
+
   // --- FINALITZACIÓ DE SESSIÓ, INFORME CSV I PASSAPORT IMPRIMIBLE ---
   showFinishModal() {
     const totalDiscovered = this.state.discoveredWords.size;
@@ -1025,6 +1390,9 @@ const App = {
               📂 Importa (.JSON)
             </button>
             <input type="file" id="import-json-input" accept=".json" style="display: none;" onchange="App.handleImportJSON(event)">
+            <button class="teacher-btn-action" onclick="App.showWorksheetModal()" title="Generar fitxes d'activitats en paper de qualsevol tema">
+              📝 Fitxes d'Aula
+            </button>
             ${customList.length ? `
               <button class="teacher-btn-action" onclick="App.clearAllCustomVocabulary()" style="color: #ef4444; margin-left: auto;">
                 🗑️ Netejar tot

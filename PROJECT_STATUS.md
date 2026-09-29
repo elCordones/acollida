@@ -67,20 +67,28 @@
   - [x] Auditoria d'accessibilitat: marcadors ARIA, `:focus-visible` per a navegació amb teclat.
   - [x] Favicon visual, representatiu i minimalista en format SVG (`favicon.svg`) integrat a la pestanya.
   - [x] Peu de pàgina oficial de llicenciament segons l'estàndard actualitzat `apps-escolars` (resumit, contingut i no invasiu).
+  - [x] **Generador de Fitxes d'Activitats d'Aula Imprimibles (Worksheets en PDF) (v2.2)**:
+    - [x] Modal interactiu amb selector dinàmic de temes i barra d'eines DUA.
+    - [x] **Mode 1: Fitxa d'Escriptura i Relació**: Activitat d'unió imatge-paraula amb fletxes (punts de connexió), pauta cal·ligràfica escolar (línia base i discontínua) per a traç manual, requadre de dibuix i frase model, i bloc d'autoavaluació formativa (`😊 😐 🤔`).
+    - [x] **Mode 2: Sopa de Lletres Visual**: Graella de 8×8 autogenerada dinàmicament amb paraules amagades en línia recta (➡️ horitzontal i ⬇️ vertical), llista de comprovació amb icones i caselles `[ ]`, i pauta de còpia.
+    - [x] Opcions DUA: Selector de tipus de lletra (🔤 Minúscula / 🔠 Majúscula de pal per a iniciació) i bastiment de suport bilingüe (llengua pont activable/desactivable).
+    - [x] Estils d'impressió optimitzats (`@media print`) en blanc i negre estalvi de tinta ajustats a 1 pàgina A4 sense desbordament.
+    - [x] Accés ràpid des de qualsevol tema (botó `📝 Fitxa de treball`) i des de la barra de l'Espai Docent (`📝 Fitxes d'Aula`).
   - [x] Suport dual complet per a **Mode Fosc / Clar**: detecció automàtica per defecte del dispositiu/sistema operatiu (`prefers-color-scheme`) i commutador manual.
   - [x] Disseny responsive revisat i optimitzat per a tauletes d'aula i telèfons intel·ligents (touch targets >= 48px, graelles adaptatives i impressió forçada en blanc/negre).
   - [x] Auditoria i correcció integral de contrastos (WCAG AAA).
 - **Punt exacte on ens hem quedat**:
-  - Aplicació consolidada a la versió 2.1 amb panell docent de gestió de vocabulari, importació/exportació JSON, 6 llengües pont, 11 categories, 60 conceptes de base i 360 àudios locals.
+  - Aplicació consolidada a la versió 2.2 amb restyling de favicon/icones PWA i generador complet de fitxes d'activitats en paper (escriptura, unió amb fletxes i sopa de lletres adaptada).
 - **Decisions tècniques i incidències conegudes**:
-  - El Service Worker empra la versió `acollida-cache-v2.1` que neteja automàticament qualsevol memòria anterior i assegura que les tauletes tinguin sempre els recursos actualitzats.
-  - El vocabulari personalitzat es desa a `acollida_custom_vocab` a `localStorage` i és totalment compatible amb els jocs, flashcards i síntesi de veu.
+  - El Service Worker empra la versió `acollida-cache-v2.2` i `index.html` té cache-busting `?v=2.2` per a tots els fitxers de l'App Shell.
+  - El generador de sopa de lletres neteja accents i caràcters especials automàticament per generar graelles tipogràficament homogènies i amigables per a Primària.
 
 ---
 
 ## 3. Full de Ruta d'Implementació (Roadmap / Propers Passos)
 - **Tasques immediates per a la següent sessió**:
-  - [ ] Pas 1: Historial acumulatiu multisesió per fer el seguiment de l'evolució al llarg del trimestre (perfils d'alumnes, gràfiques de progressió i registre d'aula).
+  - [ ] Pas 1: Laboratori de Veu «Escolta't i Repeteix» (gravadora local en memòria RAM per a l'autoavaluació fonètica de l'expressió oral amb `MediaRecorder API`).
+  - [ ] Pas 2: Historial acumulatiu multisesió i perfils d'alumnes per fer el seguiment trimestral de l'aula d'acollida.
 - **Millores futures i backlog**:
-  - [ ] Historial acumulatiu multisesió per fer el seguiment de l'evolució al llarg del trimestre.
-  - [ ] Mode d'impressió de fitxes d'activitats d'aprenentatge en paper (unir amb fletxes, pintar, escriure).
+  - [ ] Nous minijocs: «Troba l'intrús» de vocabulari i reconeixement ràpid 1 de 3 amb efecte confeti en Canvas.
+  - [ ] Ampliació de llengües pont: Romanès (🇷🇴) i Panjabi / Urdu (🇵🇰).
