@@ -81,21 +81,42 @@
     - [x] Feedback pedagògic enriquidor: en encertar, s'explica a quina altra categoria pertany l'intrús per reforçar la classificació semàntica.
     - [x] Motor d'animació de partícules de confeti en HTML5 Canvas pur (`launchConfetti`) integrat als 3 jocs per a celebració visual DUA.
     - [x] Comptador de puntuació persistent d'intrusos descoberts.
+  - [x] **Quadern de Seguiment Multialumne i Historial Acumulatiu (v2.4)**:
+    - [x] Gestió persistent de perfils multialumne a `localStorage` (`acollida_students`) pensat per a tauletes compartides d'aula.
+    - [x] Xips d'accés ràpid amb 1 sol toc a la pantalla de benvinguda (`[ 👧 Fatima 🇲🇦 ⭐12 ]`, `[ 👦 Chen 🇨🇳 ⭐8 ]`).
+    - [x] Sincronització automàtica i bidireccional de cada sessió de treball (paraules descobertes, respostes de reptes, data d'activitat).
+    - [x] Panell de seguiment docent amb barres de progrés percentuals, precisió en jocs, botons d'activació ràpida i formulari de registre d'alumnes.
+    - [x] Còpia de seguretat completa de la base d'alumnes en format `.JSON` descarregable.
+  - [x] **Informes Formatius Bilingües per a Famílies i la CAD (v2.4)**:
+    - [x] Document imprimible de seguiment formatiu segons els criteris del Suport Lingüístic i Social (SLS).
+    - [x] Missatge de reconeixement i implicació per a la llar redactat en català i traduït a la llengua familiar de l'alumne (Castellà, Francès, Anglès, Àrab amb RTL, Ucraïnès o Xinès).
+    - [x] Desglossament del lèxic per àmbits temàtics i mostra de paraules assolides.
+    - [x] Camp d'observacions pedagògiques docents i mesures DUA aplicades amb persistència al perfil de l'alumne.
+    - [x] Requadres de signatura de docent d'acollida, segell de centre i rebut familiar.
+    - [x] Optimitzat per a impressió en A4 estalvi de tinta (`@media print`).
+  - [x] **Guia Docent i Orientacions Pedagògiques Completes (v2.4)**:
+    - [x] Accés universal des de la capçalera (botó `📖`), des de l'Espai Docent i des del Quadern d'Alumnes.
+    - [x] **Pestanya 1 (Marc Normatiu i SLS)**: Decret 150/2017, marc inclusiu de Catalunya, distinció fonamental BICS vs. CALP (Jim Cummins) i principis DUA.
+    - [x] **Pestanya 2 (Metodologia de les Eines)**: Fonamentació pedagògica de cada eina (Descobreix, Escolta, Memory, Troba l'intrús, Fitxes imprimibles, Espai Docent i Quadern).
+    - [x] **Pestanya 3 (Protocol de Centre i CAD)**: Fases temporals d'acollida (48h, 2 setmanes, 1r semestre, transició), criteris per a la CAD i relació amb les famílies.
+    - [x] **Pestanya 4 (Estratègies d'Aula i DUA)**: Respecte pel període de silenci (*Silent Period*), bastida lingüística (*scaffolding*), parelles lingüístiques i aprenentatge cooperatiu.
+    - [x] **Generador de Dossier Imprimible**: Botó `🖨️ Imprimeix Dossier Guia (PDF)` que formata els 4 mòduls en un document A4 llest per imprimir o desar en PDF.
   - [x] Suport dual complet per a **Mode Fosc / Clar**: detecció automàtica per defecte del dispositiu/sistema operatiu (`prefers-color-scheme`) i commutador manual.
   - [x] Disseny responsive revisat i optimitzat per a tauletes d'aula i telèfons intel·ligents (touch targets >= 48px, graelles adaptatives i impressió forçada en blanc/negre).
   - [x] Auditoria i correcció integral de contrastos (WCAG AAA).
 - **Punt exacte on ens hem quedat**:
-  - Aplicació consolidada a la versió 2.3 amb 3 modes de reptes lúdics (auditiu, memory i intrús), efecte confeti en Canvas, generador de fitxes imprimibles i iconografia renovada.
+  - Aplicació consolidada a la versió 2.4 amb Quadern de seguiment multialumne persistent, informes bilingües formatius per a famílies/CAD i Guia Docent metodològica completa amb dossier imprimible.
 - **Decisions tècniques i incidències conegudes**:
-  - El Service Worker empra la versió `acollida-cache-v2.2` (o superior) i `index.html` té cache-busting per a tots els fitxers de l'App Shell.
-  - El motor de confeti s'executa mitjançant un llenç Canvas d'un sol ús amb `pointer-events: none` que s'autoneteja als 2,2 segons sense càrrega a la memòria ni necessitat de llibreries externes.
+  - Els perfils d'alumnes s'emmagatzemen a `acollida_students` de forma 100% local i privada (compliment estricte de privacitat escolar / RGPD).
+  - La sincronització entre sessió activa i historial d'alumnes és transparent i immediata (`syncActiveStudentProfile`).
+  - Els fulls d'informe i la guia docent compten amb classes CSS específiques per a `@media print` que asseguren una impressió neta en blanc i negre estalvi de tinta sense talls de pàgina incòmodes.
 
 ---
 
 ## 3. Full de Ruta d'Implementació (Roadmap / Propers Passos)
 - **Tasques immediates per a la següent sessió**:
   - [ ] Pas 1: Laboratori de Veu «Escolta't i Repeteix» (gravadora local en memòria RAM per a l'autoavaluació fonètica de l'expressió oral amb `MediaRecorder API`).
-  - [ ] Pas 2: Historial acumulatiu multisesió i perfils d'alumnes per fer el seguiment trimestral de l'aula d'acollida.
+  - [ ] Pas 2: Reconeixement ràpid 1 de 3 (associació de so i 3 opcions gràfiques contrarellotge relaxat).
 - **Millores futures i backlog**:
-  - [ ] Reconeixement ràpid 1 de 3 (associació de so i 3 opcions gràfiques contrarellotge relaxat).
-  - [ ] Ampliació de llengües pont: Romanès (🇷🇴) i Panjabi / Urdu (🇵🇰).
+  - [ ] Ampliació de noves llengües pont: Romanès (🇷🇴) i Panjabi / Urdu (🇵🇰).
+  - [ ] Mode d'impressió de diplomes en colors suaus per a final de trimestre.

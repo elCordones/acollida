@@ -81,15 +81,35 @@
           🏫
         </button>
 
-        <div id="user-badge" class="user-badge" style="display: none;">
+        <!-- Botó Quadern de Seguiment / Gestió d'Alumnes -->
+        <button 
+          id="students-panel-btn" 
+          class="theme-toggle-btn" 
+          onclick="App.showStudentsModal()" 
+          title="Quadern de Seguiment d'Alumnes 👥" 
+          aria-label="Obrir quadern de seguiment d'alumnes">
+          👥
+        </button>
+
+        <!-- Botó Guia Docent i Orientacions Pedagògiques -->
+        <button 
+          id="guide-panel-btn" 
+          class="theme-toggle-btn" 
+          onclick="App.showGuideModal()" 
+          title="Guia Docent i Orientacions Pedagògiques 📖" 
+          aria-label="Obrir guia docent i pedagògica">
+          📖
+        </button>
+
+        <div id="user-badge" class="user-badge" style="display: none;" onclick="App.showStudentsModal()" title="Canviar o gestionar perfils d'alumnes" role="button" tabindex="0">
           <div class="avatar" aria-hidden="true">👤</div>
           <span id="user-name-display">Alumne</span>
           <button 
-            onclick="App.clearSession()" 
-            title="Canviar d'alumne / Nova sessió"
-            aria-label="Canviar d'alumne o reiniciar la sessió"
+            onclick="event.stopPropagation(); App.showStudentsModal()" 
+            title="Quadern de seguiment i canvi d'alumne"
+            aria-label="Canviar d'alumne o obrir seguiment"
             style="background:none; border:none; cursor:pointer; font-size: 0.9rem; margin-left: 0.5rem; opacity: 0.7;">
-            🔄
+            👥
           </button>
         </div>
       </div>

@@ -6,10 +6,12 @@
 const App = {
   state: {
     studentName: "",
-    bridgeLang: "es", // es, fr, en, ar
+    bridgeLang: "es", // es, fr, en, ar, uk, zh
+    currentStudentId: null,
+    guideTab: "pedagogia",
     currentCategory: null,
     currentMode: "discover", // discover | practice
-    practiceType: "listen", // listen | memory
+    practiceType: "listen", // listen | memory | intruder
     startTime: null,
     discoveredWords: new Set(),
     quizAnswers: [],
@@ -90,6 +92,7 @@ const App = {
     const dataToSave = {
       studentName: this.state.studentName,
       bridgeLang: this.state.bridgeLang,
+      currentStudentId: this.state.currentStudentId,
       startTime: this.state.startTime ? this.state.startTime.toISOString() : null,
       discoveredWords: Array.from(this.state.discoveredWords),
       quizAnswers: this.state.quizAnswers
@@ -99,6 +102,7 @@ const App = {
     } catch (e) {
       console.warn("No s'ha pogut desar a localStorage:", e);
     }
+    this.syncActiveStudentProfile();
   },
 
   restoreFromStorage() {
@@ -108,6 +112,7 @@ const App = {
         const parsed = JSON.parse(saved);
         if (parsed.studentName) this.state.studentName = parsed.studentName;
         if (parsed.bridgeLang) this.state.bridgeLang = parsed.bridgeLang;
+        if (parsed.currentStudentId) this.state.currentStudentId = parsed.currentStudentId;
         if (parsed.startTime) this.state.startTime = new Date(parsed.startTime);
         if (parsed.discoveredWords) this.state.discoveredWords = new Set(parsed.discoveredWords);
         if (parsed.quizAnswers) this.state.quizAnswers = parsed.quizAnswers;
@@ -120,6 +125,7 @@ const App = {
   clearSession() {
     localStorage.removeItem("acollida_session");
     this.state.studentName = "";
+    this.state.currentStudentId = null;
     this.state.bridgeLang = "es";
     this.state.currentCategory = null;
     this.state.currentMode = "discover";
@@ -163,16 +169,53 @@ const App = {
     }
 
     userBadge.style.display = "none";
+
+    // Carregar alumnes existents per mostrar xips d'accés ràpid
+    const students = this.loadStudents();
+    const flags = { es: "🇪🇸", fr: "🇫🇷", en: "🇬🇧", ar: "🇲🇦", uk: "🇺🇦", zh: "🇨🇳" };
+
+    let quickChipsHtml = "";
+    if (students.length > 0) {
+      const chips = students.map(s => {
+        const flag = flags[s.bridgeLang] || "🌍";
+        const count = (s.discoveredWords || []).length;
+        return `
+          <button type="button" class="student-chip-btn" onclick="App.activateStudent('${s.id}')" title="Entrar com a ${this.escapeHTML(s.name)} (${flag})">
+            <span>${s.avatar || '👤'}</span>
+            <span>${this.escapeHTML(s.name)}</span>
+            <span>${flag}</span>
+            <span style="font-size: 0.75rem; opacity: 0.85;">⭐ ${count}</span>
+          </button>
+        `;
+      }).join("");
+
+      quickChipsHtml = `
+        <div class="students-quick-wrap">
+          <div class="students-quick-title">
+            <span>👥 Alumnes d'aquesta tauleta / aula:</span>
+            <button type="button" onclick="App.showStudentsModal()" style="background: none; border: none; color: var(--primary-color); font-size: 0.85rem; font-weight: 700; cursor: pointer; text-decoration: underline;">
+              Quadern complet ⚙️
+            </button>
+          </div>
+          <div class="students-chips-list">
+            ${chips}
+          </div>
+        </div>
+      `;
+    }
+
     mainWrapper.innerHTML = `
       <div class="welcome-screen">
         <div style="font-size: 3rem; margin-bottom: 0.5rem;">🌟</div>
         <h2>${ACOLLIDA_DATA.ui.appTitle[this.state.bridgeLang] || ACOLLIDA_DATA.ui.appTitle.ca}</h2>
         <p class="subtitle">${ACOLLIDA_DATA.ui.appSubtitle[this.state.bridgeLang] || ACOLLIDA_DATA.ui.appSubtitle.ca}</p>
 
+        ${quickChipsHtml}
+
         <form class="config-form" id="session-form" onsubmit="App.handleStartSession(event)">
           <div class="form-group">
             <label for="student-name">
-              <span>👤 ${ACOLLIDA_DATA.ui.studentNameLabel[this.state.bridgeLang] || "El teu nom:"}</span>
+              <span>👤 ${ACOLLIDA_DATA.ui.studentNameLabel[this.state.bridgeLang] || "El teu nom (o nou alumne):"}</span>
             </label>
             <input 
               type="text" 
@@ -235,6 +278,7 @@ const App = {
     if (!this.state.startTime) {
       this.state.startTime = new Date();
     }
+    this.syncActiveStudentProfile();
     this.saveToStorage();
     this.updateHeaderBadge();
     this.renderCategoriesView();
@@ -1537,6 +1581,9 @@ const App = {
             <button class="btn-primary" onclick="window.print()" aria-label="Imprimir el passaport en PDF o paper">
               🖨️ Imprimeix el Passaport (PDF)
             </button>
+            <button class="btn-secondary" onclick="App.showStudentReportModal()" aria-label="Veure l'informe bilingüe de seguiment">
+              💌 Informe Bilingüe Família
+            </button>
             <button class="btn-secondary" onclick="App.exportCSV()" aria-label="Descarregar les dades en full de càlcul">
               📥 Descarrega Full de Càlcul (.CSV)
             </button>
@@ -1554,6 +1601,832 @@ const App = {
 
   closeModal() {
     document.getElementById("modal-container").innerHTML = "";
+  },
+
+  // --- QUADERN DE SEGUIMENT MULTIALUMNE (PROPOSTA 3) ---
+  loadStudents() {
+    try {
+      const raw = localStorage.getItem("acollida_students");
+      const list = raw ? JSON.parse(raw) : [];
+      return Array.isArray(list) ? list : [];
+    } catch (e) {
+      console.warn("Error carregant alumnes de localStorage:", e);
+      return [];
+    }
+  },
+
+  saveStudents(students) {
+    try {
+      localStorage.setItem("acollida_students", JSON.stringify(students));
+    } catch (e) {
+      console.warn("Error desant alumnes a localStorage:", e);
+    }
+  },
+
+  getStudent(studentId) {
+    const list = this.loadStudents();
+    return list.find(s => s.id === studentId);
+  },
+
+  syncActiveStudentProfile() {
+    if (!this.state.studentName || !this.state.studentName.trim()) return;
+    const nameTrimmed = this.state.studentName.trim();
+    let students = this.loadStudents();
+    let student = null;
+
+    if (this.state.currentStudentId) {
+      student = students.find(s => s.id === this.state.currentStudentId);
+    }
+    if (!student) {
+      student = students.find(s => s.name.toLowerCase() === nameTrimmed.toLowerCase());
+      if (student) {
+        this.state.currentStudentId = student.id;
+      }
+    }
+
+    const currentWords = Array.from(this.state.discoveredWords);
+    const nowIso = new Date().toISOString();
+
+    if (student) {
+      student.name = nameTrimmed;
+      student.bridgeLang = this.state.bridgeLang || student.bridgeLang || "es";
+      student.lastActive = nowIso;
+      // Combinar paraules sense duplicats
+      const mergedWords = Array.from(new Set([...(student.discoveredWords || []), ...currentWords]));
+      student.discoveredWords = mergedWords;
+      if (Array.isArray(this.state.quizAnswers) && this.state.quizAnswers.length > 0) {
+        student.quizAnswers = this.state.quizAnswers;
+      }
+    } else {
+      const newStudent = {
+        id: "std_" + Date.now() + "_" + Math.random().toString(36).substr(2, 4),
+        name: nameTrimmed,
+        bridgeLang: this.state.bridgeLang || "es",
+        avatar: "👤",
+        createdAt: nowIso,
+        lastActive: nowIso,
+        discoveredWords: currentWords,
+        quizAnswers: this.state.quizAnswers || [],
+        notes: ""
+      };
+      this.state.currentStudentId = newStudent.id;
+      students.push(newStudent);
+    }
+
+    this.saveStudents(students);
+  },
+
+  activateStudent(studentId) {
+    const student = this.getStudent(studentId);
+    if (!student) return;
+
+    this.state.currentStudentId = student.id;
+    this.state.studentName = student.name;
+    this.state.bridgeLang = student.bridgeLang || "es";
+    this.state.startTime = new Date();
+    this.state.discoveredWords = new Set(student.discoveredWords || []);
+    this.state.quizAnswers = student.quizAnswers || [];
+    this.state.currentCategory = null;
+    this.state.currentMode = "discover";
+    this.state.practiceType = "listen";
+
+    this.saveToStorage();
+    this.closeModal();
+    this.updateHeaderBadge();
+    this.renderCategoriesView();
+
+    AudioManager.speak(`Hola ${student.name}! Benvingut de nou.`);
+  },
+
+  deleteStudent(studentId) {
+    const student = this.getStudent(studentId);
+    if (!student) return;
+    if (!confirm(`Segur que vols eliminar l'alumne/a "${student.name}" i tot el seu historial de progrés?`)) {
+      return;
+    }
+
+    let students = this.loadStudents();
+    students = students.filter(s => s.id !== studentId);
+    this.saveStudents(students);
+
+    if (this.state.currentStudentId === studentId) {
+      this.clearSession();
+    } else {
+      this.showStudentsModal();
+    }
+  },
+
+  saveStudentNotes(studentId, notes) {
+    const students = this.loadStudents();
+    const student = students.find(s => s.id === studentId);
+    if (student) {
+      student.notes = notes;
+      this.saveStudents(students);
+    }
+  },
+
+  showStudentsModal() {
+    const students = this.loadStudents();
+    const totalVocab = this.getAllVocabulary().length || 40;
+    const flags = { es: "🇪🇸", fr: "🇫🇷", en: "🇬🇧", ar: "🇲🇦", uk: "🇺🇦", zh: "🇨🇳" };
+
+    const studentsHtml = students.length ? students.map(s => {
+      const wordsCount = (s.discoveredWords || []).length;
+      const pct = Math.min(100, Math.round((wordsCount / totalVocab) * 100));
+      const flag = flags[s.bridgeLang] || "🌍";
+      const isActive = this.state.currentStudentId === s.id;
+      
+      const correctQuiz = (s.quizAnswers || []).filter(q => q.isCorrect).length;
+      const totalQuiz = (s.quizAnswers || []).length;
+      const accuracy = totalQuiz > 0 ? Math.round((correctQuiz / totalQuiz) * 100) : 0;
+      const lastDate = s.lastActive ? new Date(s.lastActive).toLocaleDateString('ca-ES') : "Recent";
+
+      return `
+        <div class="student-profile-card ${isActive ? 'active-student' : ''}">
+          <div class="student-card-header">
+            <div class="student-card-avatar">${s.avatar || '👤'}</div>
+            <div class="student-card-meta">
+              <h4>${this.escapeHTML(s.name)} ${flag} ${isActive ? '<span style="font-size:0.75rem; background:#10b981; color:#fff; padding:0.15rem 0.45rem; border-radius:10px; margin-left:0.25rem;">ACTIU</span>' : ''}</h4>
+              <span>Llengua pont: <strong>${(s.bridgeLang || 'es').toUpperCase()}</strong> • Darrera sessió: ${lastDate}</span>
+            </div>
+          </div>
+
+          <div style="margin-top: 0.5rem;">
+            <div style="display:flex; justify-content:space-between; font-size: 0.85rem; font-weight:700;">
+              <span>Vocabulari assolit:</span>
+              <span>${wordsCount} / ${totalVocab} (${pct}%)</span>
+            </div>
+            <div class="progress-bar-wrap">
+              <div class="progress-bar-fill" style="width: ${pct}%;"></div>
+            </div>
+          </div>
+
+          <div class="student-card-stats">
+            <span>🎯 Precisió en reptes: <strong>${totalQuiz > 0 ? accuracy + '%' : 'Sense dades'}</strong></span>
+            <span>⭐ Descobertes: <strong>${wordsCount}</strong></span>
+          </div>
+
+          <div class="student-card-actions">
+            ${!isActive ? `
+              <button class="btn-primary" style="padding: 0.45rem 0.85rem; font-size: 0.88rem;" onclick="App.activateStudent('${s.id}')">
+                🚀 Activar
+              </button>
+            ` : `
+              <button class="btn-secondary" style="padding: 0.45rem 0.85rem; font-size: 0.88rem; background: #e0f2fe; color: #0369a1; border-color: #7dd3fc;" disabled>
+                ✓ En curs
+              </button>
+            `}
+            <button class="btn-secondary" style="padding: 0.45rem 0.85rem; font-size: 0.88rem;" onclick="App.showStudentReportModal('${s.id}')" title="Generar informe de progrés per a la família i la CAD">
+              📄 Informe
+            </button>
+            <button class="btn-secondary" style="padding: 0.45rem 0.65rem; font-size: 0.88rem; color: #ef4444;" onclick="App.deleteStudent('${s.id}')" title="Eliminar perfil d'alumne">
+              🗑️
+            </button>
+          </div>
+        </div>
+      `;
+    }).join("") : `
+      <div style="text-align: center; padding: 2.5rem 1rem; color: var(--text-muted); grid-column: 1 / -1;">
+        <div style="font-size: 3rem; margin-bottom: 0.5rem;">👥</div>
+        <h4 style="color: var(--text-heading); font-size: 1.2rem; margin-bottom: 0.4rem;">Cap alumne/a registrat encara</h4>
+        <p>Quan els alumnes inicien la sessió o prems "➕ Nou Alumne", es crearan els seus perfils acumulatius aquí.</p>
+      </div>
+    `;
+
+    const modalHtml = `
+      <div class="modal-overlay" id="students-modal" role="dialog" aria-modal="true" aria-labelledby="modal-students-title">
+        <div class="modal-content" style="max-width: 920px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+            <div>
+              <h3 id="modal-students-title" style="font-size: 1.35rem; color: var(--text-heading); margin-bottom: 0.2rem;">
+                👥 Quadern de Seguiment d'Alumnes
+              </h3>
+              <p style="color: var(--text-muted); font-size: 0.88rem;">
+                Gestió de perfils multialumne, historial de progrés acumulatiu i informes formatius per a famílies i la CAD.
+              </p>
+            </div>
+            <button class="btn-secondary" onclick="App.closeModal()" aria-label="Tancar finestra">✖️</button>
+          </div>
+
+          <div class="students-toolbar">
+            <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
+              <button class="btn-primary" style="padding: 0.5rem 1rem; font-size: 0.9rem;" onclick="App.toggleNewStudentForm()">
+                ➕ Nou Alumne
+              </button>
+              <button class="btn-secondary" style="padding: 0.5rem 0.9rem; font-size: 0.9rem;" onclick="App.showGuideModal('centre')" title="Protocol d'Acollida del Centre">
+                📖 Protocol CAD
+              </button>
+              <button class="btn-secondary" style="padding: 0.5rem 0.9rem; font-size: 0.9rem;" onclick="App.exportStudentsJSON()" title="Descarregar còpia de seguretat de tots els alumnes">
+                💾 Exportar Dades (.JSON)
+              </button>
+            </div>
+            <div style="font-size: 0.88rem; color: var(--text-muted); font-weight: 700;">
+              Total registrats: ${students.length} alumnes
+            </div>
+          </div>
+
+          <!-- Formulari per afegir nou alumne -->
+          <div id="new-student-form-wrap" style="display: none; background: var(--card-subtle-bg); border: 1.5px solid var(--border-color); border-radius: var(--radius-md); padding: 1.25rem; margin-bottom: 1.25rem;">
+            <h4 style="font-size: 1.05rem; color: var(--text-heading); margin-bottom: 0.85rem;">➕ Registrar un nou alumne/a</h4>
+            <form onsubmit="App.handleCreateStudent(event)" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)) auto; gap: 0.75rem; align-items: flex-end;">
+              <div>
+                <label style="display:block; font-size: 0.85rem; font-weight:700; margin-bottom: 0.35rem;">Nom de l'alumne/a *</label>
+                <input type="text" id="new-std-name" class="form-input" placeholder="Ex: Fatima, Omar, Chen..." required autocomplete="off" style="padding: 0.55rem 0.75rem;">
+              </div>
+              <div>
+                <label style="display:block; font-size: 0.85rem; font-weight:700; margin-bottom: 0.35rem;">Llengua pont inicial *</label>
+                <select id="new-std-lang" class="form-input" style="padding: 0.55rem 0.75rem;">
+                  <option value="es">🇪🇸 Castellano</option>
+                  <option value="fr">🇫🇷 Français</option>
+                  <option value="en">🇬🇧 English</option>
+                  <option value="ar">🇲🇦 العربية (Àrab)</option>
+                  <option value="uk">🇺🇦 Українська (Ucraïnès)</option>
+                  <option value="zh">🇨🇳 中文 (Xinès)</option>
+                </select>
+              </div>
+              <div style="display:flex; gap:0.4rem;">
+                <button type="submit" class="btn-primary" style="padding: 0.58rem 1rem;">Desar Alumne</button>
+                <button type="button" class="btn-secondary" style="padding: 0.58rem 0.8rem;" onclick="App.toggleNewStudentForm()">Cancel·lar</button>
+              </div>
+            </form>
+          </div>
+
+          <div class="students-grid">
+            ${studentsHtml}
+          </div>
+
+          <div class="modal-actions" style="margin-top: 1rem; border-top: 1px solid var(--border-color); padding-top: 1rem;">
+            <button class="btn-secondary" onclick="App.closeModal()">Tancar ✖️</button>
+          </div>
+        </div>
+      </div>
+    `;
+
+    document.getElementById("modal-container").innerHTML = modalHtml;
+  },
+
+  toggleNewStudentForm() {
+    const wrap = document.getElementById("new-student-form-wrap");
+    if (wrap) {
+      wrap.style.display = wrap.style.display === "none" ? "block" : "none";
+      if (wrap.style.display === "block") {
+        document.getElementById("new-std-name").focus();
+      }
+    }
+  },
+
+  handleCreateStudent(e) {
+    e.preventDefault();
+    const nameInput = document.getElementById("new-std-name");
+    const langInput = document.getElementById("new-std-lang");
+    const name = nameInput ? nameInput.value.trim() : "";
+    const bridgeLang = langInput ? langInput.value : "es";
+
+    if (!name) return;
+
+    const students = this.loadStudents();
+    const nowIso = new Date().toISOString();
+    const newStudent = {
+      id: "std_" + Date.now() + "_" + Math.random().toString(36).substr(2, 4),
+      name: name,
+      bridgeLang: bridgeLang,
+      avatar: "👤",
+      createdAt: nowIso,
+      lastActive: nowIso,
+      discoveredWords: [],
+      quizAnswers: [],
+      notes: ""
+    };
+
+    students.push(newStudent);
+    this.saveStudents(students);
+    this.showStudentsModal();
+  },
+
+  exportStudentsJSON() {
+    const students = this.loadStudents();
+    if (!students.length) {
+      alert("No hi ha alumnes registrats per exportar.");
+      return;
+    }
+    const jsonStr = JSON.stringify(students, null, 2);
+    const blob = new Blob([jsonStr], { type: "application/json;charset=utf-8;" });
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = `quadern_alumnes_acollida_${new Date().toISOString().split('T')[0]}.json`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  },
+
+  // --- INFORME FORMATIU BILINGÜE PER A FAMÍLIES I CAD ---
+  showStudentReportModal(studentId) {
+    let student = null;
+    if (studentId) {
+      student = this.getStudent(studentId);
+    }
+    if (!student && this.state.studentName) {
+      const students = this.loadStudents();
+      student = students.find(s => s.id === this.state.currentStudentId || s.name.toLowerCase() === this.state.studentName.toLowerCase());
+    }
+    if (!student) {
+      student = {
+        id: "temp",
+        name: this.state.studentName || "Alumne/a",
+        bridgeLang: this.state.bridgeLang || "es",
+        createdAt: new Date().toISOString(),
+        lastActive: new Date().toISOString(),
+        discoveredWords: Array.from(this.state.discoveredWords),
+        quizAnswers: this.state.quizAnswers || [],
+        notes: ""
+      };
+    }
+
+    const lang = student.bridgeLang || "es";
+    const flags = { es: "🇪🇸", fr: "🇫🇷", en: "🇬🇧", ar: "🇲🇦", uk: "🇺🇦", zh: "🇨🇳" };
+    const langNames = {
+      es: "Castellà",
+      fr: "Francès",
+      en: "Anglès",
+      ar: "Àrab",
+      uk: "Ucraïnès",
+      zh: "Xinès"
+    };
+
+    const allVocab = this.getAllVocabulary();
+    const totalVocabCount = allVocab.length;
+    const discoveredWordsList = (student.discoveredWords || []).map(id => this.getWord(id)).filter(Boolean);
+    const discoveredCount = discoveredWordsList.length;
+    const progressPct = totalVocabCount > 0 ? Math.min(100, Math.round((discoveredCount / totalVocabCount) * 100)) : 0;
+
+    const quizAnswers = student.quizAnswers || [];
+    const correctQuiz = quizAnswers.filter(q => q.isCorrect).length;
+    const totalQuiz = quizAnswers.length;
+    const accuracy = totalQuiz > 0 ? Math.round((correctQuiz / totalQuiz) * 100) : 0;
+
+    const dateFormatted = student.lastActive ? new Date(student.lastActive).toLocaleDateString('ca-ES', {
+      year: 'numeric', month: 'long', day: 'numeric'
+    }) : new Date().toLocaleDateString('ca-ES');
+
+    // Missatge familiar bilingüe
+    const familyMessages = {
+      ca: `${this.escapeHTML(student.name)} està fent grans progressos en l'adquisició del català a través de l'Aula d'Acollida Digital. Us animem a continuar recolzant el seu aprenentatge compartint moments de conversa a casa i valorant la seva curiositat per la nova llengua de l'escola.`,
+      es: `${this.escapeHTML(student.name)} está progresando muy positivamente en la adquisición del catalán mediante el Aula de Acogida Digital. Les animamos a seguir apoyando su aprendizaje compartiendo momentos de conversación en casa y valorando su curiosidad por la nueva lengua escolar.`,
+      fr: `${this.escapeHTML(student.name)} fait d'excellents progrès dans l'apprentissage du catalan grâce à la Salle d'Accueil Numérique. Nous vous encourageons à soutenir son apprentissage par des moments d'échange et de discussion à la maison.`,
+      en: `${this.escapeHTML(student.name)} is making great progress in learning Catalan through the Digital Welcome Classroom. We encourage you to support their learning journey by sharing conversations at home and valuing their curiosity.`,
+      ar: `يحرز ${this.escapeHTML(student.name)} تقدماً ممتازاً في تعلم اللغة الكتالونية من خلال فصل الاستقبال الرقمي. نشجعكم على مواصلة دعمه من خلال التحدث والمشاركة في المنزل والثناء على مجهوده.`,
+      uk: `${this.escapeHTML(student.name)} робить чудові успіхи у засвоєнні каталонської мови через Цифровий Клас Прийому. Заохочуємо підтримувати дитину вдома спільними розмовами та схвалювати її старанність.`,
+      zh: `${this.escapeHTML(student.name)} 通过数字化迎新课堂在加泰罗尼亚语学习方面取得了显著进步。我们鼓励家长在家中多陪伴交流，共同促进语言学习与融入。`
+    };
+
+    const isArabic = lang === "ar";
+    const familyMsgBridge = familyMessages[lang] || familyMessages.es;
+
+    // Repartiment per categories
+    const categoryStats = ACOLLIDA_DATA.categories.map(cat => {
+      const catWords = allVocab.filter(w => w.categoria === cat.id);
+      const learned = catWords.filter(w => (student.discoveredWords || []).includes(w.id)).length;
+      return { cat, learned, total: catWords.length };
+    }).filter(c => c.learned > 0);
+
+    const categoriesBreakdownHtml = categoryStats.length ? categoryStats.map(c => `
+      <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 0.5rem 0.75rem; font-size: 0.85rem; display: flex; justify-content: space-between; align-items: center;">
+        <span>${c.cat.icon} <strong>${c.cat.titol.ca}</strong></span>
+        <span style="font-weight: 700; color: #0284c7;">${c.learned} / ${c.total}</span>
+      </div>
+    `).join("") : `<p style="color: #64748b; font-size: 0.85rem; grid-column: 1 / -1;">Encara no s'ha explorat cap categoria en detall.</p>`;
+
+    const wordsBadgesHtml = discoveredWordsList.slice(0, 32).map(w => {
+      const bridgeWord = w[lang] || w.es || "";
+      return `<span style="background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd; border-radius: 4px; padding: 0.2rem 0.5rem; font-size: 0.8rem; font-weight: 600;">${this.escapeHTML(w.ca)} <em style="font-weight: 400; opacity: 0.8;">(${this.escapeHTML(bridgeWord)})</em></span>`;
+    }).join(" ");
+
+    const modalHtml = `
+      <div class="modal-overlay" id="student-report-modal" role="dialog" aria-modal="true" aria-labelledby="report-doc-title">
+        <div class="modal-content" style="max-width: 860px; max-height: 90vh; overflow-y: auto;">
+          <div class="student-report-paper">
+            <div class="report-header">
+              <div style="font-size: 0.85rem; font-weight: 700; color: #64748b; letter-spacing: 0.05em; margin-bottom: 0.25rem;">
+                GENERALITAT DE CATALUNYA • SERVEI EDUCATIU
+              </div>
+              <h2 id="report-doc-title">INFORME DE SEGUIMENT DE L'AULA D'ACOLLIDA</h2>
+              <div style="font-size: 0.95rem; color: #475569;">
+                Suport Lingüístic i Social (SLS) • Document per a la Família i la CAD
+              </div>
+            </div>
+
+            <div class="report-grid">
+              <div>
+                <p style="margin: 0 0 0.4rem 0;"><strong>Alumne/a:</strong> ${this.escapeHTML(student.name)}</p>
+                <p style="margin: 0 0 0.4rem 0;"><strong>Llengua de suport inicial:</strong> ${flags[lang] || ''} ${langNames[lang] || lang.toUpperCase()}</p>
+                <p style="margin: 0;"><strong>Data de l'informe:</strong> ${dateFormatted}</p>
+              </div>
+              <div>
+                <p style="margin: 0 0 0.4rem 0;"><strong>Vocabulari assolit:</strong> <strong>${discoveredCount}</strong> de ${totalVocabCount} paraules (${progressPct}%)</p>
+                <p style="margin: 0 0 0.4rem 0;"><strong>Precisió en activitats i reptes:</strong> <strong>${totalQuiz > 0 ? accuracy + '%' : 'En procés d\'avaluació'}</strong> (${correctQuiz}/${totalQuiz})</p>
+                <p style="margin: 0;"><strong>Estat d'incorporació:</strong> Fase d'immersió i acollida</p>
+              </div>
+            </div>
+
+            <!-- Missatge per a la família en català i en la llengua d'origen -->
+            <div class="report-family-message">
+              <div style="font-weight: 800; font-size: 0.95rem; margin-bottom: 0.4rem; color: #1e40af;">
+                💌 Comunicació amb la Família / Carta a la llar:
+              </div>
+              <p style="margin: 0 0 0.6rem 0; font-size: 0.92rem; line-height: 1.5;">
+                "${familyMessages.ca}"
+              </p>
+              ${lang !== 'ca' ? `
+                <div style="border-top: 1px dashed #93c5fd; padding-top: 0.5rem; margin-top: 0.5rem; font-style: italic; font-size: 0.9rem; line-height: 1.5; color: #1e3a8a;" class="${isArabic ? 'arabic-text' : ''}">
+                  "${familyMsgBridge}"
+                </div>
+              ` : ''}
+            </div>
+
+            <h4 style="font-size: 1rem; color: #0f172a; margin: 1rem 0 0.5rem 0;">Distribució del lèxic treballat per àmbits:</h4>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0.5rem; margin-bottom: 1.25rem;">
+              ${categoriesBreakdownHtml}
+            </div>
+
+            <h4 style="font-size: 1rem; color: #0f172a; margin: 1rem 0 0.5rem 0;">Mostra de vocabulari adquirit (${discoveredCount} paraules):</h4>
+            <div style="display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 1.25rem; max-height: 140px; overflow-y: auto; padding: 0.5rem; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px;">
+              ${wordsBadgesHtml || '<span style="color: #94a3b8; font-size: 0.85rem;">Cap paraula registrada encara.</span>'}
+            </div>
+
+            <div style="margin-top: 1rem;">
+              <label for="report-student-notes" style="font-size: 0.88rem; font-weight: 700; color: #334155; display: block; margin-bottom: 0.3rem;">
+                Observacions pedagògiques del docent / Mesures DUA aplicades:
+              </label>
+              <textarea 
+                id="report-student-notes" 
+                class="form-input" 
+                rows="3" 
+                placeholder="Ex: Mostra bona comprensió auditiva i interès per participar. Respon favorablement al suport visual i als jocs de discriminació auditiva..."
+                style="width: 100%; font-size: 0.88rem; box-sizing: border-box;"
+                onchange="App.saveStudentNotes('${student.id}', this.value)"
+              >${this.escapeHTML(student.notes || '')}</textarea>
+            </div>
+
+            <div class="report-signature-row">
+              <div class="report-sig-box">
+                Segell del Centre Educatiu
+              </div>
+              <div class="report-sig-box">
+                Signatura del/de la Docent d'Acollida
+              </div>
+              <div class="report-sig-box">
+                Rebut de la Família
+              </div>
+            </div>
+          </div>
+
+          <div class="modal-actions" style="margin-top: 1.25rem;">
+            <button class="btn-primary" onclick="window.print()" aria-label="Imprimir informe en PDF o paper">
+              🖨️ Imprimir Informe (PDF)
+            </button>
+            <button class="btn-secondary" onclick="App.showStudentsModal()" aria-label="Tornar al quadern de seguiment">
+              👥 Tornar al Quadern
+            </button>
+            <button class="btn-secondary" onclick="App.closeModal()" aria-label="Tancar finestra">
+              Tancar ✖️
+            </button>
+          </div>
+        </div>
+      </div>
+    `;
+
+    document.getElementById("modal-container").innerHTML = modalHtml;
+  },
+
+  // --- GUIA DOCENT I ORIENTACIONS PEDAGÒGIQUES ---
+  showGuideModal(tabId = "pedagogia") {
+    this.state.guideTab = tabId;
+    const modalContainer = document.getElementById("modal-container");
+
+    const sections = {
+      pedagogia: `
+        <div class="guide-section">
+          <h3>🏛️ Marc Normatiu i Suport Lingüístic i Social (SLS)</h3>
+          <p>
+            L'atenció educativa a l'alumnat d'origen estranger a Catalunya s'emmarca en la <strong>Llei 12/2009 d'Educació (LEC)</strong> i el <strong>Decret 150/2017</strong> d'atenció educativa a l'alumnat en el marc d'un sistema educatiu inclusiu. L'<strong>Aula d'Acollida</strong> no constitueix un itinerari paral·lel ni un espai segregador, sinó un recurs de suport intensiu, flexible i temporal integrat en el Projecte Educatiu de Centre (PEC).
+          </p>
+
+          <div class="guide-callout">
+            <strong>🎯 Objectiu central:</strong> Capacitar comunicativament l'alumne perquè pugui participar progressivament, amb autonomia i benestar emocional, en les activitats educatives i relacionals del seu grup-classe ordinari.
+          </div>
+
+          <h3>🧠 La distinció BICS vs. CALP (Jim Cummins)</h3>
+          <p>
+            Segons les investigacions del sociolingüista Jim Cummins, en el desenvolupament lingüístic d'una segona llengua (L2) intervenen dos nivells de competència clarament diferenciats:
+          </p>
+
+          <div class="guide-grid-features">
+            <div class="guide-feature-card">
+              <h4>🗣️ BICS (Habilitats Conversacionals Bàsiques)</h4>
+              <p>
+                <strong>Basic Interpersonal Communicative Skills:</strong> Llenguatge contextualitzat, quotidià, de comunicació cara a cara (salutacions, necessitats bàsiques, jocs al pati). S'adquireix habitualment en <strong>1 o 2 anys</strong>. Aquesta aplicació se centra fonamentalment a bastir aquest nivell d'arrencada amb eficàcia.
+              </p>
+            </div>
+            <div class="guide-feature-card">
+              <h4>📚 CALP (Competència Acadèmica Cognitiva)</h4>
+              <p>
+                <strong>Cognitive Academic Language Proficiency:</strong> Llenguatge formal, descontextualitzat i abstracte propi de les àrees de coneixement (matemàtiques, ciències naturals, ciències socials). Requereix habitualment d'entre <strong>5 i 7 anys</strong> d'acompanyament docent continuat.
+              </p>
+            </div>
+          </div>
+
+          <h3>🌱 Disseny Universal per a l'Aprenentatge (DUA)</h3>
+          <p>
+            L'arquitectura tecnopedagògica d'<em>Aula d'Acollida Digital</em> segueix les tres pautes essencials del DUA:
+          </p>
+          <ul style="padding-left: 1.25rem; margin-bottom: 1rem; color: var(--text-main);">
+            <li style="margin-bottom: 0.4rem;"><strong>Múltiples mitjans de representació:</strong> Cada terme s'ofereix mitjançant canal visual (icona clara d'alta llegibilitat), canal acústic (síntesi de veu catalana d'alta fidelitat amb velocitat natural regulada), canal ortogràfic i ancoratge semàntic en la llengua d'origen.</li>
+            <li style="margin-bottom: 0.4rem;"><strong>Múltiples mitjans d'acció i expressió:</strong> L'alumnat pot interactuar mitjançant respostes tàctils, jocs de discriminació auditiva, emparellament lúdic de memòria, detecció d'intrusos i pràctica grafomotora sobre paper imprès.</li>
+            <li style="margin-bottom: 0.4rem;"><strong>Múltiples mitjans d'implicació:</strong> Feedback formatiu immediat, gamificació sense penalitzacions punitives que redueix el filtre afectiu (Krashen) i reconeixement de l'èxit a través del Passaport d'Acollida i el Quadern de Seguiment.</li>
+          </ul>
+
+          <h3>🌍 Valoració de la Llengua Materna (L1) com a Palanca</h3>
+          <p>
+            L'alumnat nouvingut posseeix un ric bagatge lingüístic i cultural previ. L'ús de les llengües pont (castellà, francès, anglès, àrab, ucraïnès, xinès) activa el principi d'intercomprensió: l'infant no aprèn el concepte de nou, sinó que transfereix el significat que ja coneix a la nova etiqueta lèxica en català.
+          </p>
+        </div>
+      `,
+
+      eines: `
+        <div class="guide-section">
+          <h3>🛠️ Metodologia Pedagògica de les Eines de l'App</h3>
+          <p>
+            Cada funcionalitat d'<em>Aula d'Acollida Digital</em> ha estat dissenyada per cobrir una fase concreta de l'itinerari d'aprenentatge lingüístic:
+          </p>
+
+          <div class="guide-grid-features">
+            <div class="guide-feature-card">
+              <h4>🔍 Mode Descobreix</h4>
+              <p>
+                Exploració autònoma i guiada. L'alumne escolta la veu en català, observa la representació gràfica i comprova la traducció de suport. Ideal per a la fase inicial d'escolta i immersió passiva.
+              </p>
+            </div>
+            <div class="guide-feature-card">
+              <h4>👂 Repte d'Escolta i Reconeixement</h4>
+              <p>
+                Entrena la discriminació fonològica i la comprensió auditiva abans d'exigir la producció oral. L'alumne escolta la paraula i selecciona la targeta corresponent.
+              </p>
+            </div>
+            <div class="guide-feature-card">
+              <h4>🧩 Joc de Memòria (Memory)</h4>
+              <p>
+                Estimula la memòria de treball visuoespacial i l'associació concepte-paraula mitjançant la repetició lúdica i el descobriment actiu per parelles.
+              </p>
+            </div>
+            <div class="guide-feature-card">
+              <h4>🕵️ Minijoc "Troba l'intrús"</h4>
+              <p>
+                Fomenta el raonament semàntic de nivell superior. L'alumne identifica l'element que no pertany al grup temàtic, reforçant els límits de cada camp lèxic.
+              </p>
+            </div>
+            <div class="guide-feature-card">
+              <h4>📝 Generador de Fitxes d'Aula</h4>
+              <p>
+                Connecta el món digital amb la realitat manuscrita. Permet generar a l'instant fulls de feina amb pauta escolar (doble línia i quadrícula), unió amb fletxes i sopa de lletres 8x8.
+              </p>
+            </div>
+            <div class="guide-feature-card">
+              <h4>🏫 Espai Docent de Centre</h4>
+              <p>
+                Personalització del lèxic propi de la vostra escola (noms d'espais, serveis, persones clau). Permet exportar i importar en format JSON per compartir-ho entre equips docents.
+              </p>
+            </div>
+            <div class="guide-feature-card">
+              <h4>👥 Quadern Multialumne</h4>
+              <p>
+                Gestió de perfils per a tauletes compartides d'aula. Guarda de forma persistent les paraules explorades, percentatges de precisió i historial individualitzat.
+              </p>
+            </div>
+            <div class="guide-feature-card">
+              <h4>💌 Informes Bilingües de Progrés</h4>
+              <p>
+                Avaluació formadora i comunicació amb les famílies. Genera informes imprimibles amb missatges encoratjadors en la llengua d'origen de la llar i espai per a la CAD.
+              </p>
+            </div>
+          </div>
+        </div>
+      `,
+
+      centre: `
+        <div class="guide-section">
+          <h3>🏫 Protocol d'Acollida al Centre Educatiu</h3>
+          <p>
+            L'arribada d'un nou alumne a l'escola requereix una planificació coordinada entre l'equip directiu, el tutor o tutora de grup-classe, el professorat d'aula d'acollida i la Comissió d'Atenció a la Diversitat (CAD):
+          </p>
+
+          <div style="background: var(--card-subtle-bg); border-left: 4px solid var(--primary-color); padding: 1rem 1.25rem; border-radius: 0 var(--radius-md) var(--radius-md) 0; margin-bottom: 1.25rem;">
+            <h4 style="margin: 0 0 0.35rem 0; color: var(--text-heading);">📅 Fases Temporals Recomanades:</h4>
+            <ol style="margin: 0; padding-left: 1.25rem; line-height: 1.6;">
+              <li><strong>Primeres 48 hores (Benvinguda i Seguretat Afectiva):</strong> Recepció de la família amb suport visual o traductor, assignació d'una parella de suport d'alumnes a l'aula ordinària i recorregut físic pel centre.</li>
+              <li><strong>Primeres 2 setmanes (Avaluació Inicial no Invasiva):</strong> Observació de les habilitats de comunicació i alfabetització utilitzant el mode Descobreix de l'app. No aplicar proves d'avaluació estressants.</li>
+              <li><strong>Mesos 1 a 6 (Acollida Intensiva):</strong> Suport intensiu a l'Aula d'Acollida (màxim 50% de l'horari lectiu). Prioritzar l'assistència al grup ordinari en àrees d'alta interacció lúdica i baixa exigència de llenguatge acadèmic (Educació Física, Plàstica, Música).</li>
+              <li><strong>Segon curs (Transició cap al CALP):</strong> Acompanyament compartit en el vocabulari de les àrees curriculars (matemàtiques, medi social i natural). Reducció progressiva de les hores d'aula d'acollida.</li>
+            </ol>
+          </div>
+
+          <h3>📋 Coordinació amb la CAD (Comissió d'Atenció a la Diversitat)</h3>
+          <p>
+            La CAD és l'òrgan encarregat de fer el seguiment periòdic de les mesures aplicades a l'alumnat nouvingut:
+          </p>
+          <ul style="padding-left: 1.25rem; margin-bottom: 1rem;">
+            <li>El <strong>Quadern de Seguiment</strong> de l'aplicació permet extreure dades objectives (paraules dominades, categories assolides, percentatge d'encert en discriminació auditiva).</li>
+            <li>Aquestes dades es poden exportar directament en <strong>.CSV</strong> o imprimir en l'<strong>Informe de Progrés</strong> per adjuntar-les al Pla Individualitzat (PI) o expedient de seguiment del centre.</li>
+          </ul>
+
+          <h3>🤝 Comunicació i Vinculació amb la Família</h3>
+          <p>
+            Les famílies de l'alumnat nouvingut sovint experimenten incertesa o desconeixement sobre el funcionament del sistema educatiu català. Lliurar-los l'informe periòdic amb el missatge imprès en la seva pròpia llengua (àrab, ucraïnès, xinès, francès, anglès, castellà) és una estratègia d'alt valor per:
+          </p>
+          <ul style="padding-left: 1.25rem; margin-bottom: 0.5rem;">
+            <li>Visibilitzar i valorar els progressos reals de l'infant, evitant la sensació d'estancament.</li>
+            <li>Reconèixer la dignitat i el valor de la llengua familiar de la llar.</li>
+            <li>Convidar les famílies a mantenir moments de conversa i compartir les paraules que l'infant aprèn cada dia.</li>
+          </ul>
+        </div>
+      `,
+
+      orientacions: `
+        <div class="guide-section">
+          <h3>💡 Estratègies d'Aula i Atenció a la Diversitat (DUA)</h3>
+          <p>
+            Pautes pràctiques per a la intervenció diària tant a l'Aula d'Acollida com a l'aula ordinària:
+          </p>
+
+          <div class="guide-callout" style="border-left-color: #3b82f6;">
+            <strong>🤫 Respecte absolut pel "Període de Silenci" (Silent Period):</strong><br>
+            Durant les primeres setmanes o mesos, és molt habitual que l'alumnat nouvingut no produeixi gairebé cap paraula en la nova llengua. Això no indica manca d'atenció ni retard en l'aprenentatge; el cervell està processant intensament la nova fonètica i estructurant el mapa conceptual. Mai forceu un alumne a parlar en públic si no se sent segur. Permeteu-li respondre assenyalant, triant a la pantalla o fent gestos.
+          </div>
+
+          <h3>🪜 Bastida Lingüística (Scaffolding) Efectiva</h3>
+          <ul style="padding-left: 1.25rem; margin-bottom: 1rem;">
+            <li style="margin-bottom: 0.5rem;"><strong>Rutines visuals estables:</strong> Comenceu i acabeu les sessions de la mateixa manera (passar llista, salutació inicial, revisió de l'agenda visual a la pissarra). La previsibilitat redueix l'estrès cognitiu.</li>
+            <li style="margin-bottom: 0.5rem;"><strong>Input comprensible (Krashen - i+1):</strong> Parleu a velocitat moderada, amb una vocalització clara, fent pauses i acompanyant les instruccions amb gestos expressius o amb les imatges de l'aplicació.</li>
+            <li style="margin-bottom: 0.5rem;"><strong>Reformulació i expansió:</strong> Si l'alumne diu "llapis", responeu confirmant la frase completa: <em>"Sí, molt bé, aquest és el llapis per escriure a la llibreta"</em>.</li>
+            <li style="margin-bottom: 0.5rem;"><strong>Aprofitar els recursos tecnològics:</strong> Deixeu que l'infant repeteixi l'àudio de l'aplicació amb auriculars tantes vegades com necessiti sense por de fer judicis ni interrupcions.</li>
+          </ul>
+
+          <h3>👥 Dinàmiques d'Iguals i Treball Cooperatiu</h3>
+          <p>
+            L'aprenentatge d'una llengua s'accelera quan es produeix en contextos comunicatius reals d'interacció entre infants:
+          </p>
+          <ul style="padding-left: 1.25rem; margin-bottom: 0.5rem;">
+            <li><strong>La parella lingüística:</strong> Asseieu l'alumne nouvingut al costat d'un/a company/a d'aula empàtic/a que parli el català de forma fluida i que actuï com a model lingüístic i guia d'aula.</li>
+            <li><strong>Rols cooperatius concrets:</strong> En tasques de grup, assigneu a l'alumne nouvingut rols actius que no depenguin exclusivament d'una expressió escrita complexa (com ara repartidor de material, cronometrador, o dibuixant).</li>
+            <li><strong>Celebració de la diversitat lingüística:</strong> Convidar tota la classe a aprendre algunes paraules en la llengua d'origen de l'alumne nouvingut (salutacions, números) transforma la seva condició de "diferent" en una riquesa col·lectiva per al grup.</li>
+          </ul>
+        </div>
+      `
+    };
+
+    const activeContent = sections[tabId] || sections.pedagogia;
+
+    const modalHtml = `
+      <div class="modal-overlay" id="guide-modal" role="dialog" aria-modal="true" aria-labelledby="modal-guide-title">
+        <div class="modal-content" style="max-width: 900px; max-height: 90vh; display: flex; flex-direction: column;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.75rem;">
+            <div>
+              <h3 id="modal-guide-title" style="font-size: 1.35rem; color: var(--text-heading); margin-bottom: 0.2rem;">
+                📖 Guia Docent i Orientacions Pedagògiques
+              </h3>
+              <p style="color: var(--text-muted); font-size: 0.88rem; margin: 0;">
+                Marc metodològic, DUA, protocols d'acollida i estratègies d'intervenció per a l'Aula d'Acollida Digital.
+              </p>
+            </div>
+            <button class="btn-secondary" onclick="App.closeModal()" aria-label="Tancar finestra">✖️</button>
+          </div>
+
+          <div class="guide-tabs">
+            <button class="guide-tab-btn ${tabId === 'pedagogia' ? 'active' : ''}" onclick="App.showGuideModal('pedagogia')">
+              🏛️ Marc Normatiu i SLS
+            </button>
+            <button class="guide-tab-btn ${tabId === 'eines' ? 'active' : ''}" onclick="App.showGuideModal('eines')">
+              🛠️ Metodologia de les Eines
+            </button>
+            <button class="guide-tab-btn ${tabId === 'centre' ? 'active' : ''}" onclick="App.showGuideModal('centre')">
+              🏫 Protocol d'Acollida i CAD
+            </button>
+            <button class="guide-tab-btn ${tabId === 'orientacions' ? 'active' : ''}" onclick="App.showGuideModal('orientacions')">
+              💡 Estratègies d'Aula i DUA
+            </button>
+          </div>
+
+          <div class="guide-content-area" id="guide-content-area">
+            ${activeContent}
+          </div>
+
+          <div class="modal-actions" style="margin-top: 1rem; border-top: 1px solid var(--border-color); padding-top: 0.75rem; display: flex; justify-content: space-between;">
+            <button class="btn-primary" onclick="App.printGuideDossier()" title="Imprimir el dossier pedagògic complet en PDF o paper">
+              🖨️ Imprimeix Dossier Guia (PDF)
+            </button>
+            <div style="display: flex; gap: 0.5rem;">
+              <button class="btn-secondary" onclick="App.showStudentsModal()" title="Obrir quadern de seguiment d'alumnes">
+                👥 Quadern d'Alumnes
+              </button>
+              <button class="btn-secondary" onclick="App.closeModal()">
+                Tancar ✖️
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+
+    modalContainer.innerHTML = modalHtml;
+  },
+
+  printGuideDossier() {
+    const modalContainer = document.getElementById("modal-container");
+    const fullDossierHtml = `
+      <div class="modal-overlay" id="guide-print-modal" role="dialog" aria-modal="true">
+        <div class="modal-content" style="max-width: 900px;">
+          <div class="guide-print-sheet">
+            <div class="report-header">
+              <div style="font-size: 0.85rem; font-weight: 700; color: #64748b; letter-spacing: 0.05em; margin-bottom: 0.25rem;">
+                AULA D'ACOLLIDA DIGITAL • GENERALITAT DE CATALUNYA
+              </div>
+              <h2 style="font-size: 1.4rem; font-weight: 800; color: #0f172a; margin-bottom: 0.35rem;">
+                DOSSIER DE GUIA DOCENT I ORIENTACIONS PEDAGÒGIQUES
+              </h2>
+              <p style="color: #475569; font-size: 0.95rem; margin: 0;">
+                Marc Normatiu, Metodologia DUA, Protocols de Centre i Estratègies d'Atenció a la Diversitat Lingüística
+              </p>
+            </div>
+
+            <div style="margin-bottom: 2rem;">
+              <h3 style="font-size: 1.2rem; color: #0f172a; border-bottom: 1.5px solid #0f172a; padding-bottom: 0.35rem; margin-bottom: 0.75rem;">
+                1. MARC NORMATIU I SUPORT LINGÜÍSTIC I SOCIAL (SLS)
+              </h3>
+              <p style="line-height: 1.5; font-size: 0.92rem; color: #1e293b;">
+                L'atenció educativa a l'alumnat d'origen estranger s'emmarca en la Llei 12/2009 d'Educació (LEC) i el Decret 150/2017 d'atenció inclusiva. L'Aula d'Acollida és un recurs de suport intensiu, flexible i temporal integrat en el Projecte Educatiu de Centre (PEC).
+              </p>
+              <p style="line-height: 1.5; font-size: 0.92rem; color: #1e293b;">
+                <strong>BICS vs. CALP (Jim Cummins):</strong> Es distingeixen les habilitats comunicatives interpersonals bàsiques (BICS, 1-2 anys) de la competència cognitiva acadèmica (CALP, 5-7 anys). L'aplicació prioritza la consolidació de les BICS com a plataforma per al CALP.
+              </p>
+              <p style="line-height: 1.5; font-size: 0.92rem; color: #1e293b;">
+                <strong>DUA (Disseny Universal per a l'Aprenentatge):</strong> Múltiples formes de representació (visual, àudio, text, llengua pont), d'expressió (tàctil, jocs, fitxes de cal·ligrafia) i d'implicació (reforç positiu, absència de penalització punitiva).
+              </p>
+            </div>
+
+            <div style="margin-bottom: 2rem;">
+              <h3 style="font-size: 1.2rem; color: #0f172a; border-bottom: 1.5px solid #0f172a; padding-bottom: 0.35rem; margin-bottom: 0.75rem;">
+                2. METODOLOGIA DE LES EINES DE L'APLICACIÓ
+              </h3>
+              <p style="line-height: 1.5; font-size: 0.92rem; color: #1e293b;">
+                <strong>Mode Descobreix:</strong> Exploració autònoma amb àudio natiu en català i ancoratge en la llengua de suport.<br>
+                <strong>Reptes d'Escolta i Memory:</strong> Estimulació de la discriminació fonètica i memòria de treball visuoespacial.<br>
+                <strong>Minijoc "Troba l'intrús":</strong> Treball de categorització semàntica superior.<br>
+                <strong>Generador de Fitxes d'Aula:</strong> Transferència al paper amb pauta doble línia i quadrícula, unió i sopes de lletres 8x8.<br>
+                <strong>Espai Docent i Quadern Multialumne:</strong> Personalització lèxica de centre i seguiment de progrés amb informes bilingües.
+              </p>
+            </div>
+
+            <div style="margin-bottom: 2rem;">
+              <h3 style="font-size: 1.2rem; color: #0f172a; border-bottom: 1.5px solid #0f172a; padding-bottom: 0.35rem; margin-bottom: 0.75rem;">
+                3. PROTOCOL D'ACOLLIDA AL CENTRE I CAD
+              </h3>
+              <p style="line-height: 1.5; font-size: 0.92rem; color: #1e293b;">
+                <strong>Primeres 48h:</strong> Recepció càlida, tutorització entre iguals (parella de suport), reconeixement d'espais.<br>
+                <strong>Primeres 2 setmanes:</strong> Avaluació diagnòstica no invasiva a través de l'exploració lúdica de l'app.<br>
+                <strong>Mesos 1 a 6:</strong> Immersió intensiva combinada amb aula ordinària en àrees d'alta interacció.<br>
+                <strong>CAD i Famílies:</strong> Seguiment objectiu de dades mitjançant els informes bilingües i el quadern de seguiment.
+              </p>
+            </div>
+
+            <div style="margin-bottom: 2rem;">
+              <h3 style="font-size: 1.2rem; color: #0f172a; border-bottom: 1.5px solid #0f172a; padding-bottom: 0.35rem; margin-bottom: 0.75rem;">
+                4. ESTRATÈGIES D'AULA I ATENCIÓ A LA DIVERSITAT
+              </h3>
+              <p style="line-height: 1.5; font-size: 0.92rem; color: #1e293b;">
+                <strong>Període de Silenci:</strong> Respecte escrupolós de la fase receptiva inicial sense forçar la parla en públic.<br>
+                <strong>Bastida Lingüística:</strong> Rutines estables, input comprensible (i+1), suport visual i gestual sistemàtic.<br>
+                <strong>Cohesió Social:</strong> Tutorització entre iguals, aprenentatge cooperatiu i valoració del patrimoni multilingüe.
+              </p>
+            </div>
+
+            <div style="margin-top: 2.5rem; border-top: 1px dashed #94a3b8; padding-top: 1rem; display: flex; justify-content: space-between; font-size: 0.85rem; color: #64748b;">
+              <span>Aula d'Acollida Digital • David Cordones (2026)</span>
+              <span>Llicència de codi: AGPL v3 • Continguts: CC BY-SA 4.0</span>
+            </div>
+          </div>
+
+          <div class="modal-actions" style="margin-top: 1rem;">
+            <button class="btn-primary" onclick="window.print()">🖨️ Imprimir Dossier ara</button>
+            <button class="btn-secondary" onclick="App.showGuideModal('pedagogia')">⬅️ Tornar a la Guia Interactiva</button>
+            <button class="btn-secondary" onclick="App.closeModal()">Tancar ✖️</button>
+          </div>
+        </div>
+      </div>
+    `;
+
+    modalContainer.innerHTML = fullDossierHtml;
+    setTimeout(() => {
+      window.print();
+    }, 300);
   },
 
   // Exportador de dades CSV compatible amb Excel i Google Sheets
@@ -1660,6 +2533,15 @@ const App = {
             <button class="teacher-btn-action primary" onclick="App.toggleCustomWordForm()">
               ➕ Nova Paraula / Espai
             </button>
+            <button class="teacher-btn-action" onclick="App.showStudentsModal()" title="Quadern de seguiment d'alumnes">
+              👥 Alumnes
+            </button>
+            <button class="teacher-btn-action" onclick="App.showGuideModal()" title="Guia Docent i Orientacions Pedagògiques">
+              📖 Guia Docent
+            </button>
+            <button class="teacher-btn-action" onclick="App.showWorksheetModal()" title="Generar fitxes d'activitats en paper de qualsevol tema">
+              📝 Fitxes d'Aula
+            </button>
             <button class="teacher-btn-action" onclick="App.exportCustomVocabularyJSON()">
               💾 Exporta (.JSON)
             </button>
@@ -1667,9 +2549,6 @@ const App = {
               📂 Importa (.JSON)
             </button>
             <input type="file" id="import-json-input" accept=".json" style="display: none;" onchange="App.handleImportJSON(event)">
-            <button class="teacher-btn-action" onclick="App.showWorksheetModal()" title="Generar fitxes d'activitats en paper de qualsevol tema">
-              📝 Fitxes d'Aula
-            </button>
             ${customList.length ? `
               <button class="teacher-btn-action" onclick="App.clearAllCustomVocabulary()" style="color: #ef4444; margin-left: auto;">
                 🗑️ Netejar tot

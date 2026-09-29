@@ -1931,7 +1931,11 @@ a:focus-visible,
   .flashcards-sheet,
   .flashcards-sheet *,
   .worksheet-paper,
-  .worksheet-paper * {
+  .worksheet-paper *,
+  .student-report-paper,
+  .student-report-paper *,
+  .guide-print-sheet,
+  .guide-print-sheet * {
     visibility: visible;
   }
   .modal-overlay {
@@ -1952,12 +1956,16 @@ a:focus-visible,
   }
   .modal-actions,
   .worksheet-toolbar,
+  .students-toolbar,
+  .guide-tabs,
   .app-header,
   .app-footer,
   .close-btn {
     display: none !important;
   }
-  .worksheet-paper {
+  .worksheet-paper,
+  .student-report-paper,
+  .guide-print-sheet {
     width: 100% !important;
     max-width: 100% !important;
     margin: 0 !important;
@@ -1969,7 +1977,9 @@ a:focus-visible,
     page-break-inside: avoid !important;
     break-inside: avoid !important;
   }
-  .worksheet-paper * {
+  .worksheet-paper *,
+  .student-report-paper *,
+  .guide-print-sheet * {
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
   }
@@ -2242,3 +2252,324 @@ a:focus-visible,
   font-size: 3rem;
   margin-bottom: 0.5rem;
 }
+
+/* --- CHIPS D'ALUMNES A LA PANTALLA INICIAL --- */
+.students-quick-wrap {
+  margin-bottom: 1.5rem;
+  background: var(--card-subtle-bg);
+  border: 1px solid var(--border-color);
+  padding: 1rem;
+  border-radius: var(--radius-md);
+  text-align: left;
+}
+
+.students-quick-title {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--text-heading);
+  margin-bottom: 0.6rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.students-chips-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.student-chip-btn {
+  background: var(--card-bg);
+  border: 1.5px solid var(--border-color);
+  border-radius: var(--radius-full);
+  padding: 0.45rem 0.9rem;
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: var(--text-main);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.student-chip-btn:hover {
+  border-color: var(--primary-color);
+  background: var(--primary-color);
+  color: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
+}
+
+/* --- QUADERN DE SEGUIMENT D'ALUMNES --- */
+.students-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-bottom: 1.25rem;
+  background: var(--card-subtle-bg);
+  border: 1px solid var(--border-color);
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius-md);
+}
+
+.students-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.25rem;
+  margin-bottom: 1.25rem;
+}
+
+.student-profile-card {
+  background: var(--card-bg);
+  border: 2px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.student-profile-card:hover {
+  border-color: var(--primary-color);
+  box-shadow: var(--shadow-sm);
+}
+
+.student-profile-card.active-student {
+  border-color: #10b981;
+  background: rgba(16, 185, 129, 0.04);
+}
+
+.student-card-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.student-card-avatar {
+  font-size: 2.2rem;
+  background: var(--card-subtle-bg);
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1.5px solid var(--border-color);
+  flex-shrink: 0;
+}
+
+.student-card-meta h4 {
+  font-size: 1.15rem;
+  color: var(--text-heading);
+  margin-bottom: 0.15rem;
+}
+
+.student-card-meta span {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.progress-bar-wrap {
+  width: 100%;
+  height: 8px;
+  background: var(--border-color);
+  border-radius: 4px;
+  overflow: hidden;
+  margin-top: 0.25rem;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #10b981, #059669);
+  border-radius: 4px;
+  transition: width 0.4s ease;
+}
+
+.student-card-stats {
+  font-size: 0.85rem;
+  color: var(--text-main);
+  display: flex;
+  justify-content: space-between;
+  margin-top: 0.25rem;
+}
+
+.student-card-actions {
+  display: flex;
+  gap: 0.4rem;
+  margin-top: auto;
+  flex-wrap: wrap;
+  padding-top: 0.5rem;
+  border-top: 1px solid var(--border-color);
+}
+
+/* --- INFORME D'ACOLLIDA FORMATIU PER A LA FAMÍLIA I LA CAD --- */
+.student-report-paper {
+  background: #ffffff !important;
+  color: #0f172a !important;
+  border: 2px solid #334155;
+  border-radius: 8px;
+  padding: 2.2rem 2.5rem;
+  font-family: 'Nunito', system-ui, sans-serif;
+  margin: 0 auto;
+  max-width: 820px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.report-header {
+  border-bottom: 2px solid #0f172a;
+  padding-bottom: 0.85rem;
+  margin-bottom: 1.25rem;
+  text-align: center;
+}
+
+.report-header h2 {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin-bottom: 0.3rem;
+  text-transform: uppercase;
+}
+
+.report-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
+  margin-bottom: 1.25rem;
+  background: #f8fafc;
+  padding: 1rem 1.25rem;
+  border-radius: 6px;
+  border: 1px solid #cbd5e1;
+}
+
+.report-family-message {
+  background: #eff6ff;
+  border-left: 4px solid #2563eb;
+  padding: 1rem 1.25rem;
+  border-radius: 0 6px 6px 0;
+  margin-bottom: 1.25rem;
+  color: #1e3a8a;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.report-signature-row {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 2.5rem;
+  padding-top: 1rem;
+}
+
+.report-sig-box {
+  width: 220px;
+  border-top: 1px dotted #475569;
+  text-align: center;
+  font-size: 0.85rem;
+  color: #475569;
+  padding-top: 0.5rem;
+}
+
+/* --- GUIA DOCENT I ORIENTACIONS PEDAGÒGIQUES --- */
+.guide-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.guide-tabs {
+  display: flex;
+  gap: 0.5rem;
+  border-bottom: 2px solid var(--border-color);
+  padding-bottom: 0.5rem;
+  overflow-x: auto;
+}
+
+.guide-tab-btn {
+  background: none;
+  border: none;
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  padding: 0.55rem 0.9rem;
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.guide-tab-btn:hover {
+  color: var(--primary-color);
+  background: var(--card-subtle-bg);
+}
+
+.guide-tab-btn.active {
+  color: #ffffff;
+  background: var(--primary-color);
+}
+
+.guide-content-area {
+  max-height: 65vh;
+  overflow-y: auto;
+  padding: 0.5rem 0.25rem;
+  line-height: 1.6;
+}
+
+.guide-section h3 {
+  font-size: 1.25rem;
+  color: var(--text-heading);
+  margin-bottom: 0.75rem;
+  border-left: 4px solid var(--primary-color);
+  padding-left: 0.6rem;
+}
+
+.guide-section p {
+  margin-bottom: 0.9rem;
+  color: var(--text-main);
+  font-size: 0.95rem;
+}
+
+.guide-callout {
+  background: var(--card-subtle-bg);
+  border: 1px solid var(--border-color);
+  border-left: 4px solid #f59e0b;
+  padding: 1rem 1.25rem;
+  border-radius: 0 var(--radius-md) var(--radius-md) 0;
+  margin: 1.25rem 0;
+  font-size: 0.92rem;
+}
+
+.guide-grid-features {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+  margin: 1.25rem 0;
+}
+
+.guide-feature-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 1rem;
+}
+
+.guide-feature-card h4 {
+  font-size: 1rem;
+  color: var(--text-heading);
+  margin-bottom: 0.35rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.guide-feature-card p {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin: 0;
+}
+
